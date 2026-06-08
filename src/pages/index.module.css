@@ -104,6 +104,9 @@
   line-height: 1.7;
 }
 
+/* 响应式适配 */
+
+/* 中等屏幕 */
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 5rem 2rem 4rem;
@@ -119,14 +122,256 @@
 
   .description {
     font-size: 1rem !important;
+    max-width: 90%;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .buttons a {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.875rem 2rem;
   }
 
   .stats {
-    gap: 1.5rem !important;
+    gap: 1rem !important;
+    flex-wrap: wrap;
   }
 
   .statItem {
-    padding: 1rem 1.5rem !important;
+    padding: 1rem 1.25rem !important;
+    min-width: 100px;
+  }
+
+  .statNumber {
+    font-size: 1.75rem;
+  }
+
+  .techGrid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+
+  .techItem {
+    padding: 1rem;
+  }
+
+  .techIcon {
+    font-size: 2rem;
+  }
+
+  .techName {
+    font-size: 0.85rem;
+  }
+
+  .ctaContent h2 {
+    font-size: 2rem;
+  }
+
+  .ctaContent p {
+    font-size: 1.1rem;
+  }
+}
+
+/* 小屏幕 */
+@media screen and (max-width: 768px) {
+  .heroBanner {
+    padding: 4rem 1.5rem 3rem;
+  }
+
+  .heroBanner h1 {
+    font-size: 2.25rem;
+  }
+
+  .heroBanner p {
+    font-size: 1.1rem;
+  }
+
+  .badge {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .description {
+    font-size: 0.95rem !important;
+    line-height: 1.6;
+  }
+
+  .buttons a {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .stats {
+    gap: 0.75rem !important;
+  }
+
+  .statItem {
+    padding: 0.75rem 1rem !important;
+    min-width: 80px;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
+  }
+
+  .statLabel {
+    font-size: 0.75rem;
+  }
+
+  .techStack {
+    padding: 3rem 0;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .techGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .techItem {
+    padding: 0.75rem;
+  }
+
+  .techIcon {
+    font-size: 1.75rem;
+  }
+
+  .techName {
+    font-size: 0.8rem;
+  }
+
+  .cta {
+    padding: 3rem 0;
+  }
+
+  .ctaContent h2 {
+    font-size: 1.75rem;
+  }
+
+  .ctaContent p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ctaButtons a {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* 超小屏幕 */
+@media screen and (max-width: 480px) {
+  .heroBanner {
+    padding: 3rem 1rem 2.5rem;
+  }
+
+  .heroBanner h1 {
+    font-size: 1.75rem;
+  }
+
+  .heroBanner p {
+    font-size: 1rem;
+  }
+
+  .badge {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 0.9rem !important;
+    margin-bottom: 1.5rem;
+  }
+
+  .buttons a {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .stats {
+    gap: 0.5rem !important;
+  }
+
+  .statItem {
+    padding: 0.6rem 0.75rem !important;
+    min-width: 70px;
+  }
+
+  .statNumber {
+    font-size: 1.25rem;
+  }
+
+  .statLabel {
+    font-size: 0.7rem;
+  }
+
+  .techStack {
+    padding: 2.5rem 0;
+  }
+
+  .sectionTitle {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .techGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .techItem {
+    padding: 0.6rem;
+    border-radius: 12px;
+  }
+
+  .techIcon {
+    font-size: 1.5rem;
+  }
+
+  .techName {
+    font-size: 0.75rem;
+  }
+
+  .cta {
+    padding: 2.5rem 0;
+  }
+
+  .ctaContent h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .ctaContent p {
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ctaButtons a {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .featureTag {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
   }
 }
 
