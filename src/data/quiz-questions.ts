@@ -3283,15 +3283,1167 @@ const obj = new Proxy({}, handler);`,
       pitfalls: 'Module Federation 需要 Webpack 5+，各应用需要协调共享依赖的版本。',
     },
   },
+
+  // ==================== JavaScript 深入 ====================
+  {
+    id: 151,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const arr = [1, 2, 3];
+arr[Symbol.iterator] = function* () {
+  yield* [10, 20, 30];
+};
+console.log([...arr]);`,
+    options: [
+      { label: '[1, 2, 3]', value: 'a' },
+      { label: '[10, 20, 30]', value: 'b' },
+      { label: '[1, 2, 3, 10, 20, 30]', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '输出 [10, 20, 30]。自定义 Symbol.iterator 覆盖了默认的数组迭代行为。',
+      thinking: 'Symbol.iterator 是可迭代协议的核心。数组默认的迭代器是遍历自身元素，但可以被覆盖。展开运算符 [...arr] 会调用 arr[Symbol.iterator]()。',
+      pitfalls: '自定义迭代器可以实现任意遍历逻辑，如倒序、过滤、无限序列等。',
+    },
+  },
+  {
+    id: 152,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `function Foo() {
+  Foo.a = function() { console.log(1); };
+  this.a = function() { console.log(2); };
+}
+Foo.prototype.a = function() { console.log(3); };
+Foo.a = function() { console.log(4); };
+
+Foo.a();
+const obj = new Foo();
+obj.a();
+Foo.a();`,
+    options: [
+      { label: '4 2 1', value: 'a' },
+      { label: '4 3 1', value: 'b' },
+      { label: '4 2 4', value: 'c' },
+      { label: '1 2 3', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '输出 4 2 1。',
+      thinking: '1) Foo.a() → 输出 4（静态方法）；2) new Foo() 执行：Foo.a 被重写为输出 1，this.a 被设置为输出 2；3) obj.a() → 输出 2（实例方法优先于原型方法）；4) Foo.a() → 输出 1（已被构造函数重写）。',
+      pitfalls: '构造函数内部 this.a 设置的是实例属性，Foo.a 设置的是静态属性。实例属性优先于原型属性。',
+    },
+  },
+  {
+    id: 153,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个方法可以将 JSON 字符串解析为对象？',
+    options: [
+      { label: 'JSON.stringify()', value: 'a' },
+      { label: 'JSON.parse()', value: 'b' },
+      { label: 'eval()', value: 'c' },
+      { label: 'Object.fromEntries()', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'JSON.parse() 将 JSON 字符串解析为 JavaScript 对象。',
+      thinking: 'JSON 方法：JSON.parse() 字符串 → 对象，JSON.stringify() 对象 → 字符串。eval() 也能解析但有安全风险（会执行任意代码）。',
+      pitfalls: 'JSON.parse() 只能解析合法的 JSON 格式。单引号、尾逗号、注释等都会导致解析失败。',
+    },
+  },
+  {
+    id: 154,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const p = new Promise((resolve) => {
+  resolve(Promise.resolve(1));
+});
+p.then(console.log);`,
+    options: [
+      { label: 'Promise', value: 'a' },
+      { label: '1', value: 'b' },
+      { label: 'undefined', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '输出 1。resolve 一个 Promise 时，会等待该 Promise 解析后再传递值。',
+      thinking: 'Promise 的 resolve 如果传入另一个 Promise，会"展开"它：等待内部 Promise 解析后，用其值作为外层 Promise 的值。这叫做 Promise Resolution Procedure。',
+      pitfalls: '如果想让 Promise 的值就是另一个 Promise（不展开），需要 reject 或用 Promise.resolve().then(() => innerPromise)。',
+    },
+  },
+  {
+    id: 155,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `let a = { n: 1 };
+let b = a;
+a.x = a = { n: 2 };
+console.log(a);
+console.log(b);
+console.log(a.x);`,
+    options: [
+      { label: '{n:2} {n:1,x:{n:2}} undefined', value: 'a' },
+      { label: '{n:2} {n:1} {n:2}', value: 'b' },
+      { label: '{n:2,x:{n:2}} {n:2,x:{n:2}} {n:2}', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'a 是 {n:2}，b 是 {n:1, x:{n:2}}，a.x 是 undefined。',
+      thinking: '关键：`a.x = a = {n:2}` 的执行顺序。JS 从左到右计算属性访问：1) 先计算 a.x（此时 a 指向 {n:1}）；2) 然后计算赋值右侧 a = {n:2}（a 指向新对象）；3) 最后将新对象赋给原 a 的 x 属性。所以 b.x = {n:2}。',
+      pitfalls: '连续赋值的执行顺序是从右到左，但属性访问的计算是从左到右。',
+    },
+  },
+  {
+    id: 156,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `async function* range(start, end) {
+  for (let i = start; i <= end; i++) {
+    yield Promise.resolve(i);
+  }
+}
+(async () => {
+  for await (const num of range(1, 3)) {
+    console.log(num);
+  }
+})();`,
+    options: [
+      { label: '1 2 3', value: 'a' },
+      { label: 'Promise Promise Promise', value: 'b' },
+      { label: '报错', value: 'c' },
+      { label: 'undefined undefined undefined', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '输出 1 2 3。for await...of 会自动 await 每个 yield 的值。',
+      thinking: '异步生成器（async function*）结合 for await...of 可以异步迭代。yield Promise.resolve(i) 会被自动 await，所以 num 是数字而不是 Promise。',
+      pitfalls: 'for await...of 只能用于异步可迭代对象（实现了 Symbol.asyncIterator 的对象）。',
+    },
+  },
+  {
+    id: 157,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个不是 JavaScript 的错误类型？',
+    options: [
+      { label: 'TypeError', value: 'a' },
+      { label: 'ReferenceError', value: 'b' },
+      { label: 'SyntaxError', value: 'c' },
+      { label: 'CompileError', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'CompileError 不是 JavaScript 的标准错误类型。',
+      thinking: 'JavaScript 的错误类型：1) Error（基类）；2) TypeError（类型错误）；3) ReferenceError（引用错误）；4) SyntaxError（语法错误）；5) RangeError（范围错误）；6) URIError（URI 错误）；7) EvalError（eval 错误）。',
+      pitfalls: 'SyntaxError 在解析阶段就报错（代码根本不会执行），其他错误在运行时才报。',
+    },
+  },
+  {
+    id: 158,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `class Counter {
+  #count = 0;
+  increment() {
+    this.#count++;
+  }
+  getCount() {
+    return this.#count;
+  }
+}
+const c = new Counter();
+c.increment();
+c.increment();
+console.log(c.getCount());
+console.log(c.#count);`,
+    options: [
+      { label: '2 2', value: 'a' },
+      { label: '2 undefined', value: 'b' },
+      { label: '2 报错', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: '第一个输出 2，第二个报错（私有字段不可外部访问）。',
+      thinking: '#count 是 ES2022 的私有类字段（Private Class Fields）。以 # 开头的属性只能在类内部访问，外部访问会抛出 SyntaxError。',
+      pitfalls: '私有字段不同于 _ 前缀的"约定私有"：# 私有是语言级别的强制限制，_ 只是约定。',
+    },
+  },
+  {
+    id: 159,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const handler = {
+  get(target, key) {
+    console.log('get:', key);
+    return Reflect.get(target, key);
+  },
+  set(target, key, value) {
+    console.log('set:', key, value);
+    return Reflect.set(target, key, value);
+  }
+};
+const proxy = new Proxy({ a: 1 }, handler);
+proxy.a;
+proxy.b = 2;`,
+    options: [
+      { label: 'get: a → set: b 2', value: 'a' },
+      { label: 'get: a → get: b → set: b 2', value: 'b' },
+      { label: 'set: a undefined → set: b 2', value: 'c' },
+      { label: '什么都不输出', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '输出 get: a 和 set: b 2。',
+      thinking: 'Proxy 的 get trap 在读取属性时触发，set trap 在设置属性时触发。Reflect.get/set 是对应操作的默认行为，推荐在 trap 中使用它们保持正确的行为。',
+      pitfalls: 'Reflect API 和 Proxy trap 是一一对应的，推荐用 Reflect 来执行默认操作。',
+    },
+  },
+  {
+    id: 160,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'judge',
+    question: 'JavaScript 中，函数声明（function foo() {}）和函数表达式（const foo = function() {}）都会被提升。',
+    options: [
+      { label: '正确', value: 'true' },
+      { label: '错误', value: 'false' },
+    ],
+    answer: 'false',
+    explanation: {
+      correct: '错误。函数声明会被完整提升（函数体也会提升），函数表达式只有变量名会被提升（函数体不会）。',
+      thinking: '函数声明提升：整个函数（名称+函数体）都会被提升到作用域顶部。函数表达式提升：只有变量声明被提升（类似 var），函数体不会被提升。',
+      pitfalls: 'const/let 的函数表达式不会被提升（有 TDZ），var 的函数表达式变量名会被提升但值是 undefined。',
+    },
+  },
+
+  // ==================== React 进阶 ====================
+  {
+    id: 161,
+    category: 'react',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码有什么问题？',
+    code: `function App() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return <div>{count}</div>;
+}`,
+    options: [
+      { label: 'count 永远是 1', value: 'a' },
+      { label: '定时器不会被清除', value: 'b' },
+      { label: '代码正常工作', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'count 永远是 1。因为 useEffect 的依赖数组是空数组，闭包捕获的 count 始终是 0。',
+      thinking: '修复方法：使用函数式更新 setCount(prev => prev + 1)，这样不需要依赖 count 变量。',
+      pitfalls: 'useEffect 闭包陷阱：依赖数组中遗漏的变量会导致闭包捕获旧值。',
+    },
+  },
+  {
+    id: 162,
+    category: 'react',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码中，哪个组件会在 count 变化时重新渲染？',
+    code: `function App() {
+  const [count, setCount] = useState(0);
+  const value = useMemo(() => ({ count }), [count]);
+
+  return (
+    <div>
+      <ChildA count={count} />
+      <ChildB obj={value} />
+      <ChildC />
+    </div>
+  );
+}
+const ChildA = React.memo(({ count }) => <div>{count}</div>);
+const ChildB = React.memo(({ obj }) => <div>{obj.count}</div>);
+const ChildC = React.memo(() => <div>Static</div>);`,
+    options: [
+      { label: '只有 ChildA 和 ChildB', value: 'a' },
+      { label: '只有 ChildA', value: 'b' },
+      { label: '三个都会', value: 'c' },
+      { label: '只有 ChildC', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'ChildA 和 ChildB 会重新渲染，ChildC 不会。',
+      thinking: 'ChildA 的 count prop 变了 → 重新渲染。ChildB 的 obj prop 是 useMemo 创建的新对象（引用变了但内容一样），但 React.memo 是浅比较，引用不同就重新渲染。ChildC 没有 prop 变化，不重新渲染。',
+      pitfalls: 'useMemo 创建的对象引用在依赖变化时会变，配合 React.memo 使用时要注意。',
+    },
+  },
+  {
+    id: 163,
+    category: 'react',
+    difficulty: 'easy',
+    type: 'single',
+    question: 'React 中，以下哪个不是合法的 JSX？',
+    options: [
+      { label: '<div className="box">Hello</div>', value: 'a' },
+      { label: '<img src="photo.jpg" />', value: 'b' },
+      { label: '<div class="box">Hello</div>', value: 'c' },
+      { label: '<Fragment>Hello</Fragment>', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'class 是 JavaScript 的保留字，JSX 中要用 className 代替。',
+      thinking: 'JSX 的属性名是 camelCase：class → className，for → htmlFor，onclick → onClick。自定义组件用大写字母开头。',
+      pitfalls: '虽然某些浏览器可能接受 class，但 React 会警告。始终使用 className。',
+    },
+  },
+  {
+    id: 164,
+    category: 'react',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码中，useCallback 的作用是什么？',
+    code: `function Parent() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    console.log('clicked');
+  }, []);
+
+  return <Child onClick={handleClick} />;
+}
+
+const Child = React.memo(({ onClick }) => {
+  console.log('Child render');
+  return <button onClick={onClick}>Click</button>;
+});`,
+    options: [
+      { label: 'Child 只在挂载时渲染一次', value: 'a' },
+      { label: 'Parent 每次渲染 Child 都会渲染', value: 'b' },
+      { label: 'handleClick 会缓存计算结果', value: 'c' },
+      { label: 'useCallback 没有实际作用', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'useCallback 稳定了 handleClick 的引用，配合 React.memo 使 Child 只渲染一次。',
+      thinking: 'useCallback(fn, deps) 返回一个记忆化的函数引用。当 deps 不变时，返回同一个函数。这配合 React.memo 可以避免子组件因为函数 prop 引用变化而重新渲染。',
+      pitfalls: '如果 useCallback 的依赖数组为空 []，函数内部使用的外部变量都是闭包捕获的旧值。',
+    },
+  },
+  {
+    id: 165,
+    category: 'react',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `function App() {
+  const [count, setCount] = useState(0);
+
+  console.log('render', count);
+
+  useEffect(() => {
+    console.log('effect', count);
+    return () => console.log('cleanup', count);
+  }, [count]);
+
+  return <button onClick={() => setCount(c => c + 1)}>{count}</button>;
+}`,
+    options: [
+      { label: 'render 0 → effect 0 → 点击 → cleanup 0 → render 1 → effect 1', value: 'a' },
+      { label: 'render 0 → effect 0 → 点击 → render 1 → cleanup 0 → effect 1', value: 'b' },
+      { label: 'render 0 → effect 0 → 点击 → render 1 → effect 1 → cleanup 0', value: 'c' },
+      { label: 'render 0 → effect 0 → 点击 → cleanup 1 → render 1 → effect 1', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'render 0 → effect 0 → 点击 → render 1 → cleanup 0 → effect 1。',
+      thinking: 'React 的执行顺序：1) render 阶段（纯函数）；2) commit 阶段（DOM 更新）；3) 清理上一次的 effect；4) 执行新的 effect。清理函数中 count 是旧值（0），因为清理函数捕获的是上一次渲染的闭包。',
+      pitfalls: '清理函数中的 count 是"上一次渲染"的值，不是"当前"的值。',
+    },
+  },
+
+  // ==================== Vue 进阶 ====================
+  {
+    id: 166,
+    category: 'vue',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码中，shallowRef 和 ref 的区别是什么？',
+    code: `const shallow = shallowRef({ count: 0 });
+const deep = ref({ count: 0 });
+
+// 修改
+shallow.value.count = 1;  // 不触发更新
+deep.value.count = 1;     // 触发更新
+
+shallow.value = { count: 2 };  // 触发更新
+deep.value = { count: 2 };     // 触发更新`,
+    options: [
+      { label: 'shallowRef 只监听 .value 的引用变化，不监听内部属性变化', value: 'a' },
+      { label: 'shallowRef 不能存储对象', value: 'b' },
+      { label: 'shallowRef 和 ref 完全相同', value: 'c' },
+      { label: 'shallowRef 性能更差', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'shallowRef 只监听 .value 的引用变化，不深度监听对象内部属性。',
+      thinking: 'shallowRef 适合：1) 大型对象不需要深度响应；2) 第三方库管理的对象；3) 性能优化。修改 .value 的引用（shallow.value = newObj）会触发更新，但修改内部属性（shallow.value.count = 1）不会。',
+      pitfalls: 'shallowRef 配合 triggerRef() 可以手动触发更新。',
+    },
+  },
+  {
+    id: 167,
+    category: 'vue',
+    difficulty: 'medium',
+    type: 'single',
+    question: 'Vue 3 中，defineProps 和 defineEmits 的作用是什么？',
+    options: [
+      { label: '定义组件的 props 和事件', value: 'a' },
+      { label: '定义组件的状态', value: 'b' },
+      { label: '定义组件的生命周期', value: 'c' },
+      { label: '定义组件的模板', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'defineProps 定义组件接收的 props，defineEmits 定义组件可以触发的事件。',
+      thinking: '<script setup> 中的编译器宏：1) defineProps 声明 props（不需要导入）；2) defineEmits 声明事件；3) defineExpose 暴露组件方法；4) defineModel 双向绑定（Vue 3.4+）。',
+      pitfalls: '这些是编译器宏，不是普通的 JavaScript 函数，不需要 import。',
+    },
+  },
+  {
+    id: 168,
+    category: 'vue',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码中，watch 的 flush 选项有什么作用？',
+    code: `watch(
+  source,
+  (newVal, oldVal) => {
+    // 访问更新后的 DOM
+    console.log(document.querySelector('#el').textContent);
+  },
+  { flush: 'post' }
+);`,
+    options: [
+      { label: '在 DOM 更新前执行回调', value: 'a' },
+      { label: '在 DOM 更新后执行回调', value: 'b' },
+      { label: '同步执行回调', value: 'c' },
+      { label: '延迟执行回调', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'flush: "post" 让回调在 DOM 更新后执行，可以访问更新后的 DOM。',
+      thinking: 'watch 的 flush 选项：1) "pre"（默认）在 DOM 更新前执行；2) "post" 在 DOM 更新后执行；3) "sync" 同步执行（性能差）。watchEffect 也有 flush 选项。',
+      pitfalls: '需要在 watch 回调中访问更新后的 DOM 时，使用 flush: "post"。',
+    },
+  },
+  {
+    id: 169,
+    category: 'vue',
+    difficulty: 'easy',
+    type: 'single',
+    question: 'Vue 中，v-model 的本质是什么？',
+    options: [
+      { label: '一个特殊的指令，不能拆解', value: 'a' },
+      { label: ':value + @input 的语法糖', value: 'b' },
+      { label: '一个双向绑定的魔法', value: 'c' },
+      { label: '一个 computed 属性', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'v-model 是 :modelValue + @update:modelValue 的语法糖（Vue 3）。',
+      thinking: 'Vue 3 的 v-model 拆解：v-model="val" → :modelValue="val" @update:modelValue="val = $event"。可以自定义 prop 名：v-model:title="val" → :title="val" @update:title="val = $event"。',
+      pitfalls: 'Vue 2 和 Vue 3 的 v-model 有区别：Vue 2 用 value + input，Vue 3 用 modelValue + update:modelValue。',
+    },
+  },
+  {
+    id: 170,
+    category: 'vue',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码中，useSlots 和 useAttrs 的作用是什么？',
+    code: `const slots = useSlots();
+const attrs = useAttrs();`,
+    options: [
+      { label: '获取组件的插槽和透传属性', value: 'a' },
+      { label: '获取组件的状态和方法', value: 'b' },
+      { label: '获取路由信息', value: 'c' },
+      { label: '获取全局状态', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'useSlots() 获取组件的插槽，useAttrs() 获取透传的属性。',
+      thinking: '在 <script setup> 中：1) useSlots() 返回 slots 对象，可以检查是否有某个插槽；2) useAttrs() 返回非 props 的透传属性（如 class、style、事件等）。',
+      pitfalls: 'attrs 包含所有未被 props 声明接收的属性，包括 class、style、事件等。',
+    },
+  },
+
+  // ==================== 网络 & 安全 ====================
+  {
+    id: 171,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 XSS 攻击？如何防御？',
+    options: [
+      { label: '跨站脚本攻击，通过注入恶意脚本', value: 'a' },
+      { label: '跨站请求伪造，通过伪造用户请求', value: 'b' },
+      { label: 'SQL 注入攻击', value: 'c' },
+      { label: 'DDoS 攻击', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'XSS（跨站脚本攻击）通过在页面注入恶意脚本，窃取用户数据或执行操作。',
+      thinking: 'XSS 类型：1) 存储型（恶意脚本存入数据库）；2) 反射型（脚本在 URL 中）；3) DOM 型（前端直接操作 DOM）。防御：1) 转义输出；2) CSP（内容安全策略）；3) HttpOnly Cookie。',
+      pitfalls: 'innerHTML 和 v-html 有 XSS 风险，要确保内容可信。',
+    },
+  },
+  {
+    id: 172,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 CSRF 攻击？如何防御？',
+    options: [
+      { label: '跨站脚本攻击', value: 'a' },
+      { label: '跨站请求伪造，利用用户的登录状态发送恶意请求', value: 'b' },
+      { label: '中间人攻击', value: 'c' },
+      { label: '暴力破解攻击', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'CSRF（跨站请求伪造）利用用户已登录的状态，诱导用户发送恶意请求。',
+      thinking: 'CSRF 的原理：用户已登录 A 站，访问恶意 B 站，B 站自动向 A 站发送请求（携带 Cookie）。防御：1) CSRF Token；2) SameSite Cookie；3) 检查 Origin/Referer 头部。',
+      pitfalls: 'SameSite: Strict 可以完全防御 CSRF，但会影响正常链接跳转。',
+    },
+  },
+  {
+    id: 173,
+    category: 'engineering',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是 Content Security Policy（CSP）？',
+    options: [
+      { label: '一种 CSS 框架', value: 'a' },
+      { label: '一种安全策略，限制页面可以加载和执行的资源来源', value: 'b' },
+      { label: '一种缓存策略', value: 'c' },
+      { label: '一种压缩算法', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'CSP 是一种安全策略，通过 HTTP 头部或 meta 标签限制页面可以加载的资源来源。',
+      thinking: 'CSP 的作用：1) 防止 XSS（限制内联脚本和外部脚本来源）；2) 防止数据注入；3) 报告违规。常见指令：default-src、script-src、style-src、img-src 等。',
+      pitfalls: 'CSP 可能影响第三方脚本（如 Google Analytics），需要配置白名单。',
+    },
+  },
+  {
+    id: 174,
+    category: 'engineering',
+    difficulty: 'easy',
+    type: 'single',
+    question: 'HTTPS 相比 HTTP 的优势是什么？',
+    options: [
+      { label: '速度更快', value: 'a' },
+      { label: '数据加密，防止窃听和篡改', value: 'b' },
+      { label: '不需要服务器', value: 'c' },
+      { label: '支持更多 HTTP 方法', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'HTTPS 通过 TLS 加密数据，防止窃听、篡改和冒充。',
+      thinking: 'HTTPS = HTTP + TLS。优势：1) 加密（防窃听）；2) 完整性（防篡改）；3) 身份认证（防冒充）。劣势：1) 握手增加延迟；2) 证书成本；3) 计算开销。',
+      pitfalls: '现代 TLS 1.3 的性能开销已经很小，应该全站使用 HTTPS。',
+    },
+  },
+  {
+    id: 175,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 Token 和 JWT？',
+    options: [
+      { label: '同一种东西', value: 'a' },
+      { label: 'Token 是认证凭证的统称，JWT 是一种特定格式的 Token', value: 'b' },
+      { label: 'JWT 是数据库', value: 'c' },
+      { label: 'Token 只能用于 OAuth', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Token 是认证凭证的统称，JWT（JSON Web Token）是一种包含用户信息的自包含 Token。',
+      thinking: 'JWT 的结构：Header.Payload.Signature。Payload 包含用户信息（不需要查询数据库验证）。优势：无状态、自包含。劣势：不能撤销（需要黑名单）、Payload 可见（不要放敏感信息）。',
+      pitfalls: 'JWT 的 Payload 只是 Base64 编码，不是加密。不要在 JWT 中存放密码等敏感信息。',
+    },
+  },
+
+  // ==================== 性能优化进阶 ====================
+  {
+    id: 176,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是资源提示（Resource Hints）？以下哪个不是资源提示？',
+    options: [
+      { label: 'preload', value: 'a' },
+      { label: 'prefetch', value: 'b' },
+      { label: 'preconnect', value: 'c' },
+      { label: 'preload 和 prefetch 都是', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'preload、prefetch、preconnect 都是资源提示，用于优化资源加载。',
+      thinking: '资源提示：1) preload 当前页面关键资源；2) prefetch 下一页面可能需要的资源；3) preconnect 提前建立连接（DNS+TCP+TLS）；4) dns-prefetch 只预解析 DNS。',
+      pitfalls: 'preload 的资源必须有 as 属性（as="script"/"style"/"image" 等）。',
+    },
+  },
+  {
+    id: 177,
+    category: 'performance',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是代码分割（Code Splitting）的策略？',
+    options: [
+      { label: '按路由分割', value: 'a' },
+      { label: '按组件分割', value: 'b' },
+      { label: '按第三方库分割', value: 'c' },
+      { label: '以上都是', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: '代码分割可以按路由、组件、第三方库等多个维度进行。',
+      thinking: '代码分割策略：1) 路由级分割（最常见，React.lazy / import()）；2) 组件级分割（重型组件懒加载）；3) 第三方库分割（vendor chunk）；4) 公共代码提取（splitChunks）。',
+      pitfalls: '过度分割会增加请求数量，需要找到平衡点。',
+    },
+  },
+  {
+    id: 178,
+    category: 'performance',
+    difficulty: 'easy',
+    type: 'single',
+    question: '什么是 Gzip 压缩？',
+    options: [
+      { label: '一种图片压缩格式', value: 'a' },
+      { label: '一种文本压缩算法，可以减少传输大小 60-80%', value: 'b' },
+      { label: '一种 JavaScript 压缩工具', value: 'c' },
+      { label: '一种 CSS 预处理器', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Gzip 是一种广泛使用的文本压缩算法，可以将 HTML/CSS/JS 等文本文件压缩 60-80%。',
+      thinking: '压缩方式：1) Gzip 兼容性最好，压缩率 60-70%；2) Brotli 压缩率更高 70-80%，但需要浏览器支持；3) 通常在 Nginx/Apache 配置开启。',
+      pitfalls: '图片/视频等已经是压缩格式的文件，再 Gzip 效果很小甚至更大。',
+    },
+  },
+  {
+    id: 179,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 Tree Shaking？它需要什么条件？',
+    options: [
+      { label: '删除注释', value: 'a' },
+      { label: '删除未使用的代码，需要 ES Module 静态结构', value: 'b' },
+      { label: '压缩代码', value: 'c' },
+      { label: '混淆变量名', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Tree Shaking 删除未使用的导出代码，依赖 ES Module 的静态 import/export 结构。',
+      thinking: 'Tree Shaking 的条件：1) 使用 ES Module（import/export）；2) 构建工具支持（Webpack/Rollup/Vite）；3) 没有副作用的模块（或标记 sideEffects: false）。',
+      pitfalls: 'CommonJS（require/module.exports）不能被 Tree Shaking，因为是动态的。',
+    },
+  },
+  {
+    id: 180,
+    category: 'performance',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是 SSR 和 SSG？它们的区别是什么？',
+    options: [
+      { label: 'SSR 在服务器渲染，SSG 在构建时渲染', value: 'a' },
+      { label: '两者完全相同', value: 'b' },
+      { label: 'SSR 是静态的，SSG 是动态的', value: 'c' },
+      { label: 'SSR 只支持 React', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'SSR（服务端渲染）在每次请求时在服务器渲染；SSG（静态站点生成）在构建时预渲染为静态 HTML。',
+      thinking: 'SSR vs SSG：1) SSR 每次请求都渲染（动态内容、首屏快、服务器压力大）；2) SSG 构建时渲染（静态内容、速度最快、不需要服务器）；3) ISR 增量静态再生成（结合两者优势）。',
+      pitfalls: 'Next.js 支持 SSR、SSG、ISR 三种渲染方式，根据页面特性选择。',
+    },
+  },
+
+  // ==================== TypeScript 进阶 ====================
+  {
+    id: 181,
+    category: 'typescript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码中，as const 的作用是什么？',
+    code: `const arr = [1, 2, 3] as const;
+const obj = { a: 1, b: 'hello' } as const;`,
+    options: [
+      { label: '让变量变成只读的字面量类型', value: 'a' },
+      { label: '让变量变成 any 类型', value: 'b' },
+      { label: '没有实际作用', value: 'c' },
+      { label: '让变量可以被修改', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'as const 将变量推断为只读的字面量类型，而不是宽泛的类型。',
+      thinking: 'as const 的效果：1) 数组变成 readonly 元组；2) 对象的属性变成只读字面量；3) 字面量变成 const 类型。arr 的类型是 readonly [1, 2, 3]，obj.a 的类型是 1（不是 number）。',
+      pitfalls: 'as const 是浅层的，嵌套对象的属性不会自动变为只读。',
+    },
+  },
+  {
+    id: 182,
+    category: 'typescript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码中 Result 的类型是什么？',
+    code: `type DeepReadonly<T> = {
+  readonly [K in keyof T]: T[K] extends object
+    ? DeepReadonly<T[K]>
+    : T[K];
+};
+type Obj = { a: { b: { c: number } } };
+type Result = DeepReadonly<Obj>;`,
+    options: [
+      { label: '{ a: { b: { c: number } } }', value: 'a' },
+      { label: '{ readonly a: { readonly b: { readonly c: number } } }', value: 'b' },
+      { label: '{ readonly a: { b: { c: number } } }', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'DeepReadonly 递归地将所有属性标记为 readonly。',
+      thinking: '递归条件类型：T extends object ? DeepReadonly<T[K]> : T[K]。当属性值是对象时递归处理，否则直接返回。这是实现深层工具类型的常见模式。',
+      pitfalls: '递归类型可能在深层嵌套时导致类型检查性能问题。',
+    },
+  },
+  {
+    id: 183,
+    category: 'typescript',
+    difficulty: 'easy',
+    type: 'single',
+    question: 'TypeScript 中的 ? 可以用在哪些地方？',
+    options: [
+      { label: '可选属性：interface { name?: string }', value: 'a' },
+      { label: '可选链：obj?.prop', value: 'b' },
+      { label: '空值合并：value ?? default', value: 'c' },
+      { label: 'A 和 B 都是', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: '? 可以用于可选属性和可选链。?? 是空值合并运算符，不是 ? 的用法。',
+      thinking: '? 的用法：1) 可选属性 { key?: Type }；2) 可选链 obj?.prop；3) 条件类型 T extends U ? X : Y；4) 可选参数 (a?: number)。',
+      pitfalls: '可选链 ?. 和空值合并 ?? 是不同的运算符。',
+    },
+  },
+  {
+    id: 184,
+    category: 'typescript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码中，哪个是正确的类型守卫？',
+    options: [
+      { label: 'function isString(x: unknown): x is string { return typeof x === "string"; }', value: 'a' },
+      { label: 'function isString(x: any): boolean { return typeof x === "string"; }', value: 'b' },
+      { label: 'function isString(x: unknown): boolean { return typeof x === "string"; }', value: 'c' },
+      { label: 'A 和 C 都是', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '类型守卫使用 "x is string" 返回类型，告诉 TypeScript 在 true 分支中 x 是 string。',
+      thinking: '类型守卫（Type Guard）使用类型谓词（Type Predicate）：parameter is Type。在 if (isString(x)) 后，TypeScript 知道 x 是 string 类型。',
+      pitfalls: '普通 boolean 返回值不能做类型收窄，必须用类型谓词。',
+    },
+  },
+  {
+    id: 185,
+    category: 'typescript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码中 Result 的类型是什么？',
+    code: `type TupleToUnion<T extends any[]> = T[number];
+type Result = TupleToUnion<[1, 'hello', true]>;`,
+    options: [
+      { label: '[1, "hello", true]', value: 'a' },
+      { label: '1 | "hello" | true', value: 'b' },
+      { label: 'number | string | boolean', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Result 是 1 | "hello" | true。T[number] 将元组转为联合类型。',
+      thinking: 'T[number] 是索引访问类型：当 T 是元组 [1, "hello", true] 时，T[number] 表示"元组中任意索引的值的类型"，即 1 | "hello" | true。',
+      pitfalls: 'T[number] 对数组返回元素类型，对元组返回联合类型。',
+    },
+  },
+
+  // ==================== 综合场景 ====================
+  {
+    id: 186,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码实现了什么功能？',
+    code: `function pipe(...fns) {
+  return (x) => fns.reduce((acc, fn) => fn(acc), x);
+}
+const add1 = x => x + 1;
+const double = x => x * 2;
+const square = x => x * x;
+const transform = pipe(add1, double, square);
+console.log(transform(3));`,
+    options: [
+      { label: '64', value: 'a' },
+      { label: '49', value: 'b' },
+      { label: '36', value: 'c' },
+      { label: '100', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'transform(3) = square(double(add1(3))) = square(double(4)) = square(8) = 64。',
+      thinking: 'pipe 函数将多个函数组合成一个：从左到右依次执行。这是函数式编程中的"管道"模式。compose 是从右到左执行。',
+      pitfalls: 'pipe 和 compose 的区别：pipe 从左到右，compose 从右到左。',
+    },
+  },
+  {
+    id: 187,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const obj = {
+  a: 1,
+  b: 2,
+  [Symbol.iterator]() {
+    const keys = Object.keys(this);
+    let index = 0;
+    return {
+      next: () => ({
+        value: this[keys[index]],
+        done: index++ >= keys.length,
+      }),
+    };
+  },
+};
+console.log([...obj]);`,
+    options: [
+      { label: '[1, 2]', value: 'a' },
+      { label: '["a", "b"]', value: 'b' },
+      { label: '[{value: 1}, {value: 2}]', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '输出 [1, 2]。自定义 Symbol.iterator 让对象可迭代，遍历返回属性值。',
+      thinking: 'Symbol.iterator 让对象可以被 for...of、展开运算符、解构赋值等使用。自定义迭代器需要返回一个有 next() 方法的对象，next() 返回 { value, done }。',
+      pitfalls: '这个迭代器的 this 指向需要注意，箭头函数的 this 继承自外层。',
+    },
+  },
+  {
+    id: 188,
+    category: 'react',
+    difficulty: 'medium',
+    type: 'single',
+    question: 'React 中，以下哪个不是状态管理方案？',
+    options: [
+      { label: 'useState', value: 'a' },
+      { label: 'useReducer', value: 'b' },
+      { label: 'useMemo', value: 'c' },
+      { label: 'Context', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'useMemo 不是状态管理方案，它是缓存计算结果的 Hook。',
+      thinking: 'React 状态管理方案：1) useState（简单状态）；2) useReducer（复杂状态逻辑）；3) Context（跨组件共享）；4) Redux/Zustand/Jotai（全局状态库）。',
+      pitfalls: 'useMemo 缓存"值"，useCallback 缓存"函数"，都不是状态管理。',
+    },
+  },
+  {
+    id: 189,
+    category: 'vue',
+    difficulty: 'medium',
+    type: 'single',
+    question: 'Vue 3 中，以下哪个不是组合式 API 的优势？',
+    options: [
+      { label: '逻辑复用更灵活', value: 'a' },
+      { label: '类型推断更好', value: 'b' },
+      { label: '运行速度更快', value: 'c' },
+      { label: '代码组织更清晰', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: '组合式 API 不会直接影响运行速度，它的优势在开发体验层面。',
+      thinking: '组合式 API 的优势：1) 逻辑复用（Composables）；2) TypeScript 支持更好；3) 相关逻辑聚合在一起；4) 更灵活的代码组织。性能上与选项式 API 没有显著差异。',
+      pitfalls: 'Vue 3 的性能提升主要来自编译优化（静态提升、Patch Flags），而不是组合式 API。',
+    },
+  },
+  {
+    id: 190,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是首屏渲染时间（FCP）和最大内容绘制（LCP）的区别？',
+    options: [
+      { label: 'FCP 是首次内容出现，LCP 是最大内容完成渲染', value: 'a' },
+      { label: '两者完全相同', value: 'b' },
+      { label: 'FCP 比 LCP 晚', value: 'c' },
+      { label: 'LCP 只衡量图片', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'FCP 衡量第一个内容出现的时间，LCP 衡量最大内容元素完成渲染的时间。',
+      thinking: 'FCP vs LCP：1) FCP 通常是第一个文本或图片出现（< 1.8s）；2) LCP 通常是首屏大图或标题完成渲染（< 2.5s）；3) LCP 更能代表用户感知的加载完成时间。',
+      pitfalls: 'LCP 不一定是最大的元素，而是视口内最大的文本块或图片。',
+    },
+  },
+  {
+    id: 191,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 Nginx？它在前端部署中的作用是什么？',
+    options: [
+      { label: '一种 JavaScript 运行时', value: 'a' },
+      { label: 'Web 服务器，用于静态资源托管和反向代理', value: 'b' },
+      { label: '一种包管理器', value: 'c' },
+      { label: '一种数据库', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Nginx 是高性能的 Web 服务器，常用于静态资源托管、反向代理、负载均衡。',
+      thinking: 'Nginx 在前端的作用：1) 托管静态文件（HTML/CSS/JS）；2) 反向代理 API 请求到后端；3) 开启 Gzip/Brotli 压缩；4) 配置缓存策略；5) HTTPS 证书配置；6) SPA 路由回退。',
+      pitfalls: 'SPA 需要配置 try_files $uri $uri/ /index.html 来处理前端路由。',
+    },
+  },
+  {
+    id: 192,
+    category: 'engineering',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是前端监控的三大支柱？',
+    options: [
+      { label: '日志、指标、链路追踪', value: 'a' },
+      { label: 'HTML、CSS、JavaScript', value: 'b' },
+      { label: 'React、Vue、Angular', value: 'c' },
+      { label: 'Chrome、Firefox、Safari', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '前端监控的三大支柱：日志（Logging）、指标（Metrics）、链路追踪（Tracing）。',
+      thinking: '1) 日志：记录事件和错误（console.log、Sentry）；2) 指标：量化性能数据（Web Vitals、自定义指标）；3) 链路追踪：追踪请求的完整路径（从用户操作到 API 调用）。',
+      pitfalls: '这三大支柱来自 Google 的 SRE 理念，适用于所有可观测性系统。',
+    },
+  },
+  {
+    id: 193,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const nums = [1, 2, 3, 4, 5];
+const result = nums.filter(n => n % 2 === 0).map(n => n * 2);
+console.log(result);`,
+    options: [
+      { label: '[2, 4, 6, 8, 10]', value: 'a' },
+      { label: '[4, 8]', value: 'b' },
+      { label: '[1, 3, 5]', value: 'c' },
+      { label: '[2, 4]', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'filter 留下偶数 [2, 4]，map 乘以 2 得到 [4, 8]。',
+      thinking: '链式调用：filter 返回新数组，map 对 filter 的结果再处理。先过滤再转换是常见的数据处理模式。',
+      pitfalls: '如果数组很大，可以用 reduce 一次完成，避免创建中间数组。',
+    },
+  },
+  {
+    id: 194,
+    category: 'typescript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码中，哪个是正确的泛型默认值？',
+    options: [
+      { label: 'function identity<T = string>(value: T): T', value: 'a' },
+      { label: 'function identity<T>(value: T = "hello"): T', value: 'b' },
+      { label: 'function identity<T>(value: T): T = string', value: 'c' },
+      { label: 'function identity<T extends string>(value: T): T', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '<T = string> 是泛型默认值语法，当不提供泛型参数时默认使用 string。',
+      thinking: '泛型默认值：function fn<T = DefaultType>(...)。与泛型约束 <T extends Constraint> 不同：默认值是"不提供时的默认类型"，约束是"必须满足的条件"。',
+      pitfalls: '泛型默认值和泛型约束可以同时使用：<T extends Base = Default>。',
+    },
+  },
+  {
+    id: 195,
+    category: 'react',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码中，useDeferredValue 的作用是什么？',
+    code: `function SearchResults({ query }) {
+  const deferredQuery = useDeferredValue(query);
+  const isStale = query !== deferredQuery;
+
+  return (
+    <div style={{ opacity: isStale ? 0.7 : 1 }}>
+      {renderResults(deferredQuery)}
+    </div>
+  );
+}`,
+    options: [
+      { label: '延迟更新非紧急的 UI 部分，保持输入框响应', value: 'a' },
+      { label: '缓存查询结果', value: 'b' },
+      { label: '防抖处理', value: 'c' },
+      { label: '节流处理', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'useDeferredValue 延迟更新非紧急的值，让输入框等高优先级更新先执行。',
+      thinking: 'useDeferredValue vs useTransition：1) useDeferredValue 延迟"值"的更新；2) useTransition 延迟"状态更新"的执行。两者都是 React 18 的并发特性。',
+      pitfalls: 'useDeferredValue 不是防抖：它在高优先级更新完成后立即执行，不是固定延迟。',
+    },
+  },
+  {
+    id: 196,
+    category: 'vue',
+    difficulty: 'hard',
+    type: 'single',
+    question: 'Vue 3 中，Teleport 组件的作用是什么？',
+    options: [
+      { label: '组件间通信', value: 'a' },
+      { label: '将子组件渲染到 DOM 的其他位置', value: 'b' },
+      { label: '延迟渲染组件', value: 'c' },
+      { label: '缓存组件状态', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Teleport 将子组件的 DOM 渲染到指定的目标位置（如 document.body）。',
+      thinking: 'Teleport 的用途：1) Modal/Dialog 渲染到 body；2) Toast/Notification 渲染到顶层；3) 避免父组件的 overflow: hidden 或 z-index 问题。',
+      pitfalls: 'Teleport 只移动 DOM 位置，组件的逻辑关系（父子关系、provide/inject）不变。',
+    },
+  },
+  {
+    id: 197,
+    category: 'performance',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是图片的懒加载（Lazy Loading）？',
+    options: [
+      { label: '延迟加载视口外的图片，进入视口时才加载', value: 'a' },
+      { label: '压缩图片大小', value: 'b' },
+      { label: '转换图片格式', value: 'c' },
+      { label: '预加载所有图片', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '懒加载延迟加载视口外的图片，减少首屏加载的资源量。',
+      thinking: '懒加载实现：1) loading="lazy" 原生属性（推荐）；2) Intersection Observer API；3) 第三方库（react-lazyload）。配合占位图和骨架屏效果更好。',
+      pitfalls: '首屏图片不应该懒加载（会影响 LCP），只对视口外的图片使用。',
+    },
+  },
+  {
+    id: 198,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是前端的构建（Build）和编译（Compile）？',
+    options: [
+      { label: '同一概念', value: 'a' },
+      { label: '编译是将一种语言转为另一种，构建是整个打包优化流程', value: 'b' },
+      { label: '构建只做压缩', value: 'c' },
+      { label: '编译只做转译', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '编译是构建的一部分。编译（如 TypeScript → JavaScript）是语言转换，构建包括编译、打包、压缩、优化等整个流程。',
+      thinking: '构建流程：1) 编译（TS→JS、JSX→JS、SASS→CSS）；2) 打包（合并模块）；3) 压缩（代码压缩、图片压缩）；4) 优化（Tree Shaking、Code Splitting）；5) 资源处理（哈希、拷贝）。',
+      pitfalls: 'Webpack/Vite/Rollup 是构建工具，Babel/SWC/TSC 是编译工具。',
+    },
+  },
+  {
+    id: 199,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `function createCounter() {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getCount: () => count,
+  };
+}
+const counter = createCounter();
+counter.increment();
+counter.increment();
+counter.decrement();
+console.log(counter.getCount());
+console.log(counter.count);`,
+    options: [
+      { label: '1 undefined', value: 'a' },
+      { label: '1 1', value: 'b' },
+      { label: '2 undefined', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'getCount() 返回 1，counter.count 是 undefined。',
+      thinking: '这是模块模式（Module Pattern）：通过闭包实现私有变量。count 是私有的，只能通过返回的方法访问。counter.count 是 undefined，因为 count 不是返回对象的属性。',
+      pitfalls: '闭包实现的私有变量是真正的私有（外部无法访问），比 _ 前缀的约定私有更安全。',
+    },
+  },
+  {
+    id: 200,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是前端的 A/B 测试？',
+    options: [
+      { label: '一种代码测试方法', value: 'a' },
+      { label: '将用户随机分组，展示不同版本的页面，比较效果', value: 'b' },
+      { label: '一种性能测试工具', value: 'c' },
+      { label: '一种 CSS 测试方法', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'A/B 测试将用户随机分为两组，分别展示不同版本（A 版和 B 版），通过数据比较哪个版本效果更好。',
+      thinking: 'A/B 测试的步骤：1) 确定测试目标（转化率、点击率等）；2) 创建变体（A 原版、B 新版）；3) 随机分组；4) 收集数据；5) 统计分析。常用工具：Google Optimize、LaunchDarkly。',
+      pitfalls: 'A/B 测试需要足够的样本量和时间才能得出统计显著的结论。',
+    },
+  },
 ];
 
 // 按分类统计题目数量
-categories.forEach(cat => {
-  cat.count = quizQuestions.filter(q => q.category === cat.key).length;
-});
-categories.forEach(cat => {
-  cat.count = quizQuestions.filter(q => q.category === cat.key).length;
-});
 categories.forEach(cat => {
   cat.count = quizQuestions.filter(q => q.category === cat.key).length;
 });
