@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@theme/Layout';
 import QuizCard from '@site/src/components/Quiz/QuizCard';
 import QuizSummary from '@site/src/components/Quiz/QuizSummary';
@@ -159,6 +159,12 @@ function QuizCardWithCallback({
 }): React.ReactElement {
   const [selected, setSelected] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
+
+  // 题目变化时重置状态
+  useEffect(() => {
+    setSelected(null);
+    setShowExplanation(false);
+  }, [question.id]);
 
   const isCorrect =
     Array.isArray(question.answer)
