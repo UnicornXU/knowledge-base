@@ -1,0 +1,118 @@
+.features {
+  display: flex;
+  align-items: stretch;
+  padding: 4rem 0;
+  width: 100%;
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  height: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.featureCard:hover::before {
+  transform: scaleX(1);
+}
+
+.featureCard:hover {
+  border-color: transparent;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  color: inherit;
+  transform: translateY(-8px);
+}
+
+.featureEmoji {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.featureCard:hover .featureEmoji {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.featureCard h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--ifm-color-primary);
+  transition: color 0.3s ease;
+}
+
+.featureCard:hover h3 {
+  color: #667eea;
+}
+
+.featureCard p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #64748b;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 996px) {
+  .features {
+    padding: 2rem 0;
+  }
+
+  .featureCard {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .featureEmoji {
+    font-size: 2.5rem;
+  }
+}
+
+/* 卡片入场动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.featureCard {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.featureCard:nth-child(1) { animation-delay: 0.1s; }
+.featureCard:nth-child(2) { animation-delay: 0.2s; }
+.featureCard:nth-child(3) { animation-delay: 0.3s; }
+.featureCard:nth-child(4) { animation-delay: 0.4s; }
+.featureCard:nth-child(5) { animation-delay: 0.5s; }
+.featureCard:nth-child(6) { animation-delay: 0.6s; }
