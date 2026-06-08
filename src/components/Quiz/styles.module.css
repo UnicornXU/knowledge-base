@@ -1,8 +1,8 @@
 /* ========== 测验容器 ========== */
 .quizContainer {
-  max-width: 800px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 2rem 2.5rem;
 }
 
 /* ========== 分类选择 ========== */
@@ -75,8 +75,8 @@
 .questionCard {
   background: var(--ifm-card-background-color, #fff);
   border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 3rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   margin-bottom: 1.5rem;
 }
 
@@ -122,10 +122,10 @@
 }
 
 .questionText {
-  font-size: 1.15rem;
-  font-weight: 600;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.7;
+  margin-bottom: 2rem;
   color: var(--ifm-font-color-base);
 }
 
@@ -133,35 +133,35 @@
 .codeBlock {
   background: #1e1e2e;
   color: #cdd6f4;
-  border-radius: 10px;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
   overflow-x: auto;
   font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
-  font-size: 0.9rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
 /* ========== 选项列表 ========== */
 .optionsList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .optionBtn {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   width: 100%;
-  padding: 1rem 1.25rem;
+  padding: 1.25rem 1.5rem;
   background: var(--ifm-color-emphasis-0, #f8f9fa);
   border: 2px solid var(--ifm-color-emphasis-200);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--ifm-font-color-base);
 }
 
@@ -178,12 +178,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: var(--ifm-color-emphasis-200);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--ifm-color-emphasis-700);
   flex-shrink: 0;
 }
@@ -252,7 +252,7 @@
 
 .explanationLabel {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0.5rem;
@@ -260,8 +260,8 @@
 }
 
 .explanationText {
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.8;
   color: var(--ifm-color-emphasis-800);
 }
 
@@ -494,7 +494,7 @@
 /* ========== 响应式 ========== */
 @media screen and (max-width: 768px) {
   .quizContainer {
-    padding: 1rem;
+    padding: 1rem 1.25rem;
   }
 
   .quizHeroTitle {
@@ -506,7 +506,21 @@
   }
 
   .questionCard {
-    padding: 1.25rem;
+    padding: 1.5rem;
+  }
+
+  .questionText {
+    font-size: 1.15rem;
+  }
+
+  .codeBlock {
+    font-size: 0.85rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .optionBtn {
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
   }
 
   .statsGrid {
