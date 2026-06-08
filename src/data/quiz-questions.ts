@@ -2218,9 +2218,1077 @@ const throttledFn = throttle(fn, 300);`,
       pitfalls: 'Code Splitting 不等于 Tree Shaking。Tree Shaking 删除未使用的代码，Code Splitting 拆分代码为多个文件。',
     },
   },
+
+  // ==================== JavaScript 再补充 ====================
+  {
+    id: 101,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个方法可以在数组末尾添加元素？',
+    options: [
+      { label: 'push()', value: 'a' },
+      { label: 'pop()', value: 'b' },
+      { label: 'shift()', value: 'c' },
+      { label: 'unshift()', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'push() 在数组末尾添加元素并返回新长度。',
+      thinking: '数组方法：push 末尾添加、pop 末尾删除、unshift 头部添加、shift 头部删除。四个方法都会修改原数组。',
+      pitfalls: 'pop/shift 返回被删除的元素，push/unshift 返回新长度。',
+    },
+  },
+  {
+    id: 102,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const arr = [1, 2, 3];
+const mapped = arr.map(x => x * 2).filter(x => x > 3);
+console.log(mapped);`,
+    options: [
+      { label: '[2, 4, 6]', value: 'a' },
+      { label: '[4, 6]', value: 'b' },
+      { label: '[1, 2, 3]', value: 'c' },
+      { label: '[3, 4, 5, 6]', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '先 map 得到 [2, 4, 6]，再 filter 留下大于 3 的 [4, 6]。',
+      thinking: '链式调用：map 返回新数组，filter 返回新数组。两次操作都不会修改原数组。这是函数式编程的常见模式。',
+      pitfalls: '如果数组很大，链式调用会创建多个中间数组。性能敏感场景可以用 reduce 一次完成。',
+    },
+  },
+  {
+    id: 103,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const obj = { a: 1, b: 2 };
+Object.defineProperty(obj, 'c', {
+  value: 3,
+  enumerable: false,
+});
+console.log(Object.keys(obj));
+console.log(obj.c);`,
+    options: [
+      { label: "['a', 'b', 'c'], 3", value: 'a' },
+      { label: "['a', 'b'], 3", value: 'b' },
+      { label: "['a', 'b'], undefined", value: 'c' },
+      { label: "['a', 'b', 'c'], undefined", value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: "Object.keys 返回 ['a', 'b']（不包含不可枚举属性），obj.c 是 3。",
+      thinking: 'Object.defineProperty 可以定义属性的特性：value（值）、writable（可写）、enumerable（可枚举）、configurable（可配置）。enumerable: false 使属性不会出现在 for...in 和 Object.keys 中。',
+      pitfalls: 'Object.keys 只返回可枚举的自有属性。Object.getOwnPropertyNames 返回所有自有属性（包括不可枚举的）。',
+    },
+  },
+  {
+    id: 104,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `function foo(a, b = 2) {
+  return a + b;
+}
+console.log(foo(3));
+console.log(foo(3, undefined));
+console.log(foo(3, null));`,
+    options: [
+      { label: '5, 5, 3', value: 'a' },
+      { label: '5, 5, 5', value: 'b' },
+      { label: 'NaN, NaN, NaN', value: 'c' },
+      { label: '5, NaN, 3', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'foo(3) → 3+2=5；foo(3, undefined) → 3+2=5（undefined 触发默认值）；foo(3, null) → 3+0=3（null 不触发默认值，null 转为 0）。',
+      thinking: '默认参数只在参数为 undefined 时生效。null 不会触发默认值。foo(3, null) 中 b = null，null + 3 = 3（null 转为数字 0）。',
+      pitfalls: '只有 undefined 会触发默认值，null、0、"" 都不会。',
+    },
+  },
+  {
+    id: 105,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'judge',
+    question: 'const 声明的对象，其属性不能被修改。',
+    options: [
+      { label: '正确', value: 'true' },
+      { label: '错误', value: 'false' },
+    ],
+    answer: 'false',
+    explanation: {
+      correct: '错误。const 只保证变量引用不变（不能重新赋值），对象的属性可以修改。',
+      thinking: 'const 的含义：1) 不能重新赋值（const a = 1; a = 2 报错）；2) 必须初始化（const a 报错）；3) 有暂时性死区。但对象的属性不受限制（const obj = {}; obj.x = 1 是合法的）。',
+      pitfalls: '如果想冻结对象，使用 Object.freeze()。但 freeze 也只是浅冻结。',
+    },
+  },
+  {
+    id: 106,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `console.log(Promise.resolve(1));
+console.log(Promise.resolve(2).then(console.log));
+console.log(3);`,
+    options: [
+      { label: 'Promise, Promise, 3', value: 'a' },
+      { label: '1, 2, 3', value: 'b' },
+      { label: 'Promise, 2, 3', value: 'c' },
+      { label: '1, Promise, 3', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '第一个输出 Promise 对象（then 前），第二个输出 Promise 对象（then 返回新 Promise），第三个输出 3。2 在微任务中输出。',
+      thinking: 'Promise.resolve(1) 返回一个已解决的 Promise 对象，直接 console.log 会打印 Promise 而不是值。.then(console.log) 在微任务中执行，同步代码先输出。',
+      pitfalls: '想获取 Promise 的值，必须用 .then() 或 await。',
+    },
+  },
+  {
+    id: 107,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `let x = 1;
+function foo(x) {
+  x = 2;
+}
+foo(x);
+console.log(x);`,
+    options: [
+      { label: '1', value: 'a' },
+      { label: '2', value: 'b' },
+      { label: 'undefined', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '输出 1。函数参数 x 是局部变量，修改它不影响外部的 x。',
+      thinking: 'JavaScript 的函数参数是"值传递"（基本类型传值，引用类型传引用地址）。函数内部的 x 是形参，与外部的 x 是两个不同的变量。',
+      pitfalls: '如果是对象：function foo(obj) { obj.x = 2 }，则外部对象的 x 会被修改（因为传的是引用地址）。',
+    },
+  },
+  {
+    id: 108,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个是正确的箭头函数写法？',
+    options: [
+      { label: 'const fn = (x) => { return x * 2; }', value: 'a' },
+      { label: 'const fn = x => { return x * 2; }', value: 'b' },
+      { label: 'const fn = x => x * 2', value: 'c' },
+      { label: '以上都是', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: '以上都是正确的箭头函数写法。',
+      thinking: '箭头函数的简写：1) 只有一个参数时可以省略括号：x => ...；2) 函数体只有一条语句时可以省略大括号和 return：x => x * 2；3) 返回对象时需要加括号：x => ({ key: x })。',
+      pitfalls: '返回对象字面量时必须加括号，否则大括号会被解析为函数体：x => { key: x } 是错的，x => ({ key: x }) 是对的。',
+    },
+  },
+  {
+    id: 109,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const set = new Set([1, 2, 2, 3, 3, 3]);
+console.log(set.size);`,
+    options: [
+      { label: '6', value: 'a' },
+      { label: '3', value: 'b' },
+      { label: '4', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '输出 3。Set 自动去重，只保留唯一值。',
+      thinking: 'Set 是 ES6 新增的数据结构，存储唯一值。去重使用 SameValueZero 算法（NaN === NaN 为 true）。常用场景：数组去重 [...new Set(arr)]。',
+      pitfalls: 'Set 中对象是按引用比较的：new Set([{}, {}]).size === 2。',
+    },
+  },
+  {
+    id: 110,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `const obj = {
+  value: 42,
+  getValue: function() { return this.value; }
+};
+const { getValue } = obj;
+console.log(getValue());`,
+    options: [
+      { label: '42', value: 'a' },
+      { label: 'undefined', value: 'b' },
+      { label: '报错', value: 'c' },
+      { label: 'null', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '输出 undefined。解构后 getValue 变成独立函数，this 不再指向 obj。',
+      thinking: '解构赋值 const { getValue } = obj 等价于 const getValue = obj.getValue。调用 getValue() 时是独立调用，this 指向全局对象（严格模式为 undefined）。',
+      pitfalls: '想保持 this 绑定，使用 getValue.call(obj) 或箭头函数（但箭头函数不能用作方法）。',
+    },
+  },
+  {
+    id: 111,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'single',
+    question: 'typeof undefined 的结果是什么？',
+    options: [
+      { label: '"undefined"', value: 'a' },
+      { label: '"object"', value: 'b' },
+      { label: '"null"', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'typeof undefined 返回 "undefined"。',
+      thinking: 'typeof 的返回值：number、string、boolean、undefined、object、function、symbol、bigint。typeof null === "object" 是 Bug。',
+      pitfalls: '判断 undefined 用 === undefined，判断 null 用 === null。typeof 只在判断未声明变量时有用。',
+    },
+  },
+  {
+    id: 112,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `function* fibonacci() {
+  let [a, b] = [0, 1];
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+const fib = fibonacci();
+console.log(fib.next().value);
+console.log(fib.next().value);
+console.log(fib.next().value);
+console.log(fib.next().value);`,
+    options: [
+      { label: '0, 1, 1, 2', value: 'a' },
+      { label: '1, 1, 2, 3', value: 'b' },
+      { label: '0, 0, 0, 0', value: 'c' },
+      { label: '报错：无限循环', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '输出 0, 1, 1, 2。Generator 函数可以惰性生成无限序列。',
+      thinking: 'Generator 的 yield 是惰性的：每次调用 next() 才执行到下一个 yield。while(true) 不会死循环，因为 yield 会暂停执行。斐波那契数列：0, 1, 1, 2, 3, 5, 8...',
+      pitfalls: 'Generator 适合生成无限序列或大数据流，不需要一次性生成所有值。',
+    },
+  },
+  {
+    id: 113,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: `console.log(!!0);
+console.log(!!'');
+console.log(!!null);
+console.log(!!undefined);
+console.log(!!NaN);
+console.log(!!1);
+console.log(!!'hello');`,
+    options: [
+      { label: 'false false false false false true true', value: 'a' },
+      { label: 'true true true true true true true', value: 'b' },
+      { label: 'false false false false false false false', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: '0、空字符串、null、undefined、NaN 是 falsy 值，其他都是 truthy。',
+      thinking: 'JavaScript 的 falsy 值只有 7 个：false、0、-0、0n（BigInt）、""、null、undefined、NaN。其他所有值都是 truthy（包括空对象 {}、空数组 []）。',
+      pitfalls: '空对象和空数组是 truthy！if ([]) {} 会执行。判断空数组用 arr.length === 0。',
+    },
+  },
+  {
+    id: 114,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码输出什么？',
+    code: 'class Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    return this.name + " makes a noise.";\n  }\n}\nclass Dog extends Animal {\n  speak() {\n    return this.name + " barks.";\n  }\n}\nconst d = new Dog("Mitzie");\nconsole.log(d.speak());\nconsole.log(Animal.prototype.speak.call(d));',
+    options: [
+      { label: 'Mitzie barks. Mitzie makes a noise.', value: 'a' },
+      { label: 'Mitzie barks. Mitzie barks.', value: 'b' },
+      { label: 'Mitzie makes a noise. Mitzie makes a noise.', value: 'c' },
+      { label: '报错', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: 'd.speak() 调用 Dog 的 speak（多态），Animal.prototype.speak.call(d) 强制调用父类的 speak。',
+      thinking: '方法重写（Override）：子类定义同名方法会覆盖父类。可以通过 父类.prototype.方法.call(this) 调用父类方法。',
+      pitfalls: 'ES6 class 没有 super.method() 调用父类普通方法的语法（只能在 constructor 中用 super()）。',
+    },
+  },
+  {
+    id: 115,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个不是 JavaScript 的循环语句？',
+    options: [
+      { label: 'for', value: 'a' },
+      { label: 'while', value: 'b' },
+      { label: 'do...while', value: 'c' },
+      { label: 'foreach', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'foreach 不是循环语句，是数组方法 forEach（注意大小写）。',
+      thinking: 'JavaScript 的循环语句：for、while、do...while、for...in（遍历可枚举属性）、for...of（遍历可迭代对象）。forEach 是数组方法，不是语句。',
+      pitfalls: 'forEach 不能 break/continue/return 提前退出。需要提前退出用 for...of 或 for 循环。',
+    },
+  },
+
+  // ==================== 网络 & 浏览器 ====================
+  {
+    id: 116,
+    category: 'engineering',
+    difficulty: 'easy',
+    type: 'single',
+    question: 'HTTP 状态码 304 表示什么？',
+    options: [
+      { label: '请求成功', value: 'a' },
+      { label: '重定向', value: 'b' },
+      { label: '资源未修改，使用缓存', value: 'c' },
+      { label: '服务器错误', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: '304 Not Modified 表示资源未修改，客户端可以使用缓存。',
+      thinking: '常见状态码：200 成功、301 永久重定向、302 临时重定向、304 未修改、400 请求错误、401 未授权、403 禁止、404 未找到、500 服务器错误、502 网关错误、503 服务不可用。',
+      pitfalls: '304 是协商缓存的结果，不是错误。',
+    },
+  },
+  {
+    id: 117,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪个不是同源策略限制的操作？',
+    options: [
+      { label: '读取 Cookie', value: 'a' },
+      { label: '发送 GET 请求', value: 'b' },
+      { label: '读取 DOM', value: 'c' },
+      { label: '读取 localStorage', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '同源策略不限制发送请求（表单提交、script 标签加载等），只限制读取响应。',
+      thinking: '同源策略限制：1) 读取 Cookie/localStorage；2) 读取 DOM；3) 发送 AJAX 请求后读取响应。不限制：1) 发送请求（但不能读响应）；2) script/img/link 标签加载资源。',
+      pitfalls: 'CORS（跨域资源共享）是同源策略的例外，服务器设置 Access-Control-Allow-Origin 头部来允许跨域读取响应。',
+    },
+  },
+  {
+    id: 118,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪个不是浏览器的存储方式？',
+    options: [
+      { label: 'Cookie', value: 'a' },
+      { label: 'localStorage', value: 'b' },
+      { label: 'sessionStorage', value: 'c' },
+      { label: 'cacheStorage', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'cacheStorage 不是标准的浏览器存储 API（Cache API 是 Service Worker 的一部分，不是通用存储）。',
+      thinking: '浏览器存储：1) Cookie（4KB，每次请求携带，有过期时间）；2) localStorage（5-10MB，永久存储，同源共享）；3) sessionStorage（5-10MB，会话级，标签页独立）；4) IndexedDB（大量数据，异步 API）。',
+      pitfalls: 'localStorage 是同步 API，大量数据会阻塞主线程。大数据用 IndexedDB。',
+    },
+  },
+  {
+    id: 119,
+    category: 'engineering',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是浏览器的渲染阻塞？以下哪种资源会阻塞渲染？',
+    options: [
+      { label: 'JavaScript 文件', value: 'a' },
+      { label: 'CSS 文件', value: 'b' },
+      { label: '图片', value: 'c' },
+      { label: '字体文件', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'CSS 是渲染阻塞资源：CSSOM 未构建完成前，浏览器不会渲染页面。',
+      thinking: '资源的阻塞特性：1) CSS 渲染阻塞（阻塞后续渲染）；2) JS 解析阻塞（阻塞后续 HTML 解析，除非 async/defer）；3) 图片不阻塞（异步加载）；4) 字体不阻塞渲染但可能导致 FOIT/FOUT。',
+      pitfalls: 'JS 会阻塞 CSS 的下载（在 CSS 之后的 JS 会等待 CSS 下载完成）。所以 CSS 放头部，JS 放底部或用 async/defer。',
+    },
+  },
+  {
+    id: 120,
+    category: 'engineering',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个不是 HTTP 请求方法？',
+    options: [
+      { label: 'GET', value: 'a' },
+      { label: 'POST', value: 'b' },
+      { label: 'FETCH', value: 'c' },
+      { label: 'DELETE', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'FETCH 不是 HTTP 方法，是浏览器的 API。HTTP 方法有 GET、POST、PUT、DELETE、PATCH、HEAD、OPTIONS 等。',
+      thinking: '常见 HTTP 方法：GET（获取）、POST（创建）、PUT（全量更新）、PATCH（部分更新）、DELETE（删除）、OPTIONS（预检请求）、HEAD（只获取头部）。',
+      pitfalls: 'fetch() 是浏览器 API，不是 HTTP 方法。它默认使用 GET 方法。',
+    },
+  },
+  {
+    id: 121,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪个不是跨域解决方案？',
+    options: [
+      { label: 'CORS', value: 'a' },
+      { label: 'JSONP', value: 'b' },
+      { label: 'Cookie', value: 'c' },
+      { label: '代理服务器', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'Cookie 不是跨域解决方案，反而是同源策略限制的对象。',
+      thinking: '跨域解决方案：1) CORS（服务端设置 Access-Control-Allow-Origin）；2) JSONP（利用 script 标签不受同源限制）；3) 代理服务器（同源服务器转发请求）；4) postMessage（跨窗口通信）；5) WebSocket。',
+      pitfalls: 'CORS 是最标准的跨域方案。JSONP 只支持 GET 请求，有安全风险。',
+    },
+  },
+  {
+    id: 122,
+    category: 'engineering',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是浏览器的事件循环（Event Loop）？',
+    options: [
+      { label: '一种循环遍历 DOM 的机制', value: 'a' },
+      { label: '协调同步代码、微任务和宏任务执行的机制', value: 'b' },
+      { label: '处理用户点击事件的机制', value: 'c' },
+      { label: '管理内存回收的机制', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '事件循环协调同步代码、微任务和宏任务的执行顺序。',
+      thinking: '事件循环的执行顺序：1) 执行同步代码（调用栈）；2) 执行所有微任务（Promise.then、MutationObserver）；3) 执行一个宏任务（setTimeout、setInterval、I/O）；4) 重复步骤 2-3。',
+      pitfalls: '微任务优先于宏任务。Promise.then 是微任务，setTimeout 是宏任务。',
+    },
+  },
+  {
+    id: 123,
+    category: 'engineering',
+    difficulty: 'easy',
+    type: 'single',
+    question: '什么是 WebSocket？',
+    options: [
+      { label: '一种 HTTP 请求方法', value: 'a' },
+      { label: '全双工通信协议，支持服务器主动推送', value: 'b' },
+      { label: '一种 CSS 布局方式', value: 'c' },
+      { label: '一种 JavaScript 框架', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'WebSocket 是全双工通信协议，建立连接后服务器和客户端可以互相主动发送数据。',
+      thinking: 'WebSocket vs HTTP：1) HTTP 是请求-响应模式（客户端发起）；2) WebSocket 是全双工（双方都可以主动发送）；3) WebSocket 适合实时应用（聊天、游戏、股票行情）。',
+      pitfalls: 'WebSocket 需要服务器支持（ws:// 或 wss://），不是所有服务器都支持。',
+    },
+  },
+  {
+    id: 124,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪个不是浏览器的缓存位置？',
+    options: [
+      { label: 'Service Worker Cache', value: 'a' },
+      { label: 'Memory Cache', value: 'b' },
+      { label: 'Disk Cache', value: 'c' },
+      { label: 'CPU Cache', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'CPU Cache 是处理器缓存，不是浏览器缓存。',
+      thinking: '浏览器缓存位置（优先级从高到低）：1) Service Worker Cache（可编程控制）；2) Memory Cache（内存，页面关闭即失效）；3) Disk Cache（硬盘，持久化）；4) Push Cache（HTTP/2，会话级）。',
+      pitfalls: 'from memory cache 和 from disk cache 都是强缓存命中，区别在于存储位置。',
+    },
+  },
+  {
+    id: 125,
+    category: 'engineering',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是 TLS 握手？',
+    options: [
+      { label: 'TCP 连接的建立过程', value: 'a' },
+      { label: 'HTTPS 建立安全连接时的密钥协商过程', value: 'b' },
+      { label: 'HTTP 请求的发送过程', value: 'c' },
+      { label: 'DNS 解析过程', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'TLS 握手是 HTTPS 建立安全连接时，客户端和服务器协商加密算法和密钥的过程。',
+      thinking: 'HTTPS = HTTP + TLS。TLS 握手过程：1) 客户端发送支持的加密算法列表；2) 服务器选择算法并发送证书；3) 客户端验证证书；4) 双方协商出对称密钥；5) 后续通信使用对称加密。',
+      pitfalls: 'TLS 握手会增加 1-2 个 RTT 的延迟。TLS 1.3 优化为 1-RTT 甚至 0-RTT。',
+    },
+  },
+
+  // ==================== CSS & HTML ====================
+  {
+    id: 126,
+    category: 'performance',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个 CSS 选择器性能最好？',
+    options: [
+      { label: 'div .container .item', value: 'a' },
+      { label: '.container .item', value: 'b' },
+      { label: '#header .nav .item', value: 'c' },
+      { label: '* .item', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'ID 选择器最快（哈希查找），类选择器次之，标签选择器再次，通配符最慢。',
+      thinking: 'CSS 选择器性能（从快到慢）：1) ID 选择器 #id；2) 类选择器 .class；3) 标签选择器 div；4) 相邻兄弟 + 通用兄弟 ~ 子选择器 >；5) 后代选择器（空格）；6) 通配符 *；7) 属性选择器 [attr]。',
+      pitfalls: '现代浏览器对选择器性能已经优化很多，通常不需要过度担心。避免过深的嵌套和通配符即可。',
+    },
+  },
+  {
+    id: 127,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 BFC（块级格式化上下文）？',
+    options: [
+      { label: '一种 CSS 布局模式', value: 'a' },
+      { label: '一个独立的渲染区域，内部布局不影响外部', value: 'b' },
+      { label: '一种 JavaScript 运行环境', value: 'c' },
+      { label: '一种 HTML 语义化标签', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'BFC 是一个独立的渲染区域，内部元素的布局不会影响外部元素。',
+      thinking: '触发 BFC 的条件：1) float 不为 none；2) position 为 absolute 或 fixed；3) overflow 不为 visible；4) display 为 flex/grid/inline-block/table 等。BFC 可以解决外边距重叠、清除浮动等问题。',
+      pitfalls: 'BFC 不是 CSS 属性，是一种"渲染规则"。通过设置特定属性来触发。',
+    },
+  },
+  {
+    id: 128,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪种布局方式最适合等分布局？',
+    options: [
+      { label: 'float', value: 'a' },
+      { label: 'position: absolute', value: 'b' },
+      { label: 'Flexbox', value: 'c' },
+      { label: 'display: inline-block', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'Flexbox 的 flex: 1 或 flex-grow: 1 可以轻松实现等分布局。',
+      thinking: '布局方式选择：1) 简单两栏/三栏 → float 或 Flexbox；2) 等分布局 → Flexbox 或 Grid；3) 复杂网格 → Grid；4) 文本环绕 → float；5) 垂直居中 → Flexbox 或 Grid。',
+      pitfalls: 'float 需要清除浮动，inline-block 有空白间隙，Flexbox/Grid 更现代更方便。',
+    },
+  },
+  {
+    id: 129,
+    category: 'performance',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是 CSS 的层叠上下文（Stacking Context）？',
+    options: [
+      { label: 'CSS 的继承机制', value: 'a' },
+      { label: '决定元素在 Z 轴上显示顺序的规则', value: 'b' },
+      { label: 'CSS 的选择器优先级', value: 'c' },
+      { label: 'CSS 的盒模型', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '层叠上下文决定了元素在 Z 轴上的显示顺序（谁在上面，谁在下面）。',
+      thinking: '层叠顺序（从低到高）：1) 层叠上下文的背景和边框；2) z-index 为负；3) 块级盒子；4) 浮动盒子；5) 行内盒子；6) z-index: 0/auto；7) z-index 为正。',
+      pitfalls: 'position: relative/absolute + z-index 会创建新的层叠上下文。嵌套的层叠上下文在父级内部比较。',
+    },
+  },
+  {
+    id: 130,
+    category: 'performance',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个不是 CSS 的盒模型属性？',
+    options: [
+      { label: 'margin', value: 'a' },
+      { label: 'padding', value: 'b' },
+      { label: 'border', value: 'c' },
+      { label: 'shadow', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'shadow 不是盒模型属性。盒模型由 content、padding、border、margin 组成。',
+      thinking: 'CSS 盒模型：1) content（内容区）；2) padding（内边距）；3) border（边框）；4) margin（外边距）。box-sizing: border-box 让 width/height 包含 padding 和 border。',
+      pitfalls: 'box-sizing: border-box 是现代开发的推荐设置，避免了 padding 和 border 导致的尺寸溢出问题。',
+    },
+  },
+  {
+    id: 131,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪种方式可以实现 CSS 垂直居中？',
+    options: [
+      { label: 'display: flex; align-items: center;', value: 'a' },
+      { label: 'display: grid; place-items: center;', value: 'b' },
+      { label: 'position: absolute; top: 50%; transform: translateY(-50%);', value: 'c' },
+      { label: '以上都可以', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: '以上三种方式都可以实现垂直居中。',
+      thinking: '垂直居中方案：1) Flexbox（最推荐）；2) Grid（最简洁）；3) position + transform（兼容性好）；4) line-height 等于 height（单行文本）；5) table-cell + vertical-align（老方案）。',
+      pitfalls: 'Flexbox 和 Grid 需要父元素设置，position 方案需要元素脱离文档流。',
+    },
+  },
+  {
+    id: 132,
+    category: 'performance',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是 CSS 的 contain 属性？',
+    options: [
+      { label: '限制元素内容溢出', value: 'a' },
+      { label: '告诉浏览器元素的边界，优化渲染性能', value: 'b' },
+      { label: '设置元素的最大宽度', value: 'c' },
+      { label: '控制元素的层叠顺序', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'contain 属性告诉浏览器元素的渲染边界，可以优化渲染性能。',
+      thinking: 'contain 的值：1) layout（布局隔离）；2) style（样式隔离）；3) paint（绘制隔离，内容不超出边界）；4) size（尺寸隔离，子元素不影响尺寸）；5) strict（以上全部）；6) content（layout + style + paint）。',
+      pitfalls: 'contain: strict 要求元素的尺寸不依赖子元素，否则可能导致内容被裁剪。',
+    },
+  },
+  {
+    id: 133,
+    category: 'performance',
+    difficulty: 'easy',
+    type: 'single',
+    question: '以下哪个不是 HTML5 的语义化标签？',
+    options: [
+      { label: 'header', value: 'a' },
+      { label: 'footer', value: 'b' },
+      { label: 'div', value: 'c' },
+      { label: 'article', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'div 不是语义化标签，它是无意义的容器。语义化标签有 header、footer、article、section、nav、main、aside 等。',
+      thinking: '语义化标签的价值：1) 代码可读性（开发者理解）；2) SEO（搜索引擎理解）；3) 无障碍（屏幕阅读器理解）。',
+      pitfalls: 'div 仍然有用（作为样式容器），但在有语义标签可选时应优先使用语义标签。',
+    },
+  },
+  {
+    id: 134,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 Web Components？',
+    options: [
+      { label: '一种 CSS 框架', value: 'a' },
+      { label: '浏览器原生的组件化方案', value: 'b' },
+      { label: '一种 JavaScript 库', value: 'c' },
+      { label: '一种 HTML 标签', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Web Components 是浏览器原生的组件化方案，包括 Custom Elements、Shadow DOM、HTML Templates。',
+      thinking: 'Web Components 三大技术：1) Custom Elements（自定义元素）；2) Shadow DOM（影子 DOM，样式隔离）；3) HTML Templates（模板）。优势：框架无关、原生支持、样式隔离。',
+      pitfalls: 'Web Components 的 API 比较底层，实际开发中通常使用框架（React/Vue）的组件系统。',
+    },
+  },
+  {
+    id: 135,
+    category: 'performance',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是浏览器的合成层（Composite Layer）？',
+    options: [
+      { label: 'CSS 的继承层级', value: 'a' },
+      { label: 'GPU 加速的独立图层，可以独立于主线程更新', value: 'b' },
+      { label: 'HTML 的嵌套层级', value: 'c' },
+      { label: 'JavaScript 的作用域层级', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '合成层是 GPU 加速的独立图层，transform/opacity 动画由 GPU 处理，不阻塞主线程。',
+      thinking: '提升到合成层的方法：1) will-change: transform/opacity；2) transform: translateZ(0)；3) backface-visibility: hidden；4) video/canvas/iframe 等元素。合成层的优势：独立重绘、GPU 加速、不影响其他层。',
+      pitfalls: '每个合成层都需要额外的内存。不要滥用 will-change，只在需要动画的元素上使用。',
+    },
+  },
+
+  // ==================== 设计模式 & 编程范式 ====================
+  {
+    id: 136,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下代码体现了什么设计模式？',
+    code: `class EventBus {
+  constructor() {
+    this.events = {};
+  }
+  on(event, callback) {
+    if (!this.events[event]) this.events[event] = [];
+    this.events[event].push(callback);
+  }
+  emit(event, ...args) {
+    if (this.events[event]) {
+      this.events[event].forEach(cb => cb(...args));
+    }
+  }
+}`,
+    options: [
+      { label: '单例模式', value: 'a' },
+      { label: '观察者模式（发布-订阅模式）', value: 'b' },
+      { label: '工厂模式', value: 'c' },
+      { label: '策略模式', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '这是发布-订阅模式（Event Bus），通过 on 订阅事件，通过 emit 触发事件。',
+      thinking: '常见设计模式：1) 单例（一个实例）；2) 工厂（创建对象）；3) 观察者/发布-订阅（事件通知）；4) 策略（算法族）；5) 装饰器（增强功能）；6) 代理（控制访问）。',
+      pitfalls: '发布-订阅和观察者略有不同：发布-订阅有事件中心（EventBus），观察者直接通知。',
+    },
+  },
+  {
+    id: 137,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是函数式编程？以下哪个是函数式编程的特性？',
+    options: [
+      { label: '可变状态', value: 'a' },
+      { label: '纯函数（无副作用）', value: 'b' },
+      { label: '面向对象继承', value: 'c' },
+      { label: '全局变量', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '纯函数（相同输入总是相同输出，无副作用）是函数式编程的核心特性。',
+      thinking: '函数式编程特性：1) 纯函数；2) 不可变数据；3) 函数组合；4) 高阶函数；5) 声明式（描述"做什么"而非"怎么做"）。React Hooks 就是函数式编程的体现。',
+      pitfalls: '函数式编程不是"用函数写代码"那么简单，核心是数据不可变和纯函数。',
+    },
+  },
+  {
+    id: 138,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码实现了什么模式？',
+    code: `function memoize(fn) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key);
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}`,
+    options: [
+      { label: '防抖（debounce）', value: 'a' },
+      { label: '节流（throttle）', value: 'b' },
+      { label: '记忆化（memoization）', value: 'c' },
+      { label: '柯里化（currying）', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: '这是记忆化模式，缓存函数的计算结果，相同参数直接返回缓存值。',
+      thinking: '记忆化 vs 缓存：记忆化是函数级别的优化，自动缓存相同输入的输出。React 的 useMemo 就是记忆化的应用。适合纯函数和计算密集型函数。',
+      pitfalls: '记忆化会增加内存消耗。如果参数是对象，JSON.stringify 可能不准确（属性顺序、循环引用）。',
+    },
+  },
+  {
+    id: 139,
+    category: 'javascript',
+    difficulty: 'easy',
+    type: 'single',
+    question: '什么是闭包（Closure）？',
+    options: [
+      { label: '一种循环结构', value: 'a' },
+      { label: '函数能够访问其定义时的作用域变量', value: 'b' },
+      { label: '一种对象创建方式', value: 'c' },
+      { label: '一种错误处理机制', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '闭包是函数能够"记住"并访问其定义时所在的词法作用域，即使函数在该作用域之外执行。',
+      thinking: '闭包的用途：1) 数据私有（模块模式）；2) 函数工厂；3) 柯里化；4) 事件回调中保持状态。经典例子：for 循环中的闭包问题。',
+      pitfalls: '闭包会导致变量不被垃圾回收（内存泄漏），不需要时应及时解除引用。',
+    },
+  },
+  {
+    id: 140,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是柯里化（Currying）？',
+    options: [
+      { label: '一种数组遍历方法', value: 'a' },
+      { label: '将多参数函数转换为一系列单参数函数', value: 'b' },
+      { label: '一种对象克隆方式', value: 'c' },
+      { label: '一种异步处理模式', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '柯里化将 f(a, b, c) 转换为 f(a)(b)(c) 的形式。',
+      thinking: '柯里化的用途：1) 参数复用；2) 延迟执行；3) 函数组合。例如：const add = a => b => a + b; const add5 = add(5); add5(3) === 8。',
+      pitfalls: '柯里化和偏函数（Partial Application）不同：柯里化每次只接受一个参数，偏函数可以一次接受多个。',
+    },
+  },
+  {
+    id: 141,
+    category: 'javascript',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码实现了什么？',
+    code: `class Singleton {
+  static instance = null;
+  static getInstance() {
+    if (!Singleton.instance) {
+      Singleton.instance = new Singleton();
+    }
+    return Singleton.instance;
+  }
+}`,
+    options: [
+      { label: '工厂模式', value: 'a' },
+      { label: '单例模式', value: 'b' },
+      { label: '观察者模式', value: 'c' },
+      { label: '策略模式', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '这是单例模式，确保一个类只有一个实例。',
+      thinking: '单例模式的用途：1) 全局状态管理（Redux Store）；2) 数据库连接；3) 配置对象；4) 日志记录器。JavaScript 中更简单的单例：直接导出一个对象实例。',
+      pitfalls: '单例模式可能导致全局状态耦合，不利于测试。现代开发中依赖注入（DI）更受欢迎。',
+    },
+  },
+  {
+    id: 142,
+    category: 'javascript',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是 Proxy？以下代码的作用是什么？',
+    code: `const handler = {
+  get(target, prop) {
+    console.log('读取:', prop);
+    return target[prop];
+  },
+  set(target, prop, value) {
+    console.log('设置:', prop, value);
+    target[prop] = value;
+    return true;
+  }
+};
+const obj = new Proxy({}, handler);`,
+    options: [
+      { label: '创建一个只读对象', value: 'a' },
+      { label: '拦截对象的读取和设置操作', value: 'b' },
+      { label: '创建一个冻结对象', value: 'c' },
+      { label: '创建一个密封对象', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Proxy 可以拦截对象的基本操作（读取、设置、删除等），实现自定义行为。',
+      thinking: 'Proxy 的用途：1) 响应式系统（Vue 3）；2) 数据验证；3) 访问控制；4) 日志记录；5) 缓存。Proxy 比 Object.defineProperty 更强大，可以拦截更多操作。',
+      pitfalls: 'Proxy 的性能开销比直接访问属性略大。某些操作（如 === 比较）可能失效。',
+    },
+  },
+
+  // ==================== 实际场景题 ====================
+  {
+    id: 143,
+    category: 'react',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪种方式最适合在 React 中处理表单？',
+    options: [
+      { label: '每个输入框单独管理状态（useState）', value: 'a' },
+      { label: '使用一个对象管理所有表单状态', value: 'b' },
+      { label: '使用 useRef 直接操作 DOM', value: 'c' },
+      { label: '使用全局状态管理表单', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '使用一个对象管理表单状态是常见做法，也可以用 useReducer 管理复杂表单。',
+      thinking: '表单处理方案：1) useState + 对象（简单表单）；2) useReducer（复杂表单、多字段联动）；3) react-hook-form / formik（第三方库，性能好）；4) 受控 vs 非受控组件。',
+      pitfalls: '每个字段单独 useState 会导致大量状态变量，维护困难。复杂表单推荐 useReducer 或第三方库。',
+    },
+  },
+  {
+    id: 144,
+    category: 'react',
+    difficulty: 'hard',
+    type: 'single',
+    question: '以下代码中，如何优化大列表的渲染性能？',
+    code: `function List({ items }) {
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  );
+}`,
+    options: [
+      { label: '使用 React.memo 包裹列表项组件', value: 'a' },
+      { label: '使用虚拟列表（react-window）', value: 'b' },
+      { label: '使用 useDeferredValue 延迟渲染', value: 'c' },
+      { label: 'B 是最佳方案', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: '虚拟列表是大列表（1000+ 项）的最佳方案，只渲染可见区域的元素。',
+      thinking: '大列表优化：1) 虚拟列表（只渲染可见区域，推荐 react-window / react-virtualized）；2) React.memo 包裹列表项（避免不必要 re-render）；3) 分页/无限滚动（减少单次渲染量）。',
+      pitfalls: 'React.memo 只能减少 re-render，不能减少首次渲染的 DOM 数量。虚拟列表才是根本解决方案。',
+    },
+  },
+  {
+    id: 145,
+    category: 'vue',
+    difficulty: 'medium',
+    type: 'single',
+    question: 'Vue 中如何实现组件的按需加载？',
+    options: [
+      { label: '使用 defineAsyncComponent', value: 'a' },
+      { label: '使用 import() 动态导入', value: 'b' },
+      { label: '使用 Suspense 组件', value: 'c' },
+      { label: 'A 和 B 都是', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'defineAsyncComponent 和 import() 都可以实现组件的按需加载。',
+      thinking: 'Vue 异步组件：1) defineAsyncComponent 动态导入；2) 路由懒加载 component: () => import()；3) 配合 Suspense 显示加载状态。',
+      pitfalls: '异步组件需要 Suspense 或手动处理加载/错误状态。',
+    },
+  },
+  {
+    id: 146,
+    category: 'vue',
+    difficulty: 'hard',
+    type: 'single',
+    question: 'Vue 中如何处理组件通信？',
+    options: [
+      { label: 'props / emit（父子）', value: 'a' },
+      { label: 'provide / inject（跨层级）', value: 'b' },
+      { label: 'Pinia（全局状态）', value: 'c' },
+      { label: '以上都是', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: 'Vue 有多种组件通信方式，根据场景选择。',
+      thinking: 'Vue 通信方式：1) props/emit（父子）；2) provide/inject（跨层级）；3) Pinia/Vuex（全局状态）；4) mitt/EventBus（事件总线，不推荐）；5) ref/模板引用（父访问子）；6) attrs/listeners（透传）。',
+      pitfalls: '不要滥用全局状态管理。简单的父子通信用 props/emit，跨层级用 provide/inject。',
+    },
+  },
+  {
+    id: 147,
+    category: 'performance',
+    difficulty: 'medium',
+    type: 'single',
+    question: '如何优化移动端的页面性能？',
+    options: [
+      { label: '减少 JavaScript 体积', value: 'a' },
+      { label: '使用响应式图片', value: 'b' },
+      { label: '避免 300ms 点击延迟', value: 'c' },
+      { label: '以上都是', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: '移动端优化需要从多个维度入手。',
+      thinking: '移动端特有优化：1) 响应式图片（适配不同屏幕）；2) 避免 300ms 点击延迟（使用 touch 事件或 FastClick）；3) 减少重排（移动端 CPU 弱）；4) 使用 will-change 提示浏览器；5) 避免使用 100vh（移动端地址栏问题）。',
+      pitfalls: '移动端网络环境差，更需要关注资源大小和加载策略。',
+    },
+  },
+  {
+    id: 148,
+    category: 'performance',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是骨架屏（Skeleton Screen）？',
+    options: [
+      { label: '一种 CSS 动画效果', value: 'a' },
+      { label: '页面加载时显示的占位 UI，减少感知等待时间', value: 'b' },
+      { label: '一种错误页面设计', value: 'c' },
+      { label: '一种响应式布局方案', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '骨架屏在页面加载时显示内容的灰色占位图，让用户感知到"内容即将出现"。',
+      thinking: '骨架屏 vs Loading：1) Loading 只显示加载状态，用户不知道内容结构；2) 骨架屏展示内容布局，减少感知等待时间；3) 骨架屏对 SEO 更友好（有内容结构）。',
+      pitfalls: '骨架屏不应该太复杂，简单的内容占位即可。React 可用 react-loading-skeleton 库。',
+    },
+  },
+  {
+    id: 149,
+    category: 'engineering',
+    difficulty: 'medium',
+    type: 'single',
+    question: '什么是微前端（Micro Frontends）？',
+    options: [
+      { label: '一种前端框架', value: 'a' },
+      { label: '将前端应用拆分为多个独立子应用的架构', value: 'b' },
+      { label: '一种 CSS 方法论', value: 'c' },
+      { label: '一种测试策略', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '微前端将大型前端应用拆分为多个独立开发、独立部署的子应用。',
+      thinking: '微前端方案：1) qiankun（基于 single-spa）；2) Module Federation（Webpack 5）；3) Web Components；4) iframe。适用场景：大型团队、多技术栈、独立部署。',
+      pitfalls: '微前端增加了架构复杂度，小团队/小项目不需要。子应用之间的通信和状态共享是难点。',
+    },
+  },
+  {
+    id: 150,
+    category: 'engineering',
+    difficulty: 'hard',
+    type: 'single',
+    question: '什么是 Webpack 的 Module Federation？',
+    options: [
+      { label: '一种代码压缩算法', value: 'a' },
+      { label: '允许不同应用共享模块的 Webpack 5 特性', value: 'b' },
+      { label: '一种 CSS 预处理器', value: 'c' },
+      { label: '一种测试框架', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'Module Federation 允许不同构建的应用在运行时共享模块，是微前端的重要方案。',
+      thinking: 'Module Federation 的用途：1) 多个应用共享公共依赖（如 React）；2) 微前端架构（独立部署的子应用）；3) 运行时动态加载远程模块。',
+      pitfalls: 'Module Federation 需要 Webpack 5+，各应用需要协调共享依赖的版本。',
+    },
+  },
 ];
 
 // 按分类统计题目数量
+categories.forEach(cat => {
+  cat.count = quizQuestions.filter(q => q.category === cat.key).length;
+});
 categories.forEach(cat => {
   cat.count = quizQuestions.filter(q => q.category === cat.key).length;
 });
