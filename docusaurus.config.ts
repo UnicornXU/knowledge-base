@@ -49,6 +49,11 @@ const config: Config = {
           label: '面试题库',
         },
         {
+          to: '/quiz',
+          label: '📝 随堂测验',
+          position: 'left',
+        },
+        {
           href: 'https://github.com',
           label: 'GitHub',
           position: 'right',
@@ -73,6 +78,12 @@ const config: Config = {
             {label: 'AI 应用开发', to: '/ai'},
             {label: '工程化', to: '/engineering'},
             {label: '前端性能优化', to: '/performance'},
+          ],
+        },
+        {
+          title: '互动学习',
+          items: [
+            {label: '📝 随堂测验', to: '/quiz'},
           ],
         },
       ],
