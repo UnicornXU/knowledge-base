@@ -64,11 +64,33 @@ const FeatureList: FeatureItem[] = [
     link: '/ai',
   },
   {
+    title: 'Git',
+    emoji: '🌿',
+    description: (
+      <>
+        Git 工作流对比（Git Flow / GitHub Flow / Trunk-Based）、分支管理策略、
+        代码规范（ESLint + Prettier + Husky）。团队协作的必备技能。
+      </>
+    ),
+    link: '/engineering/git-workflow',
+  },
+  {
+    title: '性能优化',
+    emoji: '⚡',
+    description: (
+      <>
+        加载优化、渲染优化、网络优化、框架级优化、性能监控与分析。
+        性能优化能力是高级工程师的核心竞争力。
+      </>
+    ),
+    link: '/performance',
+  },
+  {
     title: '工程化',
     emoji: '🔧',
     description: (
       <>
-        构建工具（Webpack/Vite）、CI/CD 流程。工程化能力决定项目的可维护性。
+        构建工具（Webpack/Vite）、CI/CD 流程、Monorepo、包管理。工程化能力决定项目的可维护性。
       </>
     ),
     link: '/engineering',
