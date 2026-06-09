@@ -15,7 +15,7 @@ function HomepageHeader() {
       <div className="container">
         <div className={styles.badge}>
           <span className={styles.badgeIcon}>🚀</span>
-          <span>2024 最新版</span>
+          <span>持续更新中</span>
         </div>
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
@@ -39,11 +39,11 @@ function HomepageHeader() {
         </div>
         <div className={styles.stats}>
           <div className={styles.statItem}>
-            <span className={styles.statNumber}>50+</span>
+            <span className={styles.statNumber}>200+</span>
             <span className={styles.statLabel}>精选面试题</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statNumber}>6</span>
+            <span className={styles.statNumber}>7</span>
             <span className={styles.statLabel}>核心分类</span>
           </div>
           <div className={styles.statItem}>
@@ -51,8 +51,8 @@ function HomepageHeader() {
             <span className={styles.statLabel}>前沿专题</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statNumber}>📝</span>
-            <span className={styles.statLabel}>源码解析</span>
+            <span className={styles.statNumber}>45+</span>
+            <span className={styles.statLabel}>深度文档</span>
           </div>
         </div>
         <div className={styles.features}>

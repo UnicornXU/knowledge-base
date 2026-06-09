@@ -7,15 +7,65 @@ const config: Config = {
   tagline: '前端面试题 & AI 开发面试指南',
   favicon: 'img/favicon.ico',
 
-  url: 'https://your-site.example.com',
+  url: 'https://frontend-interview.netlify.app',
   baseUrl: '/',
 
   onBrokenLinks: 'warn',
+
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'description',
+        content: '前端面试知识库 — 涵盖 JavaScript、TypeScript、React、Vue、AI 应用开发等核心知识点，200+ 精选面试题，助你斩获心仪 Offer！',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:title',
+        content: '前端面试知识库',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:description',
+        content: '前端面试题 & AI 开发面试指南，200+ 精选题目，在线测验系统',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:type',
+        content: 'website',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+    },
+  ],
 
   i18n: {
     defaultLocale: 'zh-Hans',
     locales: ['zh-Hans'],
   },
+
+  plugins: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        language: ['zh', 'en'],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+      },
+    ],
+  ],
 
   presets: [
     [
@@ -26,6 +76,10 @@ const config: Config = {
           routeBasePath: '/',
         },
         blog: false,
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -54,7 +108,12 @@ const config: Config = {
           position: 'left',
         },
         {
-          href: 'https://github.com',
+          to: '/about',
+          label: '关于',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/frontend-interview/knowledge-base',
           label: 'GitHub',
           position: 'right',
         },
@@ -84,6 +143,7 @@ const config: Config = {
           title: '互动学习',
           items: [
             {label: '📝 随堂测验', to: '/quiz'},
+            {label: '关于本库', to: '/about'},
           ],
         },
       ],
@@ -92,7 +152,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['bash', 'json', 'typescript'],
+      additionalLanguages: ['bash', 'json', 'typescript', 'css', 'markup', 'jsx', 'tsx'],
     },
   } satisfies Preset.ThemeConfig,
 };

@@ -491,6 +491,332 @@
   line-height: 1.6;
 }
 
+/* ========== 功能入口 ========== */
+.featureRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.featureCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--ifm-card-background-color, #fff);
+  border: 2px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.featureCard:hover {
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.featureIcon {
+  font-size: 1.5rem;
+}
+
+.featureLabel {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ifm-font-color-base);
+}
+
+.featureBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* ========== 题数选择 ========== */
+.countGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.countCard {
+  background: var(--ifm-card-background-color, #fff);
+  border: 2px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.countCard:hover {
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-2px);
+}
+
+.countCardActive {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-lightest);
+  box-shadow: 0 0 0 1px var(--ifm-color-primary);
+}
+
+.countNumber {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.25rem;
+}
+
+.countDesc {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  margin-bottom: 0.25rem;
+}
+
+.countActual {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.configActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.startBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2.5rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary), #a78bfa);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.startBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.dangerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 2px solid #fca5a5;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dangerBtn:hover {
+  background: #fecaca;
+  transform: translateY(-2px);
+}
+
+/* ========== 计时器 ========== */
+.timerBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--ifm-color-emphasis-0, #f8f9fa);
+  border-radius: 100px;
+  width: fit-content;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.timerIcon {
+  font-size: 1.1rem;
+}
+
+.timerText {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========== 答题历史 ========== */
+.historyStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.historyStatItem {
+  background: var(--ifm-card-background-color, #fff);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.historyStatValue {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--ifm-color-primary);
+}
+
+.historyStatLabel {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-top: 0.25rem;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ifm-card-background-color, #fff);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.historyItem:hover {
+  transform: translateX(4px);
+}
+
+.historyItemLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.historyCategory {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ifm-font-color-base);
+}
+
+.historyDate {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.historyItemRight {
+  text-align: right;
+}
+
+.historyScore {
+  font-size: 1.25rem;
+  font-weight: 800;
+  padding: 0.15rem 0.75rem;
+  border-radius: 100px;
+  display: inline-block;
+}
+
+.historyDetail {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-top: 0.25rem;
+}
+
+/* ========== 空状态 ========== */
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* ========== 错题本 ========== */
+.wrongBookItem {
+  background: var(--ifm-card-background-color, #fff);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-left: 4px solid #ef4444;
+}
+
+.wrongBookMastered {
+  border-left-color: #10b981;
+  opacity: 0.7;
+}
+
+.wrongBookQuestion {
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.wrongBookCategory {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.wrongBookMeta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.75rem;
+}
+
+.wrongBookActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.wrongBookBtn {
+  padding: 0.4rem 1rem;
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wrongBookBtn:hover {
+  background: #a7f3d0;
+}
+
 /* ========== 响应式 ========== */
 @media screen and (max-width: 768px) {
   .quizContainer {
@@ -531,5 +857,39 @@
     width: 120px;
     height: 120px;
     font-size: 2.5rem;
+  }
+
+  .countGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .featureRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .featureCard {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+
+  .historyStats {
+    grid-template-columns: 1fr;
+  }
+
+  .historyItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .historyItemRight {
+    text-align: left;
+  }
+
+  .wrongBookMeta {
+    flex-direction: column;
+    gap: 0.25rem;
   }
 }
