@@ -64,6 +64,39 @@ const FeatureList: FeatureItem[] = [
     link: '/ai',
   },
   {
+    title: 'CSS',
+    emoji: '🎨',
+    description: (
+      <>
+        盒模型、Flexbox 与 Grid 布局、定位与层叠上下文、响应式设计、动画过渡、现代 CSS 新特性。
+        CSS 是前端面试中容易被忽视但高频考察的领域。
+      </>
+    ),
+    link: '/css',
+  },
+  {
+    title: '浏览器原理',
+    emoji: '🌐',
+    description: (
+      <>
+        渲染流程、事件循环、V8 引擎与垃圾回收、浏览器存储与跨域、DevTools 性能调试。
+        深入浏览器底层是高级前端工程师的必备知识。
+      </>
+    ),
+    link: '/browser',
+  },
+  {
+    title: '计算机网络',
+    emoji: '🌍',
+    description: (
+      <>
+        TCP 连接、HTTP 协议演进、缓存策略、WebSocket、DNS 解析与 Web 安全。
+        网络知识是前后端协作和性能优化的基础。
+      </>
+    ),
+    link: '/network',
+  },
+  {
     title: 'Git',
     emoji: '🌿',
     description: (
