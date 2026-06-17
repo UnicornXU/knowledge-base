@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 title: "向量数据库前端交互"
 difficulty: "hard"
 tags: ["ai", "vector-db", "embedding"]

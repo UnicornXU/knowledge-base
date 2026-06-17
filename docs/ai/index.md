@@ -17,13 +17,14 @@ AI 正在重塑前端开发的方式，掌握 AI 集成能力是 2024+ 前端工
 | [RAG 前端实现](./rag-frontend.md) | 🔴 高 | 向量检索、知识库、上下文管理 |
 | [AI SDK 使用](./ai-sdk-usage.md) | 🟡 中 | Vercel AI SDK、LangChain.js |
 | [AI 工具](./ai-tools.md) | 🟢 初 | Cursor、Copilot、AI 辅助开发 |
+| [Codex 使用指南](./codex-guide.md) | 🟢 初 | 新手入门、提示词模板、工作流 |
 | [向量数据库前端](./vector-db-frontend.md) | 🔴 高 | Pinecone、Weaviate、嵌入向量 |
 
 ## 🎯 学习路线
 
 ```
-AI 工具（了解） → LLM 集成 → 流式响应 → AI SDK → RAG 实现 → 向量数据库
-   (入门)         (核心)      (重点)     (实用)    (进阶)      (高级)
+AI 工具（了解） → Codex 使用指南 → LLM 集成 → 流式响应 → AI SDK → RAG 实现 → 向量数据库
+   (入门)           (上手)        (核心)      (重点)     (实用)    (进阶)      (高级)
 ```
 
 ## 面试考察重点
