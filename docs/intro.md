@@ -17,6 +17,7 @@ title: 前端面试知识库
 | **Vue** | 响应式系统、组合式 API、虚拟 DOM |
 | **AI 应用开发** | LLM 集成、RAG、流式响应、AI SDK、AI 工具 |
 | **工程化** | 构建工具、CI/CD |
+| **手写题** | 防抖节流、深拷贝、Promise、EventEmitter、LRU 缓存 |
 
 ## 🎯 难度说明
 

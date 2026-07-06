@@ -137,6 +137,7 @@ const config: Config = {
             {label: 'AI 应用开发', to: '/ai'},
             {label: '工程化', to: '/engineering'},
             {label: '前端性能优化', to: '/performance'},
+            {label: '手写题', to: '/quiz'},
           ],
         },
         {

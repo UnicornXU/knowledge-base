@@ -26,6 +26,7 @@ export const categories = [
   { key: 'vue', label: 'Vue', icon: '💚', count: 0 },
   { key: 'performance', label: '性能优化', icon: '🚀', count: 0 },
   { key: 'engineering', label: '工程化', icon: '🔧', count: 0 },
+  { key: 'handwrite', label: '手写题', icon: '✍️', count: 0 },
 ];
 
 export const quizQuestions: QuizQuestion[] = [
@@ -4439,6 +4440,397 @@ console.log(counter.count);`,
       correct: 'A/B 测试将用户随机分为两组，分别展示不同版本（A 版和 B 版），通过数据比较哪个版本效果更好。',
       thinking: 'A/B 测试的步骤：1) 确定测试目标（转化率、点击率等）；2) 创建变体（A 原版、B 新版）；3) 随机分组；4) 收集数据；5) 统计分析。常用工具：Google Optimize、LaunchDarkly。',
       pitfalls: 'A/B 测试需要足够的样本量和时间才能得出统计显著的结论。',
+    },
+  },
+
+  // ==================== 手写题 ====================
+  {
+    id: 201,
+    category: 'handwrite',
+    difficulty: 'medium',
+    type: 'single',
+    question: '请手写实现一个 debounce（防抖）函数',
+    code: `// 期望行为
+const fn = debounce(() => console.log('called'), 300);
+fn(); fn(); fn(); // 300ms 后只输出一次 'called'`,
+    options: [
+      { label: '使用 setTimeout + clearTimeout 实现', value: 'a' },
+      { label: '使用 setInterval 实现', value: 'b' },
+      { label: '使用 requestAnimationFrame 实现', value: 'c' },
+      { label: '使用 Promise 实现', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现：
+function debounce(fn, delay) {
+  let timer = null;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}`,
+      thinking: '防抖的核心思想：每次触发时清除上一个定时器，重新计时。这样只有最后一次调用会在延迟后执行。考察点：1) 闭包保存 timer；2) this 绑定；3) 参数传递。',
+      pitfalls: '常见错误：忘记 clearTimer、没有绑定 this、没有传参。进阶追问：如何实现 leading（立即执行一次）+ trailing（最后一次执行）模式？',
+    },
+  },
+  {
+    id: 202,
+    category: 'handwrite',
+    difficulty: 'medium',
+    type: 'single',
+    question: '请手写实现一个 throttle（节流）函数',
+    code: `// 期望行为
+const fn = throttle(() => console.log('called'), 300);
+fn(); fn(); fn(); // 每 300ms 最多执行一次`,
+    options: [
+      { label: '使用时间戳或 setTimeout 实现', value: 'a' },
+      { label: '使用 Promise.race 实现', value: 'b' },
+      { label: '使用 requestIdleCallback 实现', value: 'c' },
+      { label: '使用 Generator 实现', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现（时间戳版）：
+function throttle(fn, interval) {
+  let last = 0;
+  return function(...args) {
+    const now = Date.now();
+    if (now - last >= interval) {
+      last = now;
+      fn.apply(this, args);
+    }
+  };
+}
+
+参考实现（定时器版）：
+function throttle(fn, interval) {
+  let timer = null;
+  return function(...args) {
+    if (timer) return;
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+      timer = null;
+    }, interval);
+  };
+}`,
+      thinking: '节流的核心思想：在固定时间间隔内只执行一次。两种实现：1) 时间戳版：第一次立即执行，最后一次不执行；2) 定时器版：第一次延迟执行，最后一次会执行。',
+      pitfalls: '防抖 vs 节流的区别是高频考点。进阶：如何实现 leading + trailing 都执行的节流？',
+    },
+  },
+  {
+    id: 203,
+    category: 'handwrite',
+    difficulty: 'hard',
+    type: 'single',
+    question: '请手写实现一个 deepClone（深拷贝）函数，支持循环引用',
+    code: `// 期望行为
+const obj = { a: 1, b: { c: 2 }, d: new Date() };
+obj.self = obj; // 循环引用
+const cloned = deepClone(obj);
+console.log(cloned !== obj); // true
+console.log(cloned.self === cloned); // true`,
+    options: [
+      { label: '使用递归 + WeakMap 处理循环引用', value: 'a' },
+      { label: '使用 JSON.parse(JSON.stringify())', value: 'b' },
+      { label: '使用 Object.assign()', value: 'c' },
+      { label: '使用展开运算符 {...obj}', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现：
+function deepClone(obj, map = new WeakMap()) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
+  if (map.has(obj)) return map.get(obj);
+
+  const clone = Array.isArray(obj) ? [] : {};
+  map.set(obj, clone);
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      clone[key] = deepClone(obj[key], map);
+    }
+  }
+  return clone;
+}`,
+      thinking: '深拷贝考察点：1) 基本类型直接返回；2) 引用类型递归拷贝；3) 循环引用用 WeakMap 解决；4) 特殊对象（Date、RegExp）单独处理；5) hasOwnProperty 过滤原型属性。',
+      pitfalls: 'JSON.parse(JSON.stringify()) 的局限：不能处理循环引用、函数、undefined、Symbol、Map/Set 等。WeakMap 用弱引用，不会造成内存泄漏。',
+    },
+  },
+  {
+    id: 204,
+    category: 'handwrite',
+    difficulty: 'hard',
+    type: 'single',
+    question: '请手写实现一个 Promise',
+    code: `// 期望行为
+const p = new MyPromise((resolve, reject) => {
+  setTimeout(() => resolve('success'), 100);
+});
+p.then(res => console.log(res)); // 'success'`,
+    options: [
+      { label: '实现 then/catch/finally 和状态管理', value: 'a' },
+      { label: '只需要实现 then 方法', value: 'b' },
+      { label: '使用 async/await 包装', value: 'c' },
+      { label: '使用 Generator 实现', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现（简化版）：
+class MyPromise {
+  constructor(executor) {
+    this.state = 'pending';
+    this.value = undefined;
+    this.callbacks = [];
+    const resolve = (value) => {
+      if (this.state !== 'pending') return;
+      this.state = 'fulfilled';
+      this.value = value;
+      this.callbacks.forEach(cb => cb.onFulfilled(value));
+    };
+    executor(resolve, () => {});
+  }
+  then(onFulfilled) {
+    return new MyPromise((resolve) => {
+      if (this.state === 'fulfilled') {
+        resolve(onFulfilled(this.value));
+      } else {
+        this.callbacks.push({ onFulfilled: (v) => resolve(onFulfilled(v)) });
+      }
+    });
+  }
+}`,
+      thinking: 'Promise 的核心：1) 三种状态（pending/fulfilled/rejected）；2) 状态只能改变一次；3) then 返回新 Promise（链式调用）；4) 异步执行（微任务）。',
+      pitfalls: '完整实现需要处理：异步回调、链式调用、值穿透、错误捕获。这是最难的手写题之一。',
+    },
+  },
+  {
+    id: 205,
+    category: 'handwrite',
+    difficulty: 'medium',
+    type: 'single',
+    question: '请手写实现一个 call / apply / bind 方法',
+    code: `// 期望行为
+function greet(greeting) { return greeting + ' ' + this.name; }
+const obj = { name: 'Alice' };
+console.log(greet.myCall(obj, 'Hello')); // 'Hello Alice'`,
+    options: [
+      { label: '将函数设为对象的临时方法来绑定 this', value: 'a' },
+      { label: '使用箭头函数绑定 this', value: 'b' },
+      { label: '使用 Proxy 拦截', value: 'c' },
+      { label: '使用 Reflect.apply', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现：
+Function.prototype.myCall = function(ctx, ...args) {
+  ctx = ctx || globalThis;
+  const key = Symbol();
+  ctx[key] = this;
+  const result = ctx[key](...args);
+  delete ctx[key];
+  return result;
+};
+
+Function.prototype.myBind = function(ctx, ...args) {
+  const fn = this;
+  return function(...newArgs) {
+    return fn.apply(ctx, [...args, ...newArgs]);
+  };
+};`,
+      thinking: '核心思路：将函数临时挂在目标对象上执行，执行完删除。考察：1) this 绑定原理；2) Symbol 避免属性冲突；3) 参数合并（call vs apply vs bind）。',
+      pitfalls: '注意处理 ctx 为 null/undefined 的情况（严格模式下 this 为 undefined，非严格模式下为 globalThis）。',
+    },
+  },
+  {
+    id: 206,
+    category: 'handwrite',
+    difficulty: 'hard',
+    type: 'single',
+    question: '请手写实现一个 EventEmitter（发布-订阅模式）',
+    code: `// 期望行为
+const emitter = new EventEmitter();
+emitter.on('click', (data) => console.log(data));
+emitter.emit('click', 'hello'); // 'hello'
+emitter.off('click', fn); // 取消订阅`,
+    options: [
+      { label: '使用 Map 存储事件和回调列表', value: 'a' },
+      { label: '使用 DOM 事件系统', value: 'b' },
+      { label: '使用 Promise 实现', value: 'c' },
+      { label: '使用 WebSocket 实现', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现：
+class EventEmitter {
+  constructor() { this.events = new Map(); }
+  on(event, fn) {
+    if (!this.events.has(event)) this.events.set(event, []);
+    this.events.get(event).push(fn);
+  }
+  off(event, fn) {
+    const fns = this.events.get(event);
+    if (fns) this.events.set(event, fns.filter(f => f !== fn && f._raw !== fn));
+  }
+  emit(event, ...args) {
+    (this.events.get(event) || []).forEach(fn => fn(...args));
+  }
+  once(event, fn) {
+    const wrapper = (...args) => { fn(...args); this.off(event, wrapper); };
+    wrapper._raw = fn;
+    this.on(event, wrapper);
+  }
+}`,
+      thinking: 'EventEmitter 考察：1) 数据结构选择（Map/Object）；2) on/off/emit/once 四个核心方法；3) once 的实现（wrapper 函数 + _raw 标记）；4) off 时需要能通过原始函数找到 wrapper。',
+      pitfalls: 'once 的实现是难点：需要用 wrapper 包装原始函数，同时保留通过原始函数取消订阅的能力。',
+    },
+  },
+  {
+    id: 207,
+    category: 'handwrite',
+    difficulty: 'medium',
+    type: 'single',
+    question: '请手写实现一个 new 操作符',
+    code: `// 期望行为
+function Person(name) { this.name = name; }
+Person.prototype.sayHi = function() { return 'Hi ' + this.name; };
+const p = myNew(Person, 'Alice');
+console.log(p.name); // 'Alice'
+console.log(p.sayHi()); // 'Hi Alice'
+console.log(p instanceof Person); // true`,
+    options: [
+      { label: '创建对象 → 链接原型 → 执行构造函数 → 返回对象', value: 'a' },
+      { label: '直接调用构造函数', value: 'b' },
+      { label: '使用 Object.create + call', value: 'c' },
+      { label: 'A 和 C 的思路一致', value: 'd' },
+    ],
+    answer: 'd',
+    explanation: {
+      correct: `参考实现：
+function myNew(Constructor, ...args) {
+  const obj = Object.create(Constructor.prototype);
+  const result = Constructor.apply(obj, args);
+  return result instanceof Object ? result : obj;
+}`,
+      thinking: 'new 的四个步骤：1) 创建空对象；2) 链接到原型；3) 执行构造函数绑定 this；4) 判断返回值。关键：如果构造函数返回了对象，则使用该对象；否则使用新创建的对象。',
+      pitfalls: 'Object.create 和 {} 的区别：Object.create 可以指定原型，{} 的原型是 Object.prototype。',
+    },
+  },
+  {
+    id: 208,
+    category: 'handwrite',
+    difficulty: 'medium',
+    type: 'single',
+    question: '请手写实现一个 instanceOf 方法',
+    code: `// 期望行为
+myInstanceOf([], Array); // true
+myInstanceOf({}, Object); // true
+myInstanceOf('hello', String); // false（基本类型）`,
+    options: [
+      { label: '遍历原型链，比较 constructor', value: 'a' },
+      { label: '使用 typeof 判断', value: 'b' },
+      { label: '使用 Object.prototype.toString', value: 'c' },
+      { label: '使用 Reflect API', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现：
+function myInstanceOf(obj, Constructor) {
+  if (obj === null || (typeof obj !== 'object' && typeof obj !== 'function')) return false;
+  let proto = Object.getPrototypeOf(obj);
+  while (proto !== null) {
+    if (proto === Constructor.prototype) return true;
+    proto = Object.getPrototypeOf(proto);
+  }
+  return false;
+}`,
+      thinking: 'instanceof 的原理：沿着实例的原型链向上查找，看是否能找到构造函数的 prototype。考察：1) 原型链知识；2) Object.getPrototypeOf；3) 基本类型返回 false。',
+      pitfalls: 'instanceof 对基本类型无效（1 instanceof Number === false），需要用 typeof。',
+    },
+  },
+  {
+    id: 209,
+    category: 'handwrite',
+    difficulty: 'hard',
+    type: 'single',
+    question: '请手写实现 Promise.all',
+    code: `// 期望行为
+Promise.all([p1, p2, p3]).then(results => {
+  console.log(results); // [1, 2, 3]
+}).catch(err => {
+  console.log(err); // 任一 reject 立即触发
+});`,
+    options: [
+      { label: '维护计数器，所有 resolve 后返回结果数组', value: 'a' },
+      { label: '使用 async/await 逐个等待', value: 'b' },
+      { label: '使用 Promise.race 实现', value: 'c' },
+      { label: '使用 Generator 实现', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现：
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    let count = 0;
+    const len = promises.length;
+    if (len === 0) return resolve([]);
+    promises.forEach((p, i) => {
+      Promise.resolve(p).then(val => {
+        results[i] = val;
+        if (++count === len) resolve(results);
+      }, reject);
+    });
+  });
+}`,
+      thinking: 'Promise.all 的核心：1) 维护结果数组和计数器；2) 用索引保证顺序；3) 任何一个 reject 立即 reject；4) Promise.resolve 包装非 Promise 值。',
+      pitfalls: '注意结果数组用索引赋值（results[i] = val）保证顺序，不能用 push。',
+    },
+  },
+  {
+    id: 210,
+    category: 'handwrite',
+    difficulty: 'hard',
+    type: 'single',
+    question: '请手写实现一个 LRU 缓存（Least Recently Used）',
+    code: `// 期望行为
+const cache = new LRUCache(2); // 容量为 2
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);     // 返回 1
+cache.put(3, 3);  // 淘汰 key=2
+cache.get(2);     // 返回 -1（已淘汰）`,
+    options: [
+      { label: '使用 Map 的插入顺序特性', value: 'a' },
+      { label: '使用数组实现', value: 'b' },
+      { label: '使用栈实现', value: 'c' },
+      { label: '使用队列实现', value: 'd' },
+    ],
+    answer: 'a',
+    explanation: {
+      correct: `参考实现：
+class LRUCache {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.cache = new Map();
+  }
+  get(key) {
+    if (!this.cache.has(key)) return -1;
+    const val = this.cache.get(key);
+    this.cache.delete(key);
+    this.cache.set(key, val); // 移到最新
+    return val;
+  }
+  put(key, value) {
+    if (this.cache.has(key)) this.cache.delete(key);
+    this.cache.set(key, value);
+    if (this.cache.size > this.capacity) {
+      this.cache.delete(this.cache.keys().next().value); // 删除最旧
+    }
+  }
+}`,
+      thinking: 'LRU 缓存的核心：1) Map 保持插入顺序；2) get 时把 key 移到最新；3) put 超出容量时删除最旧的（Map.keys().next().value）。',
+      pitfalls: 'Map.keys().next().value 获取的是第一个（最旧的）key。这是 Map 的迭代器特性。',
     },
   },
 ];

@@ -128,6 +128,17 @@ const FeatureList: FeatureItem[] = [
     ),
     link: '/engineering',
   },
+  {
+    title: '手写题',
+    emoji: '✍️',
+    description: (
+      <>
+        防抖节流、深拷贝、Promise、call/apply/bind、EventEmitter、LRU 缓存。
+        手写题是前端面试中区分度最高的题型。
+      </>
+    ),
+    link: '/quiz',
+  },
 ];
 
 function Feature({title, emoji, description, link}: FeatureItem) {
