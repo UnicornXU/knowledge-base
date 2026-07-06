@@ -5325,6 +5325,103 @@ console.log('4');`,
       pitfalls: 'DNS 使用 UDP 协议（端口 53），查询失败时切换 TCP。DNS 预解析（dns-prefetch）可以提前解析域名。',
     },
   },
+
+  // ==================== 网络安全 ====================
+  {
+    id: 236,
+    category: 'network',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪种 XSS 攻击类型不需要经过服务器？',
+    options: [
+      { label: '存储型 XSS', value: 'a' },
+      { label: '反射型 XSS', value: 'b' },
+      { label: 'DOM 型 XSS', value: 'c' },
+      { label: '以上都需要', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'DOM 型 XSS 由前端 JavaScript 直接操作 DOM 时未过滤输入导致，恶意脚本不经过服务器。',
+      thinking: '存储型 XSS：恶意脚本存储在服务器数据库。反射型 XSS：恶意脚本在 URL 参数中，服务器拼接返回。DOM 型 XSS：前端直接从 URL 读取并操作 DOM。',
+      pitfalls: 'DOM 型 XSS 的防御完全在前端，需要对用户输入进行编码，使用 textContent 替代 innerHTML。',
+    },
+  },
+  {
+    id: 237,
+    category: 'network',
+    difficulty: 'medium',
+    type: 'single',
+    question: 'CSRF 攻击的核心原理是什么？',
+    options: [
+      { label: '注入恶意脚本到页面', value: 'a' },
+      { label: '利用浏览器自动携带 Cookie 的特性伪造请求', value: 'b' },
+      { label: '暴力破解用户密码', value: 'c' },
+      { label: 'DDoS 攻击', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'CSRF 利用浏览器会自动为跨站请求携带目标网站 Cookie 的特性，诱导用户访问恶意网站来伪造请求。',
+      thinking: 'CSRF 流程：用户登录 A 站 → 获得 Cookie → 访问恶意 B 站 → B 站自动向 A 站发请求 → 浏览器自动携带 A 站 Cookie → A 站以为是用户操作。',
+      pitfalls: 'XSS 是注入脚本执行，CSRF 是伪造请求。两者可以组合使用：通过 XSS 获取 Token 后发起 CSRF 攻击。',
+    },
+  },
+  {
+    id: 238,
+    category: 'network',
+    difficulty: 'medium',
+    type: 'single',
+    question: 'HTTPS 使用的加密方式是？',
+    options: [
+      { label: '只使用对称加密', value: 'a' },
+      { label: '只使用非对称加密', value: 'b' },
+      { label: '非对称加密交换密钥，对称加密传输数据', value: 'c' },
+      { label: '只使用哈希算法', value: 'd' },
+    ],
+    answer: 'c',
+    explanation: {
+      correct: 'HTTPS 在握手阶段使用非对称加密（RSA/ECDHE）交换密钥，在数据传输阶段使用对称加密（AES）加密数据。',
+      thinking: '非对称加密安全但慢，用于握手阶段安全地交换密钥。对称加密快，用于加密实际传输的数据。两者结合兼顾安全性和性能。',
+      pitfalls: 'TLS 1.3 优化了握手过程，只需 1-RTT，支持 0-RTT 会话恢复。移除了不安全的加密算法。',
+    },
+  },
+  {
+    id: 239,
+    category: 'network',
+    difficulty: 'medium',
+    type: 'single',
+    question: '以下哪个 HTTP 响应头可以防止点击劫持？',
+    options: [
+      { label: 'Content-Security-Policy', value: 'a' },
+      { label: 'X-Frame-Options', value: 'b' },
+      { label: 'Strict-Transport-Security', value: 'c' },
+      { label: 'X-Content-Type-Options', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: 'X-Frame-Options: DENY 或 SAMEORIGIN 可以防止页面被嵌入 iframe，从而防止点击劫持攻击。',
+      thinking: 'X-Frame-Options: DENY（禁止嵌入）、SAMEORIGIN（只允许同源嵌入）。CSP 的 frame-ancestors 是更现代的替代方案。',
+      pitfalls: 'HSTS 强制 HTTPS，X-Content-Type-Options 防止 MIME 嗅探，CSP 限制资源加载来源。',
+    },
+  },
+  {
+    id: 240,
+    category: 'network',
+    difficulty: 'medium',
+    type: 'single',
+    question: 'CORS 请求中，为什么 Allow-Origin 不能用 * 同时 Allow-Credentials 设为 true？',
+    options: [
+      { label: '浏览器安全限制', value: 'a' },
+      { label: '会导致 Cookie 泄露给任意网站', value: 'b' },
+      { label: '服务器不支持', value: 'c' },
+      { label: '两者可以同时使用', value: 'd' },
+    ],
+    answer: 'b',
+    explanation: {
+      correct: '如果 Allow-Origin 为 * 且允许携带 Cookie，任何网站都可以携带用户的 Cookie 发起请求，相当于没有 CORS 保护。',
+      thinking: 'CORS 的设计初衷是限制跨域访问。Allow-Credentials: true 表示允许携带 Cookie，此时必须指定具体的 Origin，不能用通配符 *。',
+      pitfalls: '开发环境可以用代理解决跨域，生产环境必须在服务器配置具体的 Allow-Origin。',
+    },
+  },
 ];
 
 // 按分类统计题目数量
