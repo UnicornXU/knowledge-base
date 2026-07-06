@@ -30,15 +30,8 @@ tags:
     />
   </view>
 
-  <!-- 投票列表 -->
-  <scroll-view
-    class="poll-list"
-    scroll-y
-    bindscrolltolower="onLoadMore"
-    refresher-enabled
-    bind:refresherrefresh="onRefresh"
-    refresher-triggered="{{isRefreshing}}"
-  >
+  <!-- 投票列表（使用普通 view + 页面滚动） -->
+  <view class="poll-list">
     <block wx:for="{{pollList}}" wx:key="_id">
       <poll-card
         poll="{{item}}"
@@ -49,19 +42,20 @@ tags:
 
     <!-- 加载状态 -->
     <view class="loading-status" wx:if="{{pollList.length > 0}}">
-      <text wx:if="{{isLoading}}">加载中...</text>
-      <text wx:elif="{{noMore}}">没有更多了</text>
+      <van-loading wx:if="{{isLoading}}" size="24rpx">加载中...</van-loading>
+      <text wx:elif="{{noMore}}">— 没有更多了 —</text>
     </view>
 
     <!-- 空状态 -->
     <view class="empty-state" wx:if="{{!isLoading && pollList.length === 0}}">
       <image src="/images/empty.png" mode="aspectFit" />
-      <text>暂无投票</text>
+      <text class="empty-title">暂无投票</text>
+      <text class="empty-desc">快来创建第一个投票吧</text>
       <van-button type="primary" size="small" bind:tap="onCreateTap">
         创建投票
       </van-button>
     </view>
-  </scroll-view>
+  </view>
 
   <!-- 创建按钮 -->
   <view class="fab-button" bind:tap="onCreateTap">
@@ -69,6 +63,8 @@ tags:
   </view>
 </view>
 ```
+
+> **说明**：这里使用普通 `view` 而非 `scroll-view`，配合页面级别的 `onReachBottom` 和 `onPullDownRefresh` 实现滚动加载和下拉刷新，更符合小程序的开发习惯。
 
 ### 1.2 页面逻辑
 
@@ -84,8 +80,12 @@ Page({
     page: 1,
     pageSize: 10,
     isLoading: false,
-    isRefreshing: false,
     noMore: false,
+  },
+
+  // 配置下拉刷新
+  config: {
+    enablePullDownRefresh: true,
   },
 
   onLoad() {
@@ -98,6 +98,17 @@ Page({
       this._needRefresh = false;
       this.refreshList();
     }
+  },
+
+  // 页面下拉刷新（需要在 app.json 或页面 json 中开启 enablePullDownRefresh）
+  onPullDownRefresh() {
+    this.refreshList();
+    wx.stopPullDownRefresh();
+  },
+
+  // 页面触底加载更多
+  onReachBottom() {
+    this.loadPollList();
   },
 
   // 加载投票列表
@@ -120,24 +131,13 @@ Page({
     } catch (err) {
       console.error('加载失败:', err);
     } finally {
-      this.setData({ isLoading: false, isRefreshing: false });
+      this.setData({ isLoading: false });
     }
-  },
-
-  // 下拉刷新
-  onRefresh() {
-    this.setData({ isRefreshing: true });
-    this.refreshList();
   },
 
   // 刷新列表
   refreshList() {
     this.setData({ page: 1, noMore: false });
-    this.loadPollList();
-  },
-
-  // 上拉加载更多
-  onLoadMore() {
     this.loadPollList();
   },
 
@@ -152,14 +152,15 @@ Page({
 
   // 点击投票卡片
   onPollTap(e) {
-    const { id } = e.currentTarget.dataset;
+    const { id } = e.detail;
     wx.navigateTo({ url: `/pages/poll-detail/index?id=${id}` });
   },
 
   // 分享投票
   onPollShare(e) {
     const { poll } = e.detail;
-    // 触发页面分享
+    // 设置分享数据供 onShareAppMessage 使用
+    this._sharePoll = poll;
   },
 
   // 创建投票
@@ -168,9 +169,10 @@ Page({
   },
 
   // 分享配置
-  onShareAppMessage(e) {
-    if (e.from === 'button') {
-      const { poll } = e.target.dataset;
+  onShareAppMessage() {
+    if (this._sharePoll) {
+      const poll = this._sharePoll;
+      this._sharePoll = null;
       return {
         title: poll.title,
         path: `/pages/poll-detail/index?id=${poll._id}`,
@@ -184,13 +186,31 @@ Page({
 });
 ```
 
-### 1.3 页面样式
+### 1.3 页面配置
+
+```json
+// pages/index/index.json
+{
+  "navigationBarTitleText": "投票助手",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "poll-card": "/components/poll-card/index",
+    "van-search": "@vant/weapp/search/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-loading": "@vant/weapp/loading/index"
+  }
+}
+```
+
+### 1.4 页面样式
 
 ```css
 /* pages/index/index.wxss */
 .page-index {
   min-height: 100vh;
   background: var(--color-bg);
+  padding-bottom: 120rpx;
 }
 
 .search-bar {
@@ -202,7 +222,6 @@ Page({
 }
 
 .poll-list {
-  height: calc(100vh - 120rpx);
   padding: 24rpx;
 }
 
@@ -226,7 +245,14 @@ Page({
   margin-bottom: 32rpx;
 }
 
-.empty-state text {
+.empty-title {
+  font-size: 32rpx;
+  color: var(--color-text);
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
   color: var(--color-text-placeholder);
   margin-bottom: 32rpx;
 }
