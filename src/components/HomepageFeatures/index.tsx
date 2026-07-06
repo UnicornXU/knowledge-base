@@ -151,6 +151,17 @@ const FeatureList: FeatureItem[] = [
     link: '/computer-basics',
   },
   {
+    title: '小程序开发实战',
+    emoji: '📱',
+    description: (
+      <>
+        投票助手项目实战：微信登录、云开发、组件化、数据管理、分享海报、部署上线。
+        从零到一掌握小程序全栈开发。
+      </>
+    ),
+    link: '/miniapp',
+  },
+  {
     title: '手写题',
     emoji: '✍️',
     description: (
