@@ -136,6 +136,15 @@ const config: Config = {
           items: [
             {label: 'AI 应用开发', to: '/ai'},
             {label: '工程化', to: '/engineering'},
+            {label: '数据结构与算法', to: '/algorithms'},
+            {label: '计算机基础', to: '/computer-basics'},
+          ],
+        },
+        {
+          title: '底层原理',
+          items: [
+            {label: '浏览器原理', to: '/browser'},
+            {label: '计算机网络', to: '/network'},
             {label: '前端性能优化', to: '/performance'},
             {label: '手写题', to: '/quiz'},
           ],

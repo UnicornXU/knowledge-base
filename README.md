@@ -4,8 +4,8 @@
 
 ## ✨ 特性
 
-- **200+ 精选面试题** — 涵盖 JavaScript、TypeScript、React、Vue、AI 应用开发、工程化、性能优化
-- **45+ 深度文档** — 从基础概念到源码解析，层层递进
+- **200+ 精选面试题** — 涵盖 JavaScript、TypeScript、React、Vue、AI 应用开发、工程化、性能优化、数据结构与算法、计算机基础
+- **55+ 深度文档** — 从基础概念到源码解析，层层递进
 - **在线测验系统** — 随机出题、即时反馈、错题回顾、分数统计
 - **AI 前沿专题** — LLM 集成、RAG、流式响应、AI SDK 等热门方向
 - **难度分级** — 🟢 Easy / 🟡 Medium / 🔴 Hard 三级标注
@@ -22,6 +22,8 @@
 | Vue | 11 | 响应式、组合式 API、虚拟 DOM、源码、路由 |
 | AI 应用开发 | 6 | LLM 集成、RAG、流式响应、AI SDK |
 | 工程化 | 5+ | 构建工具、CI/CD、Monorepo、包管理 |
+| 数据结构与算法 | 5 | 数据结构、排序、搜索、动态规划、前端算法实战 |
+| 计算机基础 | 4 | 操作系统、编译原理、设计模式、数据表示 |
 | 前端性能优化 | 6 | 加载、渲染、网络、监控、框架优化 |
 
 ## 🚀 快速开始
@@ -65,6 +67,11 @@ npm run serve
 │   ├── vue/                 # Vue.js
 │   ├── ai/                  # AI 应用开发
 │   ├── engineering/         # 工程化
+│   ├── algorithms/          # 数据结构与算法
+│   ├── computer-basics/     # 计算机基础
+│   ├── browser/             # 浏览器原理
+│   ├── network/             # 计算机网络
+│   ├── css/                 # CSS
 │   └── performance/         # 前端性能优化
 ├── src/
 │   ├── components/          # React 组件

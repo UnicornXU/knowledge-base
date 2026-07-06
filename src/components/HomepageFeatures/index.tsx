@@ -129,6 +129,28 @@ const FeatureList: FeatureItem[] = [
     link: '/engineering',
   },
   {
+    title: '数据结构与算法',
+    emoji: '🧮',
+    description: (
+      <>
+        数组、链表、树、图、排序算法、动态规划、Diff 算法、LRU 缓存。
+        算法能力是大厂面试的敲门砖。
+      </>
+    ),
+    link: '/algorithms',
+  },
+  {
+    title: '计算机基础',
+    emoji: '🖥️',
+    description: (
+      <>
+        操作系统（进程/线程/内存）、编译原理（AST/Babel）、设计模式、数据表示与编码。
+        计算机基础决定了你的技术天花板。
+      </>
+    ),
+    link: '/computer-basics',
+  },
+  {
     title: '手写题',
     emoji: '✍️',
     description: (
