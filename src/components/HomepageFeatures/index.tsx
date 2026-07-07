@@ -173,6 +173,17 @@ const FeatureList: FeatureItem[] = [
     link: '/design-patterns',
   },
   {
+    title: '公务员面试',
+    emoji: '🏛️',
+    description: (
+      <>
+        结构化面试全流程：综合分析、计划组织、人际关系、应急应变。
+        真题解析与答题技巧。
+      </>
+    ),
+    link: '/civil-service',
+  },
+  {
     title: '手写题',
     emoji: '✍️',
     description: (
