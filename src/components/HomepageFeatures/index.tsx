@@ -162,6 +162,17 @@ const FeatureList: FeatureItem[] = [
     link: '/miniapp',
   },
   {
+    title: '设计模式',
+    emoji: '🏗️',
+    description: (
+      <>
+        单例、工厂、观察者、策略、代理、装饰器、适配器、状态、职责链。
+        前端框架中的设计模式实战。
+      </>
+    ),
+    link: '/design-patterns',
+  },
+  {
     title: '手写题',
     emoji: '✍️',
     description: (
