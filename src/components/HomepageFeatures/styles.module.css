@@ -110,9 +110,45 @@
   animation: fadeInUp 0.6s ease-out both;
 }
 
-.featureCard:nth-child(1) { animation-delay: 0.1s; }
-.featureCard:nth-child(2) { animation-delay: 0.2s; }
-.featureCard:nth-child(3) { animation-delay: 0.3s; }
-.featureCard:nth-child(4) { animation-delay: 0.4s; }
-.featureCard:nth-child(5) { animation-delay: 0.5s; }
-.featureCard:nth-child(6) { animation-delay: 0.6s; }
+.featureCard:nth-child(1) { animation-delay: 0.05s; }
+.featureCard:nth-child(2) { animation-delay: 0.1s; }
+.featureCard:nth-child(3) { animation-delay: 0.15s; }
+.featureCard:nth-child(4) { animation-delay: 0.2s; }
+.featureCard:nth-child(5) { animation-delay: 0.25s; }
+.featureCard:nth-child(6) { animation-delay: 0.3s; }
+.featureCard:nth-child(7) { animation-delay: 0.35s; }
+.featureCard:nth-child(8) { animation-delay: 0.4s; }
+.featureCard:nth-child(9) { animation-delay: 0.45s; }
+.featureCard:nth-child(10) { animation-delay: 0.5s; }
+.featureCard:nth-child(11) { animation-delay: 0.55s; }
+.featureCard:nth-child(12) { animation-delay: 0.6s; }
+.featureCard:nth-child(13) { animation-delay: 0.65s; }
+.featureCard:nth-child(14) { animation-delay: 0.7s; }
+.featureCard:nth-child(15) { animation-delay: 0.75s; }
+
+/* 暗色主题卡片 */
+[data-theme='dark'] .featureCard {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .featureCard:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] .featureCard h3 {
+  color: #a5b4fc;
+}
+
+[data-theme='dark'] .featureCard:hover h3 {
+  color: #c7d2fe;
+}
+
+[data-theme='dark'] .featureCard p {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .features {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+}

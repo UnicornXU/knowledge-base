@@ -239,6 +239,16 @@ body {
   border-radius: 12px;
   margin: 1.5rem 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.markdown pre:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme='dark'] .markdown pre {
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .markdown code {
@@ -247,55 +257,173 @@ body {
   font-size: 0.9em;
 }
 
+/* 行内代码高亮 */
+.markdown p code,
+.markdown li code,
+.markdown td code {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  color: var(--ifm-color-primary-dark);
+  font-weight: 500;
+  padding: 0.1rem 0.35rem;
+}
+
+[data-theme='dark'] .markdown p code,
+[data-theme='dark'] .markdown li code,
+[data-theme='dark'] .markdown td code {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: var(--ifm-color-primary-lighter);
+}
+
 /* 表格优化 */
 .markdown table {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .markdown table th {
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   font-weight: 600;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.1rem;
   border-bottom: 2px solid #e2e8f0;
+  text-align: left;
+  font-size: 0.9rem;
+  color: #334155;
 }
 
 .markdown table td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
 }
 
 .markdown table tr:last-child td {
   border-bottom: none;
 }
 
+.markdown table tbody tr:hover td {
+  background: rgba(99, 102, 241, 0.04);
+}
+
+[data-theme='dark'] .markdown table {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .markdown table th {
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .markdown table td {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .markdown table tbody tr:hover td {
+  background: rgba(99, 102, 241, 0.1);
+}
+
 /* 引用块优化 */
 .markdown blockquote {
   border-left: 4px solid var(--ifm-color-primary);
-  background: linear-gradient(90deg, var(--ifm-color-emphasis-100) 0%, transparent 100%);
-  border-radius: 0 8px 8px 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.03) 100%);
+  border-radius: 0 12px 12px 0;
   padding: 1rem 1.5rem;
   margin: 1.5rem 0;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+}
+
+.markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+[data-theme='dark'] .markdown blockquote {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
 }
 
 /* 提示框优化 */
 .markdown .admonition {
   border-radius: 12px;
   margin: 1.5rem 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+
+.markdown .admonition--info {
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.markdown .admonition--tip {
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.markdown .admonition--warning {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.markdown .admonition--danger {
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .markdown .admonition-heading {
   border-radius: 12px 12px 0 0;
-  padding: 0.75rem 1.25rem;
+  padding: 0.85rem 1.25rem;
+  font-weight: 600;
 }
 
 .markdown .admonition-content {
-  padding: 0.75rem 1.25rem;
+  padding: 0.85rem 1.25rem;
+}
+
+/* 页脚优化 */
+.footer {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer__title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer__link-item {
+  transition: all 0.2s ease;
+  padding: 0.3rem 0;
+}
+
+.footer__link-item:hover {
+  color: #818cf8;
+  transform: translateX(4px);
+}
+
+/* 分割线美化 */
+.markdown hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ifm-color-emphasis-300), transparent);
+  margin: 2.5rem 0;
+}
+
+/* 图片悬浮效果 */
+.markdown img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.markdown img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* 图片优化 */
@@ -916,6 +1044,47 @@ body {
     white-space: pre-wrap;
     word-wrap: break-word;
   }
+}
+
+/* ========== 目录（TOC）优化 ========== */
+.table-of-contents {
+  border-left: 2px solid var(--ifm-color-emphasis-200);
+  padding-left: 1rem;
+  font-size: 0.88rem;
+}
+
+.table-of-contents__link {
+  transition: all 0.2s ease;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.table-of-contents__link:hover {
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+  background: rgba(99, 102, 241, 0.08);
+  border-left: 2px solid var(--ifm-color-primary);
+  margin-left: -1rem;
+  padding-left: calc(1rem - 2px);
+}
+
+[data-theme='dark'] .table-of-contents {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .table-of-contents__link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .table-of-contents__link--active {
+  background: rgba(99, 102, 241, 0.15);
 }
 
 /* ========== 选中文本样式 ========== */

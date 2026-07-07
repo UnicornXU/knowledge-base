@@ -39,11 +39,11 @@ function HomepageHeader() {
         </div>
         <div className={styles.stats}>
           <div className={styles.statItem}>
-            <span className={styles.statNumber}>200+</span>
+            <span className={styles.statNumber}>250+</span>
             <span className={styles.statLabel}>精选面试题</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statNumber}>7</span>
+            <span className={styles.statNumber}>15</span>
             <span className={styles.statLabel}>核心分类</span>
           </div>
           <div className={styles.statItem}>
@@ -51,7 +51,7 @@ function HomepageHeader() {
             <span className={styles.statLabel}>前沿专题</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statNumber}>45+</span>
+            <span className={styles.statNumber}>70+</span>
             <span className={styles.statLabel}>深度文档</span>
           </div>
         </div>
