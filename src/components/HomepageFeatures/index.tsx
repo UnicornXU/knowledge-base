@@ -1,226 +1,107 @@
 import type {ReactNode} from 'react';
-import clsx from 'clsx';
-import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
   emoji: string;
-  description: ReactNode;
+  description: string;
   link: string;
+  progress: number;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'JavaScript 基础',
+    title: 'JavaScript 闭包',
     emoji: '📦',
-    description: (
-      <>
-        类型系统、闭包与作用域、异步编程、原型链、ES6+ 特性。
-        扎实的 JS 基础是前端开发的根基。
-      </>
-    ),
-    link: '/javascript',
+    description: '闭包是 JavaScript 的核心概念之一，理解闭包的工作原理…',
+    link: '/javascript/closure-scope',
+    progress: 87,
   },
   {
-    title: 'TypeScript',
-    emoji: '🔷',
-    description: (
-      <>
-        泛型、工具类型、类型体操。TypeScript 已成为现代前端开发的标配。
-      </>
-    ),
-    link: '/typescript',
-  },
-  {
-    title: 'React',
-    emoji: '⚛️',
-    description: (
-      <>
-        Hooks 深入、Fiber 架构、状态管理、性能优化。React 生态的面试重点。
-      </>
-    ),
-    link: '/react',
-  },
-  {
-    title: 'Vue',
+    title: 'Vue3 响应式原理',
     emoji: '💚',
-    description: (
-      <>
-        响应式系统、组合式 API、虚拟 DOM 与 Diff 算法。Vue 核心原理必知必会。
-      </>
-    ),
-    link: '/vue',
+    description: 'Vue3 使用 Proxy 实现响应式，相比 Vue2 的 defineProperty…',
+    link: '/vue/reactivity-system',
+    progress: 92,
   },
   {
-    title: 'AI 应用开发',
-    emoji: '🤖',
-    description: (
-      <>
-        前端集成 LLM、RAG 实现、流式响应处理、AI SDK 使用、AI 编程工具。
-        掌握 AI 开发是前端工程师的新竞争力。
-      </>
-    ),
-    link: '/ai',
-  },
-  {
-    title: 'CSS',
-    emoji: '🎨',
-    description: (
-      <>
-        盒模型、Flexbox 与 Grid 布局、定位与层叠上下文、响应式设计、动画过渡、现代 CSS 新特性。
-        CSS 是前端面试中容易被忽视但高频考察的领域。
-      </>
-    ),
-    link: '/css',
-  },
-  {
-    title: '浏览器原理',
+    title: '浏览器渲染机制',
     emoji: '🌐',
-    description: (
-      <>
-        渲染流程、事件循环、V8 引擎与垃圾回收、浏览器存储与跨域、DevTools 性能调试。
-        深入浏览器底层是高级前端工程师的必备知识。
-      </>
-    ),
-    link: '/browser',
+    description: '浏览器如何将 HTML、CSS 和 JavaScript 转换成用户看到的…',
+    link: '/browser/rendering',
+    progress: 78,
   },
   {
-    title: '计算机网络',
+    title: 'HTTP 缓存机制',
     emoji: '🌍',
-    description: (
-      <>
-        TCP 连接、HTTP 协议演进、缓存策略、WebSocket、DNS 解析与 Web 安全。
-        网络知识是前后端协作和性能优化的基础。
-      </>
-    ),
-    link: '/network',
+    description: '理解 HTTP 缓存机制对于优化网页性能至关重要，包括强缓存…',
+    link: '/network/cache',
+    progress: 83,
   },
   {
-    title: 'Git',
-    emoji: '🌿',
-    description: (
-      <>
-        Git 工作流对比（Git Flow / GitHub Flow / Trunk-Based）、分支管理策略、
-        代码规范（ESLint + Prettier + Husky）。团队协作的必备技能。
-      </>
-    ),
-    link: '/engineering/git-workflow',
+    title: 'React Hooks',
+    emoji: '⚛️',
+    description: 'Hooks 是 React 16.8 引入的新特性，让函数组件也能使用状…',
+    link: '/react/hooks-deep',
+    progress: 89,
   },
   {
-    title: '性能优化',
-    emoji: '⚡',
-    description: (
-      <>
-        加载优化、渲染优化、网络优化、框架级优化、性能监控与分析。
-        性能优化能力是高级工程师的核心竞争力。
-      </>
-    ),
-    link: '/performance',
+    title: 'TypeScript 泛型',
+    emoji: '🔷',
+    description: '泛型是 TypeScript 中非常强大的特性，提供了类型安全的…',
+    link: '/typescript/type-generics',
+    progress: 76,
   },
   {
-    title: '工程化',
+    title: '前端工程化',
     emoji: '🔧',
-    description: (
-      <>
-        构建工具（Webpack/Vite）、CI/CD 流程、Monorepo、包管理。工程化能力决定项目的可维护性。
-      </>
-    ),
+    description: '现代前端工程化包括构建工具、代码规范、自动化部署等…',
     link: '/engineering',
+    progress: 81,
   },
   {
-    title: '数据结构与算法',
-    emoji: '🧮',
-    description: (
-      <>
-        数组、链表、树、图、排序算法、动态规划、Diff 算法、LRU 缓存。
-        算法能力是大厂面试的敲门砖。
-      </>
-    ),
-    link: '/algorithms',
-  },
-  {
-    title: '计算机基础',
-    emoji: '🖥️',
-    description: (
-      <>
-        操作系统（进程/线程/内存）、编译原理（AST/Babel）、设计模式、数据表示与编码。
-        计算机基础决定了你的技术天花板。
-      </>
-    ),
-    link: '/computer-basics',
-  },
-  {
-    title: '小程序开发实战',
-    emoji: '📱',
-    description: (
-      <>
-        投票助手项目实战：微信登录、云开发、组件化、数据管理、分享海报、部署上线。
-        从零到一掌握小程序全栈开发。
-      </>
-    ),
-    link: '/miniapp',
-  },
-  {
-    title: '设计模式',
-    emoji: '🏗️',
-    description: (
-      <>
-        单例、工厂、观察者、策略、代理、装饰器、适配器、状态、职责链。
-        前端框架中的设计模式实战。
-      </>
-    ),
-    link: '/design-patterns',
-  },
-  {
-    title: '公务员面试',
-    emoji: '🏛️',
-    description: (
-      <>
-        结构化面试全流程：综合分析、计划组织、人际关系、应急应变。
-        真题解析与答题技巧。
-      </>
-    ),
-    link: '/civil-service',
-  },
-  {
-    title: '手写题',
-    emoji: '✍️',
-    description: (
-      <>
-        防抖节流、深拷贝、Promise、call/apply/bind、EventEmitter、LRU 缓存。
-        手写题是前端面试中区分度最高的题型。
-      </>
-    ),
-    link: '/quiz',
+    title: 'Web 安全',
+    emoji: '🔒',
+    description: '了解常见的 Web 安全漏洞及防范措施，如 XSS、CSRF、SQL…',
+    link: '/network/web-security',
+    progress: 73,
   },
 ];
 
-function Feature({title, emoji, description, link}: FeatureItem) {
+function Feature({title, emoji, description, link, progress}: FeatureItem) {
+  const progressColor = progress >= 85 ? '#10b981' : progress >= 70 ? '#6366f1' : '#f59e0b';
+
   return (
-    <div className={clsx('col col--4')}>
-      <a href={link} className={styles.featureCard}>
-        <div className={styles.featureEmoji}>{emoji}</div>
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
-      </a>
-    </div>
+    <a href={link} className={styles.featureCard}>
+      <div className={styles.featureHeader}>
+        <span className={styles.featureEmoji}>{emoji}</span>
+        <span className={styles.featureProgress} style={{color: progressColor}}>
+          {progress}%
+        </span>
+      </div>
+      <h3 className={styles.featureTitle}>{title}</h3>
+      <p className={styles.featureDesc}>{description}</p>
+      <div className={styles.progressBar}>
+        <div
+          className={styles.progressFill}
+          style={{width: `${progress}%`, background: `linear-gradient(90deg, ${progressColor}, ${progressColor}dd)`}}
+        />
+      </div>
+    </a>
   );
 }
 
 export default function HomepageFeatures(): ReactNode {
   return (
     <section className={styles.features}>
-      <div className="container">
-        <div className="text--center margin-bottom--lg">
-          <Heading as="h2">题库分类</Heading>
-          <p>覆盖前端面试核心知识点，助你系统备战</p>
-        </div>
-        <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
-        </div>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>热门知识点</h2>
+        <a href="/intro" className={styles.viewAll}>查看全部 ›</a>
+      </div>
+      <div className={styles.featureGrid}>
+        {FeatureList.map((props, idx) => (
+          <Feature key={idx} {...props} />
+        ))}
       </div>
     </section>
   );
