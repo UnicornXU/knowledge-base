@@ -18,6 +18,8 @@ slug: /network
 | [HTTP 协议](./http.md) | 🟡 中 | HTTP 版本演进、请求方法、状态码、HTTPS |
 | [HTTP 缓存策略](./cache.md) | 🟡 中 | 强缓存、协商缓存、Service Worker 缓存 |
 | [WebSocket 与实时通信](./websocket.md) | 🟡 中 | WebSocket、SSE、轮询对比 |
+| [HTTP/2 协议详解](./http2.md) | 🟡 中 | 多路复用、头部压缩、服务端推送、二进制分帧 |
+| [HTTP/3 与 QUIC](./http3-quic.md) | 🔴 难 | QUIC 协议、0-RTT 握手、连接迁移、多流复用 |
 | [DNS 解析](./dns.md) | 🟡 中 | DNS 解析过程、DNS 预解析、DNS over HTTPS |
 
 ### 安全与跨域

@@ -138,6 +138,8 @@ const config: Config = {
             {label: '工程化', to: '/engineering'},
             {label: '数据结构与算法', to: '/algorithms'},
             {label: '计算机基础', to: '/computer-basics'},
+            {label: '前端架构设计', to: '/architecture'},
+            {label: '微前端架构', to: '/micro-frontend'},
           ],
         },
         {
@@ -146,7 +148,22 @@ const config: Config = {
             {label: '浏览器原理', to: '/browser'},
             {label: '计算机网络', to: '/network'},
             {label: '前端性能优化', to: '/performance'},
-            {label: '手写题', to: '/quiz'},
+            {label: '前端监控', to: '/monitoring'},
+            {label: 'Web 安全', to: '/network/xss-attacks'},
+          ],
+        },
+        {
+          title: '扩展方向',
+          items: [
+            {label: 'Node.js / SSR', to: '/nodejs'},
+            {label: '跨端开发', to: '/cross-platform'},
+            {label: 'WebAssembly', to: '/wasm'},
+            {label: '低代码平台', to: '/lowcode'},
+            {label: '前端可视化', to: '/visualization'},
+            {label: '无障碍访问', to: '/accessibility'},
+            {label: '国际化 i18n', to: '/i18n'},
+            {label: 'SEO 优化', to: '/seo'},
+            {label: 'Serverless', to: '/serverless'},
           ],
         },
         {
