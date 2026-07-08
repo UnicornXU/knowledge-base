@@ -43,6 +43,43 @@ const hotArticles = [
 
 /* ========== Hero 区域 ========== */
 function HeroSection() {
+  const handleSearch = () => {
+    // 尝试多种方式触发搜索
+    // 方式1：查找导航栏搜索输入框并聚焦
+    const searchInput = document.querySelector<HTMLInputElement>(
+      '.navbar__search-input, .searchInput_YFbd, [class*="searchInput"]'
+    );
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.click();
+      return;
+    }
+
+    // 方式2：查找搜索按钮并点击
+    const searchBtn = document.querySelector<HTMLElement>(
+      '.navbar__search button, [class*="searchBarContainer"] button'
+    );
+    if (searchBtn) {
+      searchBtn.click();
+      return;
+    }
+
+    // 方式3：模拟 Ctrl+K / Cmd+K 快捷键
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'k',
+      ctrlKey: !isMac,
+      metaKey: isMac,
+      bubbles: true,
+    }));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <section className={styles.hero}>
       <div className={styles.heroContent}>
@@ -51,13 +88,17 @@ function HeroSection() {
           <p className={styles.heroSubtitle}>
             覆盖前端核心知识点，包含 3000+ 面试题与详细解析
           </p>
-          <div className={styles.searchBox}>
+          <div className={styles.searchBox} onClick={handleSearch} role="button" tabIndex={0} onKeyDown={handleKeyDown}>
+            <span className={styles.searchIcon}>🔍</span>
             <input
               type="text"
               placeholder="搜索面试题、知识点或关键词..."
               className={styles.searchInput}
+              onKeyDown={handleKeyDown}
+              readOnly
             />
-            <button className={styles.searchBtn}>搜索</button>
+            <span className={styles.searchShortcut}>Ctrl K</span>
+            <button className={styles.searchBtn} type="button">搜索</button>
           </div>
         </div>
         <div className={styles.heroIllustration}>

@@ -55,16 +55,42 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.searchBox:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+.searchIcon {
+  padding-left: 1rem;
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
 .searchInput {
   flex: 1;
   border: none;
-  padding: 0.875rem 1.25rem;
+  padding: 0.875rem 0.75rem;
   font-size: 0.95rem;
   outline: none;
   background: transparent;
   color: #334155;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+.searchShortcut {
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  font-family: monospace;
 }
 
 .searchInput::placeholder {
@@ -560,6 +586,10 @@
     max-width: 100%;
   }
 
+  .searchShortcut {
+    display: none;
+  }
+
   .heroIllustration {
     flex: none;
     width: 250px;
@@ -644,6 +674,12 @@
 
 [data-theme='dark'] .searchInput::placeholder {
   color: #64748b;
+}
+
+[data-theme='dark'] .searchShortcut {
+  background: #334155;
+  border-color: #475569;
+  color: #94a3b8;
 }
 
 [data-theme='dark'] .statCard,
