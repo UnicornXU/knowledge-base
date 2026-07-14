@@ -1,112 +1,87 @@
 # 📚 前端面试知识库
 
-> 前端面试题 & AI 开发面试指南 — 系统备战前端面试，斩获心仪 Offer！
+> 基于 Docusaurus 3 的前端面试与 AI 开发知识库，提供系统化文档、在线测验、错题本和答题历史。
 
-## ✨ 特性
+## ✨ 项目规模
 
-- **200+ 精选面试题** — 涵盖 JavaScript、TypeScript、React、Vue、AI 应用开发、工程化、性能优化、数据结构与算法、计算机基础
-- **55+ 深度文档** — 从基础概念到源码解析，层层递进
-- **在线测验系统** — 随机出题、即时反馈、错题回顾、分数统计
-- **AI 前沿专题** — LLM 集成、RAG、流式响应、AI SDK 等热门方向
-- **难度分级** — 🟢 Easy / 🟡 Medium / 🔴 Hard 三级标注
-- **暗色模式** — 支持系统偏好自动切换
-- **响应式设计** — 完美适配手机、平板、桌面端
+项目会在启动和构建前自动统计内容，当前包含：
 
-## 📖 内容分类
+- **238 篇知识文档**
+- **255 道测验题**
+- **47 个内容分类**
+- JavaScript、TypeScript、React、Vue、浏览器、网络、工程化、AI、性能优化等专题
 
-| 分类 | 文档数 | 说明 |
-|------|--------|------|
-| JavaScript 基础 | 5 | 类型系统、闭包、异步、原型链、ES6+ |
-| TypeScript | 3 | 泛型、工具类型、类型体操 |
-| React | 5 | Hooks、Fiber、状态管理、性能优化、源码 |
-| Vue | 11 | 响应式、组合式 API、虚拟 DOM、源码、路由 |
-| AI 应用开发 | 6 | LLM 集成、RAG、流式响应、AI SDK |
-| 工程化 | 5+ | 构建工具、CI/CD、Monorepo、包管理 |
-| 数据结构与算法 | 5 | 数据结构、排序、搜索、动态规划、前端算法实战 |
-| 计算机基础 | 4 | 操作系统、编译原理、设计模式、数据表示 |
-| 前端性能优化 | 6 | 加载、渲染、网络、监控、框架优化 |
+## 🚀 本地开发
 
-## 🚀 快速开始
-
-### 环境要求
-
-- Node.js >= 20.0
-- npm / yarn / pnpm
-
-### 本地开发
+要求 Node.js 20 或更高版本。
 
 ```bash
-# 安装依赖
-npm install
-
-# 启动开发服务器
+npm ci
 npm start
-
-# 构建生产版本
-npm run build
-
-# 预览构建结果
-npm run serve
 ```
 
-## 🛠️ 技术栈
+常用命令：
 
-- [Docusaurus 3](https://docusaurus.io/) — 静态站点生成器
-- [React 19](https://react.dev/) — UI 框架
-- [TypeScript](https://www.typescriptlang.org/) — 类型安全
-- [Prism](https://prismjs.com/) — 代码语法高亮
-- [Netlify](https://netlify.com/) — 部署平台
-
-## 📁 项目结构
-
+```bash
+npm run validate:content # 校验题库并更新真实统计
+npm run typecheck        # TypeScript 检查
+npm run lint             # ESLint
+npm run format:check     # Prettier 检查
+npm test                 # Vitest 单元测试
+npm run build            # 生产构建
+npm run test:e2e         # Playwright 端到端测试（需先安装 Chromium）
+npm run check            # 完整质量检查
 ```
-├── docs/                    # 文档内容 (Markdown/MDX)
-│   ├── javascript/          # JavaScript 基础
-│   ├── typescript/          # TypeScript
-│   ├── react/               # React
-│   ├── vue/                 # Vue.js
-│   ├── ai/                  # AI 应用开发
-│   ├── engineering/         # 工程化
-│   ├── algorithms/          # 数据结构与算法
-│   ├── computer-basics/     # 计算机基础
-│   ├── browser/             # 浏览器原理
-│   ├── network/             # 计算机网络
-│   ├── css/                 # CSS
-│   └── performance/         # 前端性能优化
-├── src/
-│   ├── components/          # React 组件
-│   │   ├── HomepageFeatures/ # 首页特性卡片
-│   │   └── Quiz/            # 测验系统组件
-│   ├── data/
-│   │   └── quiz-questions.ts # 题库数据 (200+ 题)
-│   ├── pages/               # 自定义页面
-│   │   ├── index.tsx        # 首页
-│   │   └── quiz.tsx         # 测验页面
-│   └── css/
-│       └── custom.css       # 全局自定义样式
-├── static/                  # 静态资源
-├── docusaurus.config.ts     # 站点配置
-└── sidebars.ts              # 侧边栏配置
+
+首次运行 E2E 测试前安装浏览器：
+
+```bash
+npx playwright install chromium
 ```
 
 ## 📝 测验系统
 
-- 选择分类开始测验（每轮 10 题随机抽取）
-- 支持单选、多选、判断题型
-- 答题后即时显示解析和常见误区
-- 分数统计与错题回顾
-- 支持重测和分类切换
+- 可按分类选择 5、10、20 或全部题目
+- 支持单选、多选和判断题
+- 即时答案解析和常见误区提示
+- 浏览器本地保存最近 50 条答题历史和错题本
+- 存储不可用时会给出明确提示
+- 支持键盘操作和可见焦点
+
+## 📁 主要目录
+
+```text
+docs/                     Markdown/MDX 文档
+src/data/                 题库与自动生成的内容统计
+src/pages/                首页和测验页面
+src/utils/                可测试的测验逻辑
+scripts/                  内容统计与题库校验
+tests/e2e/                Playwright 测试
+.github/workflows/ci.yml   持续集成
+```
+
+## ✅ 题库质量规则
+
+`npm run validate:content` 会检查：
+
+- 题目 ID 唯一
+- 分类合法且非空
+- 选项值不重复
+- 答案存在于选项中
+- 单选、多选题答案结构正确
+- 解析和答题思路非空
+- 分类统计与实际题量一致
+
+新增或修改内容后，请在提交前运行：
+
+```bash
+npm run check
+```
+
+## 🌐 部署
+
+Netlify 使用 `npm run build` 构建并发布 `build/`。Docusaurus 会生成静态路由和 404 页面，不需要 SPA 全站重定向。
 
 ## 🤝 贡献
 
-欢迎提交 Issue 和 Pull Request！
-
-1. Fork 本仓库
-2. 创建特性分支：`git checkout -b feature/amazing-feature`
-3. 提交更改：`git commit -m 'feat: add amazing feature'`
-4. 推送分支：`git push origin feature/amazing-feature`
-5. 提交 Pull Request
-
-## 📄 License
-
-MIT License
+欢迎补充题目、修正文档或改进交互。请确保构建、类型检查、Lint、单元测试和内容校验全部通过。

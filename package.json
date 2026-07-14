@@ -12,7 +12,16 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "validate:content": "node scripts/validate-content.cjs",
+    "prestart": "npm run validate:content",
+    "prebuild": "npm run validate:content",
+    "lint": "eslint .",
+    "format": "prettier --write src/pages src/components src/utils scripts tests *.ts *.mjs *.json .github",
+    "format:check": "prettier --check src/pages src/components src/utils scripts tests *.ts *.mjs *.json .github",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check": "npm run validate:content && npm run typecheck && npm run lint && npm run format:check && npm run test && npm run build"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.1",
@@ -29,8 +38,17 @@
     "@docusaurus/module-type-aliases": "3.10.1",
     "@docusaurus/tsconfig": "3.10.1",
     "@docusaurus/types": "3.10.1",
+    "@eslint/js": "^10.0.1",
+    "@node-rs/jieba-win32-x64-msvc": "^1.10.4",
+    "@playwright/test": "^1.61.1",
+    "@rolldown/binding-win32-x64-msvc": "^1.1.5",
     "@types/react": "^19.0.0",
-    "typescript": "~6.0.2"
+    "eslint": "^10.7.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "prettier": "^3.9.5",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.64.0",
+    "vitest": "^4.1.10"
   },
   "browserslist": {
     "production": [

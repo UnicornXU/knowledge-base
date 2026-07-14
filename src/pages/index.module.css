@@ -734,3 +734,21 @@
   background: #334155;
   color: #94a3b8;
 }
+
+.questionItem,
+.pathItem,
+.articleItem {
+  text-decoration: none;
+}
+.questionItem:hover,
+.pathItem:hover,
+.articleItem:hover {
+  text-decoration: none;
+}
+.searchBtn:focus-visible,
+.questionItem:focus-visible,
+.pathItem:focus-visible,
+.articleItem:focus-visible {
+  outline: 3px solid var(--ifm-color-primary);
+  outline-offset: 3px;
+}

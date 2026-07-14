@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import type { QuizQuestion } from '@site/src/data/quiz-questions';
+import React, {useState} from 'react';
+import type {QuizQuestion} from '@site/src/data/quiz-questions';
 import styles from './styles.module.css';
 
 interface QuizCardProps {
@@ -30,10 +30,9 @@ export default function QuizCard({
   const [selected, setSelected] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const isCorrect =
-    Array.isArray(question.answer)
-      ? question.answer.includes(selected ?? '')
-      : selected === question.answer;
+  const isCorrect = Array.isArray(question.answer)
+    ? question.answer.includes(selected ?? '')
+    : selected === question.answer;
 
   const handleSelect = (value: string) => {
     if (selected) return; // 已选择，不可再选
@@ -47,14 +46,13 @@ export default function QuizCard({
     <div>
       {/* 进度条 */}
       <div className={styles.progressText}>
-        <span>第 {questionNumber} / {totalQuestions} 题</span>
+        <span>
+          第 {questionNumber} / {totalQuestions} 题
+        </span>
         <span>{Math.round((questionNumber / totalQuestions) * 100)}%</span>
       </div>
       <div className={styles.progressBar}>
-        <div
-          className={styles.progressFill}
-          style={{ width: `${(questionNumber / totalQuestions) * 100}%` }}
-        />
+        <div className={styles.progressFill} style={{width: `${(questionNumber / totalQuestions) * 100}%`}} />
       </div>
 
       {/* 题目卡片 */}
@@ -62,14 +60,14 @@ export default function QuizCard({
         <div className={styles.questionHeader}>
           <span
             className={`${styles.difficultyBadge} ${
-              styles[`difficulty${question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1)}`]
+              styles[
+                `difficulty${question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1)}`
+              ]
             }`}
           >
             {difficultyLabels[question.difficulty]}
           </span>
-          <span className={styles.questionType}>
-            {typeLabels[question.type]}
-          </span>
+          <span className={styles.questionType}>{typeLabels[question.type]}</span>
         </div>
 
         <div className={styles.questionText}>{question.question}</div>
@@ -84,10 +82,9 @@ export default function QuizCard({
           {question.options.map((option, index) => {
             let optionClass = styles.optionBtn;
             if (selected) {
-              const isThisCorrect =
-                Array.isArray(question.answer)
-                  ? question.answer.includes(option.value)
-                  : option.value === question.answer;
+              const isThisCorrect = Array.isArray(question.answer)
+                ? question.answer.includes(option.value)
+                : option.value === question.answer;
               const isThisSelected = option.value === selected;
 
               if (isThisCorrect) {
@@ -118,36 +115,28 @@ export default function QuizCard({
               isCorrect ? styles.explanationCorrect : styles.explanationWrong
             }`}
           >
-            <div className={styles.explanationHeader}>
-              {isCorrect ? '✅ 回答正确！' : '❌ 回答错误'}
-            </div>
+            <div className={styles.explanationHeader}>{isCorrect ? '✅ 回答正确！' : '❌ 回答错误'}</div>
             <div className={styles.explanationBody}>
               <div className={styles.explanationSection}>
                 <div className={styles.explanationLabel}>📖 正确答案</div>
                 <div className={styles.explanationText}>
                   {Array.isArray(question.answer)
                     ? question.answer.join(', ')
-                    : question.options.find(o => o.value === question.answer)?.label}
+                    : question.options.find((o) => o.value === question.answer)?.label}
                 </div>
               </div>
               <div className={styles.explanationSection}>
                 <div className={styles.explanationLabel}>💡 知识点解析</div>
-                <div className={styles.explanationText}>
-                  {question.explanation.correct}
-                </div>
+                <div className={styles.explanationText}>{question.explanation.correct}</div>
               </div>
               <div className={styles.explanationSection}>
                 <div className={styles.explanationLabel}>🧠 答题思路</div>
-                <div className={styles.explanationText}>
-                  {question.explanation.thinking}
-                </div>
+                <div className={styles.explanationText}>{question.explanation.thinking}</div>
               </div>
               {question.explanation.pitfalls && (
                 <div className={styles.explanationSection}>
                   <div className={styles.explanationLabel}>⚠️ 常见陷阱</div>
-                  <div className={styles.explanationText}>
-                    {question.explanation.pitfalls}
-                  </div>
+                  <div className={styles.explanationText}>{question.explanation.pitfalls}</div>
                 </div>
               )}
             </div>

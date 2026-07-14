@@ -1,4 +1,5 @@
 import type {ReactNode} from 'react';
+import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 type FeatureItem = {
@@ -72,7 +73,7 @@ function Feature({title, emoji, description, link, progress}: FeatureItem) {
   const progressColor = progress >= 85 ? '#10b981' : progress >= 70 ? '#6366f1' : '#f59e0b';
 
   return (
-    <a href={link} className={styles.featureCard}>
+    <Link to={link} className={styles.featureCard}>
       <div className={styles.featureHeader}>
         <span className={styles.featureEmoji}>{emoji}</span>
         <span className={styles.featureProgress} style={{color: progressColor}}>
@@ -84,10 +85,13 @@ function Feature({title, emoji, description, link, progress}: FeatureItem) {
       <div className={styles.progressBar}>
         <div
           className={styles.progressFill}
-          style={{width: `${progress}%`, background: `linear-gradient(90deg, ${progressColor}, ${progressColor}dd)`}}
+          style={{
+            width: `${progress}%`,
+            background: `linear-gradient(90deg, ${progressColor}, ${progressColor}dd)`,
+          }}
         />
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -96,11 +100,13 @@ export default function HomepageFeatures(): ReactNode {
     <section className={styles.features}>
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>热门知识点</h2>
-        <a href="/intro" className={styles.viewAll}>查看全部 ›</a>
+        <Link to="/intro" className={styles.viewAll}>
+          查看全部 ›
+        </Link>
       </div>
       <div className={styles.featureGrid}>
-        {FeatureList.map((props, idx) => (
-          <Feature key={idx} {...props} />
+        {FeatureList.map((props) => (
+          <Feature key={props.link} {...props} />
         ))}
       </div>
     </section>

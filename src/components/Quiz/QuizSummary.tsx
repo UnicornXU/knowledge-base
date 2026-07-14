@@ -1,5 +1,5 @@
 import React from 'react';
-import type { QuizQuestion } from '@site/src/data/quiz-questions';
+import type {QuizQuestion} from '@site/src/data/quiz-questions';
 import styles from './styles.module.css';
 
 interface AnswerRecord {
@@ -21,7 +21,7 @@ export default function QuizSummary({
   onRetry,
   onBack,
 }: QuizSummaryProps): React.ReactElement {
-  const correctCount = answers.filter(a => a.isCorrect).length;
+  const correctCount = answers.filter((a) => a.isCorrect).length;
   const totalCount = questions.length;
   const score = Math.round((correctCount / totalCount) * 100);
 
@@ -46,8 +46,8 @@ export default function QuizSummary({
     return '别灰心，认真看一下错题解析，下次一定能做得更好！';
   };
 
-  const wrongAnswers = answers.filter(a => !a.isCorrect);
-  const rightAnswers = answers.filter(a => a.isCorrect);
+  const wrongAnswers = answers.filter((a) => !a.isCorrect);
+  const rightAnswers = answers.filter((a) => a.isCorrect);
 
   return (
     <div className={styles.quizContainer}>
@@ -62,19 +62,19 @@ export default function QuizSummary({
 
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>
-            <div className={styles.statValue} style={{ color: '#10b981' }}>
+            <div className={styles.statValue} style={{color: '#10b981'}}>
               {correctCount}
             </div>
             <div className={styles.statLabel}>答对</div>
           </div>
           <div className={styles.statItem}>
-            <div className={styles.statValue} style={{ color: '#ef4444' }}>
+            <div className={styles.statValue} style={{color: '#ef4444'}}>
               {totalCount - correctCount}
             </div>
             <div className={styles.statLabel}>答错</div>
           </div>
           <div className={styles.statItem}>
-            <div className={styles.statValue} style={{ color: 'var(--ifm-color-primary)' }}>
+            <div className={styles.statValue} style={{color: 'var(--ifm-color-primary)'}}>
               {totalCount}
             </div>
             <div className={styles.statLabel}>总题数</div>
@@ -94,35 +94,31 @@ export default function QuizSummary({
       {/* 错题回顾 */}
       {wrongAnswers.length > 0 && (
         <div className={styles.reviewSection}>
-          <h3 className={styles.reviewTitle}>
-            ❌ 错题回顾（{wrongAnswers.length} 题）
-          </h3>
-          {wrongAnswers.map(record => {
-            const question = questions.find(q => q.id === record.questionId)!;
+          <h3 className={styles.reviewTitle}>❌ 错题回顾（{wrongAnswers.length} 题）</h3>
+          {wrongAnswers.map((record) => {
+            const question = questions.find((q) => q.id === record.questionId)!;
             const correctLabel = Array.isArray(question.answer)
-              ? question.answer
-                  .map(v => question.options.find(o => o.value === v)?.label)
-                  .join(', ')
-              : question.options.find(o => o.value === question.answer)?.label;
-            const selectedLabel = question.options.find(
-              o => o.value === record.selected
-            )?.label;
+              ? question.answer.map((v) => question.options.find((o) => o.value === v)?.label).join(', ')
+              : question.options.find((o) => o.value === question.answer)?.label;
+            const selectedLabel = question.options.find((o) => o.value === record.selected)?.label;
 
             return (
               <div key={record.questionId} className={styles.reviewItem}>
-                <div className={styles.reviewQuestionText}>
-                  {question.question}
-                </div>
+                <div className={styles.reviewQuestionText}>{question.question}</div>
                 <div className={styles.reviewAnswer}>
-                  <strong>你的答案：</strong>{selectedLabel}
+                  <strong>你的答案：</strong>
+                  {selectedLabel}
                   <br />
-                  <strong>正确答案：</strong>{correctLabel}
+                  <strong>正确答案：</strong>
+                  {correctLabel}
                   <br />
-                  <strong>解析：</strong>{question.explanation.correct}
+                  <strong>解析：</strong>
+                  {question.explanation.correct}
                   {question.explanation.pitfalls && (
                     <>
                       <br />
-                      <strong>常见陷阱：</strong>{question.explanation.pitfalls}
+                      <strong>常见陷阱：</strong>
+                      {question.explanation.pitfalls}
                     </>
                   )}
                 </div>
@@ -135,21 +131,15 @@ export default function QuizSummary({
       {/* 答对的题也展示 */}
       {rightAnswers.length > 0 && (
         <div className={styles.reviewSection}>
-          <h3 className={styles.reviewTitle}>
-            ✅ 答对题目（{rightAnswers.length} 题）
-          </h3>
-          {rightAnswers.map(record => {
-            const question = questions.find(q => q.id === record.questionId)!;
+          <h3 className={styles.reviewTitle}>✅ 答对题目（{rightAnswers.length} 题）</h3>
+          {rightAnswers.map((record) => {
+            const question = questions.find((q) => q.id === record.questionId)!;
             return (
-              <div
-                key={record.questionId}
-                className={`${styles.reviewItem} ${styles.reviewItemCorrect}`}
-              >
-                <div className={styles.reviewQuestionText}>
-                  {question.question}
-                </div>
+              <div key={record.questionId} className={`${styles.reviewItem} ${styles.reviewItemCorrect}`}>
+                <div className={styles.reviewQuestionText}>{question.question}</div>
                 <div className={styles.reviewAnswer}>
-                  <strong>知识点：</strong>{question.explanation.correct}
+                  <strong>知识点：</strong>
+                  {question.explanation.correct}
                 </div>
               </div>
             );

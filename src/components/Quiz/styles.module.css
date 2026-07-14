@@ -893,3 +893,33 @@
     gap: 0.25rem;
   }
 }
+
+/* Accessible interactive controls */
+.categoryCard,
+.countCard,
+.featureCard {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+}
+.categoryCard:focus-visible,
+.countCard:focus-visible,
+.featureCard:focus-visible,
+.optionBtn:focus-visible,
+.nextBtn:focus-visible {
+  outline: 3px solid var(--ifm-color-primary);
+  outline-offset: 3px;
+}
+.optionSelected {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-lightest);
+}
+
+.storageWarning {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+}

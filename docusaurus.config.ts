@@ -10,14 +10,16 @@ const config: Config = {
   url: 'https://frontend-interview.netlify.app',
   baseUrl: '/',
 
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'throw',
+  onBrokenAnchors: 'throw',
 
   headTags: [
     {
       tagName: 'meta',
       attributes: {
         name: 'description',
-        content: '前端面试知识库 — 涵盖 JavaScript、TypeScript、React、Vue、AI 应用开发等核心知识点，200+ 精选面试题，助你斩获心仪 Offer！',
+        content:
+          '前端面试知识库 — 涵盖 JavaScript、TypeScript、React、Vue、AI 应用开发等核心知识点，255 道精选测验题，助你斩获心仪 Offer！',
       },
     },
     {
@@ -31,7 +33,7 @@ const config: Config = {
       tagName: 'meta',
       attributes: {
         property: 'og:description',
-        content: '前端面试题 & AI 开发面试指南，200+ 精选题目，在线测验系统',
+        content: '前端面试题与 AI 开发面试指南，238 篇文档、255 道测验题和在线练习系统',
       },
     },
     {
@@ -63,6 +65,9 @@ const config: Config = {
         language: ['zh', 'en'],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: true,
       },
     ],
   ],
