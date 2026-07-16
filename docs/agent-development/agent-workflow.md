@@ -1,8 +1,8 @@
 ---
 sidebar_position: 7
-title: "工作流编排"
-difficulty: "medium"
-tags: ["agent", "workflow", "LangGraph", "状态机"]
+title: '工作流编排'
+difficulty: 'medium'
+tags: ['agent', 'workflow', 'LangGraph', '状态机']
 ---
 
 # 工作流编排
@@ -34,29 +34,20 @@ tags: ["agent", "workflow", "LangGraph", "状态机"]
 
 ```typescript
 import OpenAI from 'openai';
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // 一个顺序工作流：调研 → 分析 → 写报告
 async function sequentialWorkflow(topic: string) {
   // 步骤 1：调研
-  const research = await callLLM(
-    '你是调研员。收集关于以下主题的关键信息，列出要点。',
-    topic
-  );
+  const research = await callLLM('你是调研员。收集关于以下主题的关键信息，列出要点。', topic);
   console.log('✅ 步骤1 调研完成');
 
   // 步骤 2：分析（基于调研结果）
-  const analysis = await callLLM(
-    '你是分析师。基于以下调研信息，分析趋势和洞察。',
-    research
-  );
+  const analysis = await callLLM('你是分析师。基于以下调研信息，分析趋势和洞察。', research);
   console.log('✅ 步骤2 分析完成');
 
   // 步骤 3：写报告（基于分析结果）
-  const report = await callLLM(
-    '你是报告撰写人。基于以下分析，写一份结构清晰的报告。',
-    analysis
-  );
+  const report = await callLLM('你是报告撰写人。基于以下分析，写一份结构清晰的报告。', analysis);
   console.log('✅ 步骤3 报告完成');
 
   return report;
@@ -66,8 +57,8 @@ async function callLLM(system: string, user: string): Promise<string> {
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: system },
-      { role: 'user', content: user },
+      {role: 'system', content: system},
+      {role: 'user', content: user},
     ],
   });
   return r.choices[0].message.content!;
@@ -99,7 +90,7 @@ async function classifyNode(state: WorkflowState): Promise<string> {
         role: 'system',
         content: '判断用户问题属于哪类。只回答: "技术" / "闲聊" / "投诉"。',
       },
-      { role: 'user', content: state.input },
+      {role: 'user', content: state.input},
     ],
   });
   state.category = r.choices[0].message.content!.trim();
@@ -126,16 +117,20 @@ async function complaintHandler(state: WorkflowState) {
 // 条件路由函数
 function routeByCategory(category: string): string {
   switch (category) {
-    case '技术': return 'tech';
-    case '闲聊': return 'chat';
-    case '投诉': return 'complaint';
-    default: return 'chat';
+    case '技术':
+      return 'tech';
+    case '闲聊':
+      return 'chat';
+    case '投诉':
+      return 'complaint';
+    default:
+      return 'chat';
   }
 }
 
 // 手动编排的条件分支工作流
 async function conditionalWorkflow(input: string) {
-  let state: WorkflowState = { input };
+  let state: WorkflowState = {input};
 
   // 1. 分类
   const category = await classifyNode(state);
@@ -143,9 +138,15 @@ async function conditionalWorkflow(input: string) {
   // 2. 根据分类路由到不同处理节点
   const route = routeByCategory(category);
   switch (route) {
-    case 'tech': state = await techHandler(state); break;
-    case 'chat': state = await chatHandler(state); break;
-    case 'complaint': state = await complaintHandler(state); break;
+    case 'tech':
+      state = await techHandler(state);
+      break;
+    case 'chat':
+      state = await chatHandler(state);
+      break;
+    case 'complaint':
+      state = await complaintHandler(state);
+      break;
   }
 
   return state.result;
@@ -172,7 +173,7 @@ interface DraftState {
 async function writeDraft(state: DraftState): Promise<DraftState> {
   state.draft = await callLLM(
     '你是技术写作专家，写一篇高质量文章。',
-    state.topic + (state.draft ? `\n\n参考上一版改进：\n${state.draft}` : '')
+    state.topic + (state.draft ? `\n\n参考上一版改进：\n${state.draft}` : ''),
   );
   state.iteration++;
   return state;
@@ -187,7 +188,7 @@ async function evaluateDraft(state: DraftState): Promise<DraftState> {
         role: 'system',
         content: '给文章打分（0-100）。只返回数字。',
       },
-      { role: 'user', content: state.draft },
+      {role: 'user', content: state.draft},
     ],
   });
   state.qualityScore = parseInt(r.choices[0].message.content!.trim(), 10);
@@ -234,11 +235,11 @@ iterativeWorkflow('AI Agent 入门指南', 85);
 ### LangGraph 代码示例
 
 ```typescript
-import { StateGraph, END, START } from '@langchain/langgraph';
-import { Annotation } from '@langchain/langgraph';
+import {StateGraph, END, START} from '@langchain/langgraph';
+import {Annotation} from '@langchain/langgraph';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // 1. 定义工作流状态
 const WorkflowState = Annotation.Root({
@@ -252,41 +253,44 @@ async function classifyNode(state: typeof WorkflowState.State) {
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: '分类为: 技术/闲聊/投诉。只回答类别名。' },
-      { role: 'user', content: state.input },
+      {role: 'system', content: '分类为: 技术/闲聊/投诉。只回答类别名。'},
+      {role: 'user', content: state.input},
     ],
   });
-  return { category: r.choices[0].message.content!.trim() };
+  return {category: r.choices[0].message.content!.trim()};
 }
 
 async function techNode(state: typeof WorkflowState.State) {
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: '你是技术专家。' },
-      { role: 'user', content: state.input },
+      {role: 'system', content: '你是技术专家。'},
+      {role: 'user', content: state.input},
     ],
   });
-  return { result: r.choices[0].message.content };
+  return {result: r.choices[0].message.content};
 }
 
 async function chatNode(state: typeof WorkflowState.State) {
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: '你是友好的聊天伙伴。' },
-      { role: 'user', content: state.input },
+      {role: 'system', content: '你是友好的聊天伙伴。'},
+      {role: 'user', content: state.input},
     ],
   });
-  return { result: r.choices[0].message.content };
+  return {result: r.choices[0].message.content};
 }
 
 // 3. 定义条件路由
 function routeFunction(state: typeof WorkflowState.State): string {
   switch (state.category) {
-    case '技术': return 'tech';
-    case '投诉': return 'complaint';
-    default: return 'chat';
+    case '技术':
+      return 'tech';
+    case '投诉':
+      return 'complaint';
+    default:
+      return 'chat';
   }
 }
 
@@ -309,7 +313,7 @@ const workflow = new StateGraph(WorkflowState)
 const app = workflow.compile();
 
 async function main() {
-  const result = await app.invoke({ input: '怎么用 TypeScript 写一个防抖函数？' });
+  const result = await app.invoke({input: '怎么用 TypeScript 写一个防抖函数？'});
   console.log('分类:', result.category);
   console.log('回答:', result.result);
 }
@@ -318,11 +322,12 @@ main();
 ```
 
 :::tip LangGraph 的优势
+
 - **可视化**：图结构天然可可视化，方便理解和调试
 - **状态管理**：状态自动在节点间传递，不用手动传参
 - **条件路由**：`addConditionalEdges` 让分支逻辑清晰
 - **持久化**：支持 checkpoint，可暂停/恢复工作流
-:::
+  :::
 
 ## 人机协作（Human-in-the-loop）模式
 
@@ -347,12 +352,12 @@ async function humanReviewNode(state: any): Promise<any> {
   const approved = await waitForHumanApproval(); // 模拟等待人工确认
 
   if (!approved) {
-    return { ...state, result: '操作已被人工拒绝', cancelled: true };
+    return {...state, result: '操作已被人工拒绝', cancelled: true};
   }
 
   // 确认后执行
   const result = await executeAction(state.proposedAction, state.actionParams);
-  return { ...state, result };
+  return {...state, result};
 }
 
 // 模拟等待人工审批
@@ -367,13 +372,13 @@ function waitForHumanApproval(): Promise<boolean> {
 
 ### HITL 的典型场景
 
-| 场景 | 为什么需要人工 |
-|------|--------------|
-| 发送邮件/消息 | 内容可能不当，需确认 |
-| 执行数据库删除 | 不可逆操作，需确认 |
-| 资金交易 | 涉及金钱，需审批 |
-| 代码提交/部署 | 影响生产环境，需 review |
-| 生成最终报告 | 需人工把关质量 |
+| 场景           | 为什么需要人工          |
+| -------------- | ----------------------- |
+| 发送邮件/消息  | 内容可能不当，需确认    |
+| 执行数据库删除 | 不可逆操作，需确认      |
+| 资金交易       | 涉及金钱，需审批        |
+| 代码提交/部署  | 影响生产环境，需 review |
+| 生成最终报告   | 需人工把关质量          |
 
 ## 工作流可视化与调试
 
@@ -381,10 +386,7 @@ function waitForHumanApproval(): Promise<boolean> {
 
 ```typescript
 // 给每个节点加日志
-function withLogging<T extends (...args: any[]) => any>(
-  name: string,
-  fn: T
-): T {
+function withLogging<T extends (...args: any[]) => any>(name: string, fn: T): T {
   return (async (...args: any[]) => {
     console.log(`▶️ 进入节点: ${name}`);
     console.log(`   输入: ${JSON.stringify(args[0]).slice(0, 100)}...`);
@@ -407,11 +409,7 @@ const loggedTech = withLogging('tech', techNode);
 
 ```typescript
 // 带重试的节点执行
-async function executeWithRetry<T>(
-  nodeFn: () => Promise<T>,
-  nodeName: string,
-  maxRetries = 3
-): Promise<T> {
+async function executeWithRetry<T>(nodeFn: () => Promise<T>, nodeName: string, maxRetries = 3): Promise<T> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await nodeFn();
@@ -444,13 +442,13 @@ async function workflowWithFallback(input: string) {
 
 ### 错误处理策略汇总
 
-| 策略 | 适用场景 | 实现 |
-|------|---------|------|
-| **重试** | 网络抖动、临时故障 | 指数退避重试 N 次 |
-| **降级** | 主流程失败 | 切换到简化备用流程 |
-| **跳过** | 非关键节点失败 | 记录错误，继续后续节点 |
-| **中断** | 关键节点失败 | 停止工作流，通知人工 |
-| **回滚** | 已产生副作用 | 撤销已执行的操作 |
+| 策略     | 适用场景           | 实现                   |
+| -------- | ------------------ | ---------------------- |
+| **重试** | 网络抖动、临时故障 | 指数退避重试 N 次      |
+| **降级** | 主流程失败         | 切换到简化备用流程     |
+| **跳过** | 非关键节点失败     | 记录错误，继续后续节点 |
+| **中断** | 关键节点失败       | 停止工作流，通知人工   |
+| **回滚** | 已产生副作用       | 撤销已执行的操作       |
 
 ## 小结
 

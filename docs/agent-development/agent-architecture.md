@@ -1,8 +1,8 @@
 ---
 sidebar_position: 3
-title: "Agent 架构模式"
-difficulty: "medium"
-tags: ["agent", "architecture", "ReAct", "planning"]
+title: 'Agent 架构模式'
+difficulty: 'medium'
+tags: ['agent', 'architecture', 'ReAct', 'planning']
 ---
 
 # Agent 架构模式
@@ -13,12 +13,12 @@ tags: ["agent", "architecture", "ReAct", "planning"]
 
 ## 架构模式总览
 
-| 模式 | 核心思想 | 优点 | 缺点 | 适用场景 |
-|------|---------|------|------|---------|
-| **ReAct** | 边推理边行动，循环往复 | 灵活、能纠错 | 可能绕圈子 | 大多数通用任务 |
-| **Plan-and-Execute** | 先整体规划，再逐步执行 | 方向清晰、省 Token | 计划可能脱离实际 | 复杂多步任务 |
-| **状态机** | 预定义状态和跳转 | 可控、可预测 | 灵活性低 | 流程固定的任务 |
-| **多 Agent** | 多个角色分工协作 | 专精、可并行 | 协调复杂 | 大型复杂任务 |
+| 模式                 | 核心思想               | 优点               | 缺点             | 适用场景       |
+| -------------------- | ---------------------- | ------------------ | ---------------- | -------------- |
+| **ReAct**            | 边推理边行动，循环往复 | 灵活、能纠错       | 可能绕圈子       | 大多数通用任务 |
+| **Plan-and-Execute** | 先整体规划，再逐步执行 | 方向清晰、省 Token | 计划可能脱离实际 | 复杂多步任务   |
+| **状态机**           | 预定义状态和跳转       | 可控、可预测       | 灵活性低         | 流程固定的任务 |
+| **多 Agent**         | 多个角色分工协作       | 专精、可并行       | 协调复杂         | 大型复杂任务   |
 
 下面逐一详解。
 
@@ -47,7 +47,7 @@ Thought（思考）→ Action（行动）→ Observation（观察）→ Thought 
 ```typescript
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // ---------- 1. 定义工具 ----------
 // 工具就是普通的函数，Agent 会自己决定何时调用
@@ -80,7 +80,7 @@ const tools = [
       parameters: {
         type: 'object',
         properties: {
-          query: { type: 'string', description: '搜索关键词' },
+          query: {type: 'string', description: '搜索关键词'},
         },
         required: ['query'],
       },
@@ -94,7 +94,7 @@ const tools = [
       parameters: {
         type: 'object',
         properties: {
-          expression: { type: 'string', description: '数学表达式，如 28 - 15' },
+          expression: {type: 'string', description: '数学表达式，如 28 - 15'},
         },
         required: ['expression'],
       },
@@ -121,7 +121,7 @@ async function reactAgent(userTask: string, maxIterations = 10) {
       role: 'system',
       content: '你是一个能使用工具的助手。遇到需要实时信息或计算的任务，请调用相应工具。',
     },
-    { role: 'user', content: userTask },
+    {role: 'user', content: userTask},
   ];
 
   for (let i = 0; i < maxIterations; i++) {
@@ -196,7 +196,7 @@ Step 3: Re-planner（可选）根据执行结果重新规划
 
 ```typescript
 import OpenAI from 'openai';
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // ---------- 第一步：Planner 制定计划 ----------
 async function makePlan(goal: string): Promise<string[]> {
@@ -208,9 +208,9 @@ async function makePlan(goal: string): Promise<string[]> {
         content: `你是一个任务规划器。把用户目标拆解为有序的子任务步骤。
 返回 JSON 数组，每个元素是一个具体的子任务描述。只返回 JSON，不要其他内容。`,
       },
-      { role: 'user', content: goal },
+      {role: 'user', content: goal},
     ],
-    response_format: { type: 'json_object' },
+    response_format: {type: 'json_object'},
   });
 
   const parsed = JSON.parse(response.choices[0].message.content!);
@@ -226,7 +226,7 @@ async function executeStep(step: string): Promise<string> {
         role: 'system',
         content: '你是任务执行器。认真完成给定的子任务，返回执行结果。',
       },
-      { role: 'user', content: step },
+      {role: 'user', content: step},
     ],
   });
   return response.choices[0].message.content!;
@@ -257,13 +257,13 @@ planAndExecute('写一篇关于 AI Agent 的科普文章，包含定义、应用
 
 ### ReAct vs Plan-and-Execute 对比
 
-| 维度 | ReAct | Plan-and-Execute |
-|------|-------|-----------------|
-| **规划时机** | 每步现想 | 开头一次性规划 |
-| **灵活性** | 高，随时调整 | 中，需重新规划才能改 |
+| 维度           | ReAct                    | Plan-and-Execute           |
+| -------------- | ------------------------ | -------------------------- |
+| **规划时机**   | 每步现想                 | 开头一次性规划             |
+| **灵活性**     | 高，随时调整             | 中，需重新规划才能改       |
 | **Token 消耗** | 较高（每步带全量上下文） | 较低（执行器只需当前步骤） |
-| **可预测性** | 低 | 高，计划可预览 |
-| **适合任务** | 探索性、不确定性高 | 步骤明确、可拆解 |
+| **可预测性**   | 低                       | 高，计划可预览             |
+| **适合任务**   | 探索性、不确定性高       | 步骤明确、可拆解           |
 
 :::tip 实践建议
 很多优秀 Agent 采用**混合模式**：先用 Planner 出一个粗略计划，执行时每个子任务内部用 ReAct 循环。这样既有全局方向，又有局部灵活性。
@@ -291,13 +291,10 @@ type AgentState = 'IDLE' | 'COLLECTING_INFO' | 'PROCESSING' | 'AWAITING_CONFIRM'
 
 // 定义状态跳转表
 const transitions: Record<AgentState, (input: string) => AgentState> = {
-  IDLE: (input) =>
-    input.includes('查询') || input.includes('帮') ? 'COLLECTING_INFO' : 'IDLE',
-  COLLECTING_INFO: (input) =>
-    input.includes('确认') ? 'PROCESSING' : 'COLLECTING_INFO',
+  IDLE: (input) => (input.includes('查询') || input.includes('帮') ? 'COLLECTING_INFO' : 'IDLE'),
+  COLLECTING_INFO: (input) => (input.includes('确认') ? 'PROCESSING' : 'COLLECTING_INFO'),
   PROCESSING: (input) => 'AWAITING_CONFIRM',
-  AWAITING_CONFIRM: (input) =>
-    input.includes('是') || input.includes('确认') ? 'DONE' : 'COLLECTING_INFO',
+  AWAITING_CONFIRM: (input) => (input.includes('是') || input.includes('确认') ? 'DONE' : 'COLLECTING_INFO'),
   DONE: () => 'IDLE',
 };
 
@@ -339,9 +336,9 @@ class StateMachineAgent {
 // 使用
 const agent = new StateMachineAgent();
 console.log(await agent.handle('帮我查询订单')); // COLLECTING_INFO
-console.log(await agent.handle('订单号 12345'));  // COLLECTING_INFO
-console.log(await agent.handle('确认'));           // PROCESSING → AWAITING_CONFIRM
-console.log(await agent.handle('是'));             // DONE
+console.log(await agent.handle('订单号 12345')); // COLLECTING_INFO
+console.log(await agent.handle('确认')); // PROCESSING → AWAITING_CONFIRM
+console.log(await agent.handle('是')); // DONE
 ```
 
 状态机的优势是**可控、可预测、可可视化**，LangGraph 本质上就是一个状态机框架。
@@ -382,13 +379,13 @@ console.log(await agent.handle('是'));             // DONE
 
 ### 对比
 
-| 维度 | 单 Agent | 多 Agent |
-|------|---------|---------|
-| **复杂度** | 低 | 高 |
-| **工具管理** | 一个 Agent 拿所有工具 | 每个 Agent 拿专属工具 |
-| **并行能力** | 弱（串行循环） | 强（可并行执行） |
-| **上下文一致性** | 强 | 弱（需传递） |
-| **适用规模** | 中小任务 | 大型复杂任务 |
+| 维度             | 单 Agent              | 多 Agent              |
+| ---------------- | --------------------- | --------------------- |
+| **复杂度**       | 低                    | 高                    |
+| **工具管理**     | 一个 Agent 拿所有工具 | 每个 Agent 拿专属工具 |
+| **并行能力**     | 弱（串行循环）        | 强（可并行执行）      |
+| **上下文一致性** | 强                    | 弱（需传递）          |
+| **适用规模**     | 中小任务              | 大型复杂任务          |
 
 ## 五、如何选择合适的架构模式
 

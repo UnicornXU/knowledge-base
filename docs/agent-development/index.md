@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: "Agent 开发实战"
+title: 'Agent 开发实战'
 slug: /agent-development
 ---
 
@@ -25,17 +25,17 @@ slug: /agent-development
 
 ## 📚 内容导航
 
-| 文档 | 难度 | 说明 |
-|------|------|------|
-| [什么是 AI Agent](./agent-concepts.md) | 🟢 易 | Agent 定义、核心特征、与 Chatbot 的区别、主流框架 |
-| [Agent 架构模式](./agent-architecture.md) | 🟡 中 | ReAct、Plan-and-Execute、状态机、单/多 Agent 对比 |
-| [工具调用与 Function Calling](./agent-tools.md) | 🟡 中 | OpenAI Function Calling、自定义工具、工具编排 |
-| [记忆系统设计](./agent-memory.md) | 🟡 中 | 短期/长期/工作记忆、向量数据库、上下文管理 |
-| [规划与推理能力](./agent-planning.md) | 🟡 中 | 思维链、任务分解、自我反思、ReAct 循环实现 |
-| [工作流编排](./agent-workflow.md) | 🟡 中 | 顺序/分支/循环工作流、LangGraph、人机协作 |
-| [多 Agent 协作系统](./agent-multiagent.md) | 🔴 难 | 主从/对等/层级模式、CrewAI、双 Agent 实战 |
-| [从零构建第一个 Agent](./agent-practice.md) | 🟡 中 | 完整项目：对话→工具→记忆→规划→交互 |
-| [Agent Prompt 工程](./agent-prompt-engineering.md) | 🟡 中 | System Prompt、角色定义、指令层级、防护机制 |
+| 文档                                               | 难度  | 说明                                              |
+| -------------------------------------------------- | ----- | ------------------------------------------------- |
+| [什么是 AI Agent](./agent-concepts.md)             | 🟢 易 | Agent 定义、核心特征、与 Chatbot 的区别、主流框架 |
+| [Agent 架构模式](./agent-architecture.md)          | 🟡 中 | ReAct、Plan-and-Execute、状态机、单/多 Agent 对比 |
+| [工具调用与 Function Calling](./agent-tools.md)    | 🟡 中 | OpenAI Function Calling、自定义工具、工具编排     |
+| [记忆系统设计](./agent-memory.md)                  | 🟡 中 | 短期/长期/工作记忆、向量数据库、上下文管理        |
+| [规划与推理能力](./agent-planning.md)              | 🟡 中 | 思维链、任务分解、自我反思、ReAct 循环实现        |
+| [工作流编排](./agent-workflow.md)                  | 🟡 中 | 顺序/分支/循环工作流、LangGraph、人机协作         |
+| [多 Agent 协作系统](./agent-multiagent.md)         | 🔴 难 | 主从/对等/层级模式、CrewAI、双 Agent 实战         |
+| [从零构建第一个 Agent](./agent-practice.md)        | 🟡 中 | 完整项目：对话→工具→记忆→规划→交互                |
+| [Agent Prompt 工程](./agent-prompt-engineering.md) | 🟡 中 | System Prompt、角色定义、指令层级、防护机制       |
 
 ## 🎯 学习路线图
 
@@ -62,23 +62,24 @@ Agent 架构模式（理解骨架）
 ```
 
 :::tip 学习建议
+
 - **第一遍**：快速通读"什么是 AI Agent"和"架构模式"，建立整体认知
 - **第二遍**：重点啃"工具调用"和"记忆系统"，这是 Agent 的两条腿
 - **第三遍**：跟着"从零构建第一个 Agent"动手敲代码，真正跑起来
 - **进阶**：研究"多 Agent 协作"和"工作流编排"，构建复杂系统
-:::
+  :::
 
 ## 前置知识
 
 在开始之前，建议你具备以下基础：
 
-| 知识点 | 要求 | 说明 |
-|--------|------|------|
-| TypeScript / JavaScript | ✅ 必备 | 能看懂 async/await、接口、泛型 |
-| OpenAI API 基础 | ✅ 必备 | 知道如何调用 Chat Completions |
-| Node.js | ✅ 必备 | 会用 npm/pnpm 安装依赖、运行脚本 |
-| LLM 基本概念 | 🟡 推荐 | 了解 Token、上下文窗口、Temperature |
-| 向量数据库 | 🟡 可选 | 知道 Embedding 是什么即可，手册会讲 |
+| 知识点                  | 要求    | 说明                                |
+| ----------------------- | ------- | ----------------------------------- |
+| TypeScript / JavaScript | ✅ 必备 | 能看懂 async/await、接口、泛型      |
+| OpenAI API 基础         | ✅ 必备 | 知道如何调用 Chat Completions       |
+| Node.js                 | ✅ 必备 | 会用 npm/pnpm 安装依赖、运行脚本    |
+| LLM 基本概念            | 🟡 推荐 | 了解 Token、上下文窗口、Temperature |
+| 向量数据库              | 🟡 可选 | 知道 Embedding 是什么即可，手册会讲 |
 
 ## 一个 30 秒的直观感受
 
@@ -87,7 +88,7 @@ Agent 架构模式（理解骨架）
 ```typescript
 // 一个最简单的 Agent 循环
 async function agentLoop(userTask: string) {
-  let messages = [{ role: 'user', content: userTask }];
+  let messages = [{role: 'user', content: userTask}];
 
   while (true) {
     // 1. 思考：我应该做什么？
@@ -100,7 +101,7 @@ async function agentLoop(userTask: string) {
     if (decision.toolCalls) {
       for (const call of decision.toolCalls) {
         const result = await executeTool(call); // 真正去搜索/计算/查天气
-        messages.push({ role: 'tool', content: result });
+        messages.push({role: 'tool', content: result});
       }
       continue; // 拿到工具结果后，继续让模型思考
     }

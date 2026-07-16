@@ -1,8 +1,8 @@
 ---
 sidebar_position: 8
-title: "多 Agent 协作系统"
-difficulty: "hard"
-tags: ["agent", "multi-agent", "协作", "CrewAI"]
+title: '多 Agent 协作系统'
+difficulty: 'hard'
+tags: ['agent', 'multi-agent', '协作', 'CrewAI']
 ---
 
 # 多 Agent 协作系统
@@ -19,13 +19,13 @@ tags: ["agent", "multi-agent", "协作", "CrewAI"]
 
 单 Agent 在以下情况会力不从心：
 
-| 问题 | 单 Agent 的困境 | 多 Agent 的解法 |
-|------|---------------|----------------|
-| **工具太多** | 20 个工具塞给一个 Agent，它选不准 | 拆成 3 个 Agent，每个 5-7 个工具 |
-| **角色冲突** | 又要批判又要创作，Prompt 难写 | 写作 Agent 和审核 Agent 分开 |
-| **上下文爆炸** | 所有信息堆在一起，Token 爆了 | 各 Agent 独立上下文，只传必要信息 |
-| **无法并行** | 一个 Agent 串行干活慢 | 多个 Agent 同时干不同子任务 |
-| **专业深度** | 一个 Prompt 难以面面俱到 | 每个 Agent 专精一个领域 |
+| 问题           | 单 Agent 的困境                   | 多 Agent 的解法                   |
+| -------------- | --------------------------------- | --------------------------------- |
+| **工具太多**   | 20 个工具塞给一个 Agent，它选不准 | 拆成 3 个 Agent，每个 5-7 个工具  |
+| **角色冲突**   | 又要批判又要创作，Prompt 难写     | 写作 Agent 和审核 Agent 分开      |
+| **上下文爆炸** | 所有信息堆在一起，Token 爆了      | 各 Agent 独立上下文，只传必要信息 |
+| **无法并行**   | 一个 Agent 串行干活慢             | 多个 Agent 同时干不同子任务       |
+| **专业深度**   | 一个 Prompt 难以面面俱到          | 每个 Agent 专精一个领域           |
 
 ```
 单 Agent（全能选手，容易翻车）：
@@ -109,12 +109,12 @@ Agent 之间直接通信，没有中心协调者。
 
 ### 模式选择
 
-| 场景 | 推荐模式 |
-|------|---------|
-| 任务可清晰拆分，需统一协调 | 主从模式 |
-| Agent 间需频繁讨论协商 | 对等模式 |
-| 超大型任务，需分层管理 | 层级模式 |
-| 新手起步 | **主从模式**（最可控） |
+| 场景                       | 推荐模式               |
+| -------------------------- | ---------------------- |
+| 任务可清晰拆分，需统一协调 | 主从模式               |
+| Agent 间需频繁讨论协商     | 对等模式               |
+| 超大型任务，需分层管理     | 层级模式               |
+| 新手起步                   | **主从模式**（最可控） |
 
 ## Agent 之间的通信机制
 
@@ -135,15 +135,12 @@ interface AgentMessage {
 class Agent {
   constructor(
     public name: string,
-    public systemPrompt: string
+    public systemPrompt: string,
   ) {}
 
   async receive(message: AgentMessage): Promise<string> {
     // 收到消息后处理并回复
-    const response = await callLLM(
-      this.systemPrompt,
-      `${message.from} 说: ${message.content}`
-    );
+    const response = await callLLM(this.systemPrompt, `${message.from} 说: ${message.content}`);
     return response;
   }
 }
@@ -168,7 +165,7 @@ class Blackboard {
   }
 
   readAll(): Record<string, any> {
-    return { ...this.data };
+    return {...this.data};
   }
 }
 
@@ -195,11 +192,11 @@ async function writerAgent() {
 
 ```typescript
 interface AgentRole {
-  name: string;           // 角色名
-  role: string;           // 角色定位
-  goal: string;           // 目标
-  backstory: string;      // 背景设定（影响风格）
-  tools: string[];        // 专属工具
+  name: string; // 角色名
+  role: string; // 角色定位
+  goal: string; // 目标
+  backstory: string; // 背景设定（影响风格）
+  tools: string[]; // 专属工具
 }
 
 // 定义一个"内容生产团队"
@@ -229,11 +226,12 @@ const team: AgentRole[] = [
 ```
 
 :::tip 角色设计原则
+
 1. **职责不重叠**：每个 Agent 干的事别交叉，避免互相抢活
 2. **目标可衡量**：每个角色的目标要清晰，方便评估
 3. **工具专精**：给每个 Agent 只配它需要的工具
 4. **边界明确**：明确规定谁负责什么，谁不负责什么
-:::
+   :::
 
 ## 使用 CrewAI 构建多 Agent 团队
 
@@ -243,12 +241,12 @@ const team: AgentRole[] = [
 
 ### CrewAI 核心概念
 
-| 概念 | 类比 | 说明 |
-|------|------|------|
-| **Agent** | 船员 | 有角色、目标、工具的个体 |
-| **Task** | 任务单 | 具体要完成的工作，分配给某个 Agent |
-| **Crew** | 探险队 | 把 Agent 和 Task 组起来，定义执行方式 |
-| **Process** | 队形 | 顺序执行 or 协作执行 |
+| 概念        | 类比   | 说明                                  |
+| ----------- | ------ | ------------------------------------- |
+| **Agent**   | 船员   | 有角色、目标、工具的个体              |
+| **Task**    | 任务单 | 具体要完成的工作，分配给某个 Agent    |
+| **Crew**    | 探险队 | 把 Agent 和 Task 组起来，定义执行方式 |
+| **Process** | 队形   | 顺序执行 or 协作执行                  |
 
 ### 代码示例（TypeScript 风格伪代码）
 
@@ -318,11 +316,7 @@ const crew = {
 引入第三方"仲裁 Agent"做最终裁决：
 
 ```typescript
-async function resolveConflict(
-  opinionA: string,
-  opinionB: string,
-  context: string
-): Promise<string> {
+async function resolveConflict(opinionA: string, opinionB: string, context: string): Promise<string> {
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
@@ -354,7 +348,7 @@ async function vote(proposals: string[]): Promise<string> {
         role: 'system',
         content: '以下是多个方案，选出最佳的一个并说明理由。只返回被选方案的编号。',
       },
-      { role: 'user', content: proposals.map((p, i) => `方案${i + 1}: ${p}`).join('\n\n') },
+      {role: 'user', content: proposals.map((p, i) => `方案${i + 1}: ${p}`).join('\n\n')},
     ],
   });
   return r.choices[0].message.content!;
@@ -370,14 +364,14 @@ async function debateUntilConsensus(
   agentA: Agent,
   agentB: Agent,
   topic: string,
-  maxRounds = 3
+  maxRounds = 3,
 ): Promise<string> {
-  let messageA = await agentA.receive({ from: 'user', content: topic, to: 'A' } as any);
+  let messageA = await agentA.receive({from: 'user', content: topic, to: 'A'} as any);
   let messageB: string;
 
   for (let i = 0; i < maxRounds; i++) {
-    messageB = await agentB.receive({ from: 'A', content: messageA, to: 'B' } as any);
-    messageA = await agentA.receive({ from: 'B', content: messageB, to: 'A' } as any);
+    messageB = await agentB.receive({from: 'A', content: messageA, to: 'B'} as any);
+    messageA = await agentA.receive({from: 'B', content: messageB, to: 'A'} as any);
 
     // 检查是否达成一致
     if (await checkAgreement(messageA, messageB)) {
@@ -395,7 +389,7 @@ async function debateUntilConsensus(
 ```typescript
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // 工具模拟
 function searchWeb(query: string): string {
@@ -406,15 +400,15 @@ function searchWeb(query: string): string {
 class BaseAgent {
   constructor(
     public name: string,
-    public systemPrompt: string
+    public systemPrompt: string,
   ) {}
 
   async run(userInput: string): Promise<string> {
     const r = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: this.systemPrompt },
-        { role: 'user', content: userInput },
+        {role: 'system', content: this.systemPrompt},
+        {role: 'user', content: userInput},
       ],
     });
     return r.choices[0].message.content!;
@@ -435,7 +429,7 @@ class ResearcherAgent extends BaseAgent {
 - 主题概述
 - 关键发现（3-5 条）
 - 数据与案例
-- 总结`
+- 总结`,
     );
   }
 
@@ -446,8 +440,8 @@ class ResearcherAgent extends BaseAgent {
     const keywordsResp = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: '为以下主题生成 3 个搜索关键词，用逗号分隔。只返回关键词。' },
-        { role: 'user', content: topic },
+        {role: 'system', content: '为以下主题生成 3 个搜索关键词，用逗号分隔。只返回关键词。'},
+        {role: 'user', content: topic},
       ],
     });
     const keywords = keywordsResp.choices[0].message.content!.split('，').map((s) => s.trim());
@@ -461,7 +455,7 @@ class ResearcherAgent extends BaseAgent {
 
     // 3. 整合报告
     const report = await this.run(
-      `主题：${topic}\n\n搜索结果：\n${searchResults.join('\n')}\n\n请整合成调研报告。`
+      `主题：${topic}\n\n搜索结果：\n${searchResults.join('\n')}\n\n请整合成调研报告。`,
     );
     console.log(`✅ 调研报告完成（${report.length} 字）`);
     return report;
@@ -479,7 +473,7 @@ class WriterAgent extends BaseAgent {
 3. 字数 1500-2000 字
 4. 用比喻和案例帮助读者理解
 
-文章结构：引言 → 正文（分小节）→ 总结`
+文章结构：引言 → 正文（分小节）→ 总结`,
     );
   }
 
@@ -527,14 +521,14 @@ coordinator.run('AI Agent 在教育领域的应用前景').then((article) => {
 
 ## 多 Agent 的陷阱与建议
 
-| 陷阱 | 说明 | 建议 |
-|------|------|------|
-| **过度设计** | 简单任务也上多 Agent | 能单 Agent 就别多 Agent |
-| **通信开销** | Agent 间传太多信息 | 只传必要的总结，别传原始数据 |
-| **死循环** | 两个 Agent 互相踢皮球 | 设最大轮次限制 |
-| **上下文丢失** | 信息层层传递后失真 | 用共享黑板而非纯消息传递 |
-| **调试困难** | 不知道哪个 Agent 出错 | 每个 Agent 加详细日志 |
-| **成本翻倍** | N 个 Agent = N 倍 API 调用 | 控制 Agent 数量和调用次数 |
+| 陷阱           | 说明                       | 建议                         |
+| -------------- | -------------------------- | ---------------------------- |
+| **过度设计**   | 简单任务也上多 Agent       | 能单 Agent 就别多 Agent      |
+| **通信开销**   | Agent 间传太多信息         | 只传必要的总结，别传原始数据 |
+| **死循环**     | 两个 Agent 互相踢皮球      | 设最大轮次限制               |
+| **上下文丢失** | 信息层层传递后失真         | 用共享黑板而非纯消息传递     |
+| **调试困难**   | 不知道哪个 Agent 出错      | 每个 Agent 加详细日志        |
+| **成本翻倍**   | N 个 Agent = N 倍 API 调用 | 控制 Agent 数量和调用次数    |
 
 :::warning 黄金法则
 **先用单 Agent 做出能用的版本，遇到明确的瓶颈（工具太多/上下文爆炸/需并行）再上多 Agent。** 多 Agent 是"优化手段"，不是"起步方案"。

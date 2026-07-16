@@ -1,8 +1,8 @@
 ---
 sidebar_position: 5
-title: "记忆系统设计"
-difficulty: "medium"
-tags: ["agent", "memory", "RAG", "向量数据库"]
+title: '记忆系统设计'
+difficulty: 'medium'
+tags: ['agent', 'memory', 'RAG', '向量数据库']
 ---
 
 # 记忆系统设计
@@ -31,11 +31,11 @@ Agent：抱歉，我不知道你叫什么。   ← 没有记忆，尴尬
 
 借鉴认知科学，Agent 的记忆通常分为三种：
 
-| 类型 | 类比 | 存什么 | 生命周期 | 实现方式 |
-|------|------|--------|---------|---------|
-| **短期记忆** | 便签纸 | 当前对话的历史消息 | 单次会话 | 对话上下文数组 |
-| **长期记忆** | 笔记本 | 用户偏好、历史事实 | 跨会话持久 | 向量数据库 |
-| **工作记忆** | 草稿纸 | 任务执行的中间状态 | 单次任务 | 临时变量/状态 |
+| 类型         | 类比   | 存什么             | 生命周期   | 实现方式       |
+| ------------ | ------ | ------------------ | ---------- | -------------- |
+| **短期记忆** | 便签纸 | 当前对话的历史消息 | 单次会话   | 对话上下文数组 |
+| **长期记忆** | 笔记本 | 用户偏好、历史事实 | 跨会话持久 | 向量数据库     |
+| **工作记忆** | 草稿纸 | 任务执行的中间状态 | 单次任务   | 临时变量/状态  |
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -60,14 +60,14 @@ Agent：抱歉，我不知道你叫什么。   ← 没有记忆，尴尬
 
 ```typescript
 class SlidingWindowMemory {
-  private messages: Array<{ role: string; content: string }> = [];
+  private messages: Array<{role: string; content: string}> = [];
   private maxSize: number; // 保留的最大消息数
 
   constructor(maxSize = 20) {
     this.maxSize = maxSize;
   }
 
-  add(message: { role: string; content: string }) {
+  add(message: {role: string; content: string}) {
     this.messages.push(message);
     // 超出窗口大小，从前面丢弃旧消息
     if (this.messages.length > this.maxSize) {
@@ -86,8 +86,8 @@ class SlidingWindowMemory {
 
 // 使用
 const memory = new SlidingWindowMemory(10);
-memory.add({ role: 'user', content: '你好' });
-memory.add({ role: 'assistant', content: '你好！有什么可以帮你的？' });
+memory.add({role: 'user', content: '你好'});
+memory.add({role: 'assistant', content: '你好！有什么可以帮你的？'});
 ```
 
 **优点**：简单、Token 消耗可控
@@ -103,12 +103,12 @@ memory.add({ role: 'assistant', content: '你好！有什么可以帮你的？' 
 
 ```typescript
 import OpenAI from 'openai';
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 class SummaryMemory {
   private systemPrompt: string;
   private summary: string = '';
-  private recentMessages: Array<{ role: string; content: string }> = [];
+  private recentMessages: Array<{role: string; content: string}> = [];
   private threshold: number; // 超过几条就触发摘要
 
   constructor(systemPrompt: string, threshold = 6) {
@@ -116,7 +116,7 @@ class SummaryMemory {
     this.threshold = threshold;
   }
 
-  async add(message: { role: string; content: string }) {
+  async add(message: {role: string; content: string}) {
     this.recentMessages.push(message);
 
     // 超过阈值，把旧消息压缩成摘要
@@ -150,12 +150,10 @@ class SummaryMemory {
   }
 
   getMessages() {
-    const messages: Array<{ role: string; content: string }> = [
-      { role: 'system', content: this.systemPrompt },
-    ];
+    const messages: Array<{role: string; content: string}> = [{role: 'system', content: this.systemPrompt}];
     // 如果有摘要，作为系统消息注入
     if (this.summary) {
-      messages.push({ role: 'system', content: `之前的对话摘要：${this.summary}` });
+      messages.push({role: 'system', content: `之前的对话摘要：${this.summary}`});
     }
     messages.push(...this.recentMessages);
     return messages;
@@ -175,6 +173,7 @@ class SummaryMemory {
 > 比喻：长期记忆就像一个"智能笔记本"。你把每条信息变成一串数字（向量），存进去。下次要找相关信息时，也把问题变成数字，然后找"数字最接近"的那几条。这就是**语义搜索**——不是靠关键词匹配，而是靠"意思相近"。
 
 流程：
+
 1. **写入**：把文本通过 Embedding 模型转成向量 → 存入向量数据库
 2. **检索**：把查询转成向量 → 在数据库里找最相似的 K 条 → 作为上下文喂给模型
 
@@ -184,11 +183,11 @@ class SummaryMemory {
 
 ```typescript
 import OpenAI from 'openai';
-import { OpenAIEmbeddings } from '@langchain/openai';
-import { MemoryVectorStore } from 'langchain/vectorstores/memory';
-import { Document } from '@langchain/core/documents';
+import {OpenAIEmbeddings} from '@langchain/openai';
+import {MemoryVectorStore} from 'langchain/vectorstores/memory';
+import {Document} from '@langchain/core/documents';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // ============ 长期记忆管理器 ============
 class LongTermMemory {
@@ -205,9 +204,7 @@ class LongTermMemory {
 
   // 写入：把一段记忆存起来
   async remember(text: string, metadata?: Record<string, string>) {
-    await this.store.addDocuments([
-      new Document({ pageContent: text, metadata: metadata ?? {} }),
-    ]);
+    await this.store.addDocuments([new Document({pageContent: text, metadata: metadata ?? {}})]);
     console.log(`💾 已记住: ${text.slice(0, 30)}...`);
   }
 
@@ -221,20 +218,18 @@ class LongTermMemory {
 // ============ 带长期记忆的 Agent ============
 class AgentWithMemory {
   private memory: LongTermMemory;
-  private conversation: Array<{ role: string; content: string }>;
+  private conversation: Array<{role: string; content: string}>;
 
   constructor(systemPrompt: string) {
     this.memory = new LongTermMemory();
-    this.conversation = [{ role: 'system', content: systemPrompt }];
+    this.conversation = [{role: 'system', content: systemPrompt}];
   }
 
   async chat(userInput: string): Promise<string> {
     // 1. 先从长期记忆中检索相关信息
     const relevantMemories = await this.memory.recall(userInput);
     const memoryContext =
-      relevantMemories.length > 0
-        ? `\n\n[长期记忆参考]\n${relevantMemories.join('\n')}`
-        : '';
+      relevantMemories.length > 0 ? `\n\n[长期记忆参考]\n${relevantMemories.join('\n')}` : '';
 
     // 2. 把记忆作为上下文注入
     this.conversation.push({
@@ -249,7 +244,7 @@ class AgentWithMemory {
     });
 
     const reply = response.choices[0].message.content!;
-    this.conversation.push({ role: 'assistant', content: reply });
+    this.conversation.push({role: 'assistant', content: reply});
 
     // 4. 把重要信息存入长期记忆（这里简化：存用户说的关键事实）
     if (this.looksLikeFact(userInput)) {
@@ -283,10 +278,11 @@ demo();
 ```
 
 :::note 生产环境用什么向量数据库
+
 - **本地开发/小项目**：`MemoryVectorStore`（内存）、`Chroma`（本地）
 - **生产环境**：Pinecone、Weaviate、Qdrant、Milvus、PostgreSQL + pgvector
 - 前端知识库项目可参考本站的 [向量数据库前端实现](../ai/vector-db-frontend.md)
-:::
+  :::
 
 ## 记忆管理策略：何时存、何时取、何时忘
 
@@ -294,12 +290,12 @@ demo();
 
 ### 何时存（写入策略）
 
-| 信号 | 示例 | 策略 |
-|------|------|------|
-| 用户陈述事实 | "我叫小明" | 立即存 |
-| 用户表达偏好 | "我喜欢简洁回答" | 立即存 |
-| 任务关键结果 | 查到的航班信息 | 存（带时间戳） |
-| 闲聊/寒暄 | "今天天气不错" | 不存 |
+| 信号         | 示例             | 策略           |
+| ------------ | ---------------- | -------------- |
+| 用户陈述事实 | "我叫小明"       | 立即存         |
+| 用户表达偏好 | "我喜欢简洁回答" | 立即存         |
+| 任务关键结果 | 查到的航班信息   | 存（带时间戳） |
+| 闲聊/寒暄    | "今天天气不错"   | 不存           |
 
 可以用一个"判断器"来决定要不要存：
 
@@ -312,7 +308,7 @@ async function shouldRemember(text: string): Promise<boolean> {
         role: 'system',
         content: '判断这句话是否包含值得长期记住的信息（如用户姓名、偏好、重要事实）。只回答 true 或 false。',
       },
-      { role: 'user', content: text },
+      {role: 'user', content: text},
     ],
   });
   return response.choices[0].message.content!.trim() === 'true';
@@ -356,12 +352,12 @@ function shouldForget(item: MemoryItem, now: number): boolean {
 
 即使有记忆系统，传给模型的上下文也不能无限长。管理技巧：
 
-| 技巧 | 说明 |
-|------|------|
-| **Token 计数** | 调用前估算 Token 数，超限就裁剪 |
-| **分层保留** | System Prompt 永留 → 最近 N 轮全留 → 更早的压缩成摘要 |
-| **相关检索优先** | 长期记忆只取 Top-K 最相关的，不要全塞 |
-| **工具结果精简** | 工具返回的大段数据先提取要点再存入上下文 |
+| 技巧             | 说明                                                  |
+| ---------------- | ----------------------------------------------------- |
+| **Token 计数**   | 调用前估算 Token 数，超限就裁剪                       |
+| **分层保留**     | System Prompt 永留 → 最近 N 轮全留 → 更早的压缩成摘要 |
+| **相关检索优先** | 长期记忆只取 Top-K 最相关的，不要全塞                 |
+| **工具结果精简** | 工具返回的大段数据先提取要点再存入上下文              |
 
 ```typescript
 // 简单的 Token 估算（中文约 1 字 = 1.5 token，英文约 4 字符 = 1 token）
@@ -372,10 +368,7 @@ function estimateTokens(text: string): number {
 }
 
 // 确保上下文不超过限制
-function trimToTokenLimit(
-  messages: Array<{ role: string; content: string }>,
-  limit: number
-) {
+function trimToTokenLimit(messages: Array<{role: string; content: string}>, limit: number) {
   let total = 0;
   const result: typeof messages = [];
   // 从后往前保留（最新的最重要）

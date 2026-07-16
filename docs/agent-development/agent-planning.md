@@ -1,8 +1,8 @@
 ---
 sidebar_position: 6
-title: "规划与推理能力"
-difficulty: "medium"
-tags: ["agent", "planning", "reasoning", "CoT"]
+title: '规划与推理能力'
+difficulty: 'medium'
+tags: ['agent', 'planning', 'reasoning', 'CoT']
 ---
 
 # 规划与推理能力
@@ -55,7 +55,7 @@ tags: ["agent", "planning", "reasoning", "CoT"]
 
 ```typescript
 import OpenAI from 'openai';
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // 方式一：System Prompt 引导
 const cotSystemPrompt = `你是一个善于推理的助手。面对复杂问题，请按以下格式回答：
@@ -69,8 +69,8 @@ async function askWithCoT(question: string) {
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: cotSystemPrompt },
-      { role: 'user', content: question },
+      {role: 'system', content: cotSystemPrompt},
+      {role: 'user', content: question},
     ],
   });
   return response.choices[0].message.content;
@@ -80,9 +80,7 @@ async function askWithCoT(question: string) {
 async function askSimple(question: string) {
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
-    messages: [
-      { role: 'user', content: `${question}\n\n请一步步思考后再回答。` },
-    ],
+    messages: [{role: 'user', content: `${question}\n\n请一步步思考后再回答。`}],
   });
   return response.choices[0].message.content;
 }
@@ -123,7 +121,7 @@ async function askSimple(question: string) {
 
 ```typescript
 import OpenAI from 'openai';
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 interface SubTask {
   id: number;
@@ -150,9 +148,9 @@ async function decomposeTask(goal: string): Promise<SubTask[]> {
 - dependsOn 标明依赖关系
 - 最多拆成 8 个子任务`,
       },
-      { role: 'user', content: goal },
+      {role: 'user', content: goal},
     ],
-    response_format: { type: 'json_object' },
+    response_format: {type: 'json_object'},
   });
 
   const data = JSON.parse(response.choices[0].message.content!);
@@ -191,22 +189,22 @@ decomposeTask('帮我调研并对比 React、Vue、Svelte 三个框架的性能'
 
 ```typescript
 import OpenAI from 'openai';
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // 生成初版结果
 async function generate(task: string): Promise<string> {
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: '你是一个专业的写作助手。' },
-      { role: 'user', content: task },
+      {role: 'system', content: '你是一个专业的写作助手。'},
+      {role: 'user', content: task},
     ],
   });
   return r.choices[0].message.content!;
 }
 
 // 反思：评估结果并给出改进建议
-async function reflect(task: string, result: string): Promise<{ ok: boolean; feedback: string }> {
+async function reflect(task: string, result: string): Promise<{ok: boolean; feedback: string}> {
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
@@ -221,7 +219,7 @@ async function reflect(task: string, result: string): Promise<{ ok: boolean; fee
         content: `任务：${task}\n\n待审查内容：\n${result}`,
       },
     ],
-    response_format: { type: 'json_object' },
+    response_format: {type: 'json_object'},
   });
   return JSON.parse(r.choices[0].message.content!);
 }
@@ -231,7 +229,7 @@ async function improve(task: string, result: string, feedback: string): Promise<
   const r = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: '你是写作助手，根据反馈改进内容。' },
+      {role: 'system', content: '你是写作助手，根据反馈改进内容。'},
       {
         role: 'user',
         content: `任务：${task}\n\n当前内容：\n${result}\n\n改进建议：${feedback}\n\n请输出改进后的完整内容。`,
@@ -247,7 +245,7 @@ async function generateWithReflection(task: string, maxRounds = 3): Promise<stri
 
   for (let i = 0; i < maxRounds; i++) {
     console.log(`\n🔄 反思第 ${i + 1} 轮...`);
-    const { ok, feedback } = await reflect(task, result);
+    const {ok, feedback} = await reflect(task, result);
 
     if (ok) {
       console.log('✅ 审查通过，无需修改');
@@ -272,7 +270,7 @@ generateWithReflection('解释 JavaScript 闭包，要给初学者讲明白，�
 
 ```typescript
 import OpenAI from 'openai';
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // 工具
 function searchWeb(q: string) {
@@ -294,7 +292,7 @@ const tools = [
       description: '搜索网页获取信息',
       parameters: {
         type: 'object',
-        properties: { query: { type: 'string' } },
+        properties: {query: {type: 'string'}},
         required: ['query'],
       },
     },
@@ -306,7 +304,7 @@ const tools = [
       description: '数学计算',
       parameters: {
         type: 'object',
-        properties: { expression: { type: 'string' } },
+        properties: {expression: {type: 'string'}},
         required: ['expression'],
       },
     },
@@ -331,7 +329,7 @@ async function reactAgent(task: string) {
 
 可用工具：searchWeb（搜索）、calculate（计算）`,
     },
-    { role: 'user', content: task },
+    {role: 'user', content: task},
   ];
 
   const log: string[] = [`🎯 任务: ${task}`];
@@ -360,7 +358,7 @@ async function reactAgent(task: string) {
       const result = executeTool(call.function.name, args);
       log.push(`         Observation: ${result}`);
 
-      messages.push({ role: 'tool', tool_call_id: call.id, content: result });
+      messages.push({role: 'tool', tool_call_id: call.id, content: result});
     }
   }
 
@@ -421,10 +419,7 @@ async function executeWithBacktrack(tasks: SubTask[]) {
 当环境变化或计划走不通时，让 Planner 重新制定计划：
 
 ```typescript
-async function replan(
-  remainingTasks: SubTask[],
-  doneResults: Record<number, string>
-): Promise<SubTask[]> {
+async function replan(remainingTasks: SubTask[], doneResults: Record<number, string>): Promise<SubTask[]> {
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
@@ -438,7 +433,7 @@ async function replan(
         content: `已完成: ${JSON.stringify(doneResults)}\n待重新规划: ${JSON.stringify(remainingTasks)}`,
       },
     ],
-    response_format: { type: 'json_object' },
+    response_format: {type: 'json_object'},
   });
   return JSON.parse(response.choices[0].message.content!).tasks;
 }
@@ -448,13 +443,13 @@ async function replan(
 
 规划质量很大程度取决于 Prompt。关键技巧：
 
-| 技巧 | 示例 | 作用 |
-|------|------|------|
-| **明确输出格式** | "返回 JSON 数组" | 让规划结果可程序解析 |
-| **约束数量** | "最多 8 个子任务" | 防止过度拆解 |
-| **要求标注依赖** | "标明 dependsOn" | 支持并行执行 |
-| **提供示例** | Few-shot 给个范例 | 提升规划质量 |
-| **要求可行性自评** | "评估每个子任务是否可执行" | 提前发现问题 |
+| 技巧               | 示例                       | 作用                 |
+| ------------------ | -------------------------- | -------------------- |
+| **明确输出格式**   | "返回 JSON 数组"           | 让规划结果可程序解析 |
+| **约束数量**       | "最多 8 个子任务"          | 防止过度拆解         |
+| **要求标注依赖**   | "标明 dependsOn"           | 支持并行执行         |
+| **提供示例**       | Few-shot 给个范例          | 提升规划质量         |
+| **要求可行性自评** | "评估每个子任务是否可执行" | 提前发现问题         |
 
 ```typescript
 const planningPrompt = `你是一个任务规划专家。将目标分解为子任务。

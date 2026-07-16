@@ -1,8 +1,8 @@
 ---
 sidebar_position: 10
-title: "Agent Prompt 工程"
-difficulty: "medium"
-tags: ["agent", "prompt", "system-prompt", "指令设计"]
+title: 'Agent Prompt 工程'
+difficulty: 'medium'
+tags: ['agent', 'prompt', 'system-prompt', '指令设计']
 ---
 
 # Agent Prompt 工程
@@ -15,13 +15,13 @@ tags: ["agent", "prompt", "system-prompt", "指令设计"]
 
 一个好的 Agent System Prompt 应该回答这几个问题：
 
-| 问题 | Prompt 中的部分 | 示例 |
-|------|---------------|------|
-| 你是谁？ | **角色定义** | "你是一个专业的信息调研助手" |
-| 你能做什么？ | **能力边界** | "你可以搜索网页、提取要点、写报告" |
-| 你不能做什么？ | **约束限制** | "不要编造信息，不确定时说明" |
-| 你该怎么做？ | **行为规则** | "先搜索再回答，回答要引用来源" |
-| 你的风格？ | **输出格式** | "回答简洁，用要点列表" |
+| 问题           | Prompt 中的部分 | 示例                               |
+| -------------- | --------------- | ---------------------------------- |
+| 你是谁？       | **角色定义**    | "你是一个专业的信息调研助手"       |
+| 你能做什么？   | **能力边界**    | "你可以搜索网页、提取要点、写报告" |
+| 你不能做什么？ | **约束限制**    | "不要编造信息，不确定时说明"       |
+| 你该怎么做？   | **行为规则**    | "先搜索再回答，回答要引用来源"     |
+| 你的风格？     | **输出格式**    | "回答简洁，用要点列表"             |
 
 ### 一个完整的 System Prompt 模板
 
@@ -104,13 +104,11 @@ const globalPrompt = `你是一个调研助手。
 // 任务指令：针对具体任务的补充
 async function research(topic: string, format: 'brief' | 'detailed') {
   const taskInstruction =
-    format === 'brief'
-      ? `请用 200 字以内简短总结。`
-      : `请写一份 2000 字的详细报告，包含数据、案例和分析。`;
+    format === 'brief' ? `请用 200 字以内简短总结。` : `请写一份 2000 字的详细报告，包含数据、案例和分析。`;
 
   const messages = [
-    { role: 'system', content: globalPrompt },
-    { role: 'user', content: `调研主题：${topic}\n\n${taskInstruction}` },
+    {role: 'system', content: globalPrompt},
+    {role: 'user', content: `调研主题：${topic}\n\n${taskInstruction}`},
   ];
   // ...
 }
@@ -180,7 +178,7 @@ const examples = [
   {
     role: 'assistant',
     content: null,
-    tool_calls: [{ function: { name: 'searchWeb', arguments: '{"query":"北京今天天气"}' } }],
+    tool_calls: [{function: {name: 'searchWeb', arguments: '{"query":"北京今天天气"}'}}],
   },
   {
     role: 'user',
@@ -195,10 +193,11 @@ const examples = [
 ```
 
 :::tip Few-shot 数量
+
 - **1-2 个**示例通常就能教会格式
 - **3-5 个**示例能覆盖更多边界情况
 - 超过 5 个收益递减，且浪费 Token
-:::
+  :::
 
 ## 常见 Prompt 模板与最佳实践
 
@@ -346,14 +345,14 @@ ${userInput}
 
 ### 调优技巧
 
-| 技巧 | 说明 | 示例 |
-|------|------|------|
+| 技巧       | 说明                   | 示例                   |
+| ---------- | ---------------------- | ---------------------- |
 | **具体化** | 用具体的词替代模糊的词 | "简洁"→"不超过 200 字" |
-| **加约束** | 明确告诉它不要做什么 | "不要编造数据" |
-| **给步骤** | 把流程写清楚 | "第一步…第二步…" |
-| **用示例** | Few-shot 比说理有效 | 给 2 个期望输出的例子 |
-| **加角色** | 赋予专业身份 | "你是资深分析师" |
-| **设格式** | 明确输出结构 | "返回 JSON" |
+| **加约束** | 明确告诉它不要做什么   | "不要编造数据"         |
+| **给步骤** | 把流程写清楚           | "第一步…第二步…"       |
+| **用示例** | Few-shot 比说理有效    | 给 2 个期望输出的例子  |
+| **加角色** | 赋予专业身份           | "你是资深分析师"       |
+| **设格式** | 明确输出结构           | "返回 JSON"            |
 
 ### 评估方法
 
@@ -365,16 +364,16 @@ const testCases = [
   {
     input: '帮我调研 AI Agent 框架',
     expectations: {
-      shouldUseSearchTool: true,        // 应该调用搜索工具
-      shouldCiteSources: true,          // 应该引用来源
-      shouldNotHallucinate: true,       // 不应该编造
-      maxLength: 2000,                  // 不超过 2000 字
+      shouldUseSearchTool: true, // 应该调用搜索工具
+      shouldCiteSources: true, // 应该引用来源
+      shouldNotHallucinate: true, // 不应该编造
+      maxLength: 2000, // 不超过 2000 字
     },
   },
   {
     input: '今天天气真好',
     expectations: {
-      shouldRefuse: true,  // 应该拒答（与调研无关）
+      shouldRefuse: true, // 应该拒答（与调研无关）
     },
   },
 ];
@@ -393,7 +392,7 @@ async function evaluatePrompt(prompt: string, testCases: any[]) {
     // 根据 expectations 判断是否通过
     if (meetsExpectations(checks, test.expectations)) passed++;
   }
-  return { passed, total: testCases.length, score: passed / testCases.length };
+  return {passed, total: testCases.length, score: passed / testCases.length};
 }
 
 // A/B 测试：对比两个 Prompt 版本
@@ -403,11 +402,12 @@ console.log(`V1 得分: ${resultA.score}, V2 得分: ${resultB.score}`);
 ```
 
 :::tip 评估建议
+
 - 准备 **10-20 个**覆盖典型场景的测试用例
 - 每次改 Prompt 都跑一遍评估，确保没退步
 - 关注**边界情况**（无关问题、恶意输入、模糊指令）
 - 用 `gpt-4o-mini` 做评估打分，省成本
-:::
+  :::
 
 ## 一个 Prompt 迭代实战
 
