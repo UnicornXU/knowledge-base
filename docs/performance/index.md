@@ -23,6 +23,7 @@ slug: /performance
 ```
 
 **残酷的现实：**
+
 - 53% 的移动用户会放弃加载超过 3 秒的页面
 - Amazon 发现每 100ms 的延迟会让他们损失 1% 的销售额
 - Pinterest 的搜索引擎流量和注册量增加了 15%，他们将等待时间减少了 40%
@@ -48,28 +49,31 @@ slug: /performance
 
 ### Web Vitals（核心指标）
 
-| 指标 | 全称 | 衡量什么 | 目标值 |
-|------|------|----------|--------|
-| **LCP** | Largest Contentful Paint | 最大内容绘制时间 | < 2.5s |
-| **FID** | First Input Delay | 首次输入延迟 | < 100ms |
-| **CLS** | Cumulative Layout Shift | 累计布局偏移 | < 0.1 |
-| **INP** | Interaction to Next Paint | 交互响应时间 | < 200ms |
-| **TTFB** | Time to First Byte | 首字节时间 | < 800ms |
+> **重要更新**：Google 于 2024 年 3 月正式以 INP 取代 FID 作为核心 Web Vitals 指标。
+
+| 指标     | 全称                      | 衡量什么           | 目标值  | 状态                     |
+| -------- | ------------------------- | ------------------ | ------- | ------------------------ |
+| **LCP**  | Largest Contentful Paint  | 最大内容绘制时间   | < 2.5s  | 核心指标                 |
+| **INP**  | Interaction to Next Paint | 所有交互的响应延迟 | < 200ms | 核心指标（2024 新增）    |
+| **CLS**  | Cumulative Layout Shift   | 累计布局偏移       | < 0.1   | 核心指标                 |
+| ~~FID~~  | First Input Delay         | 首次输入延迟       | < 100ms | ⚠️ 已弃用（被 INP 取代） |
+| **TTFB** | Time to First Byte        | 首字节时间         | < 800ms | 辅助指标                 |
 
 ### 如何测量？
 
 ```javascript
-// 使用 Web Vitals 库
-import { onLCP, onFID, onCLS } from 'web-vitals';
+// 使用 Web Vitals 库（v4+）
+import {onLCP, onINP, onCLS} from 'web-vitals';
 
-onLCP(console.log);
-onFID(console.log);
-onCLS(console.log);
+onLCP(console.log); // 最大内容绘制
+onINP(console.log); // 交互响应（取代 FID）
+onCLS(console.log); // 布局偏移
 ```
 
 ## 性能优化检查清单
 
 ### ✅ 加载性能
+
 - [ ] 首屏加载时间 < 2 秒
 - [ ] 关键 CSS 内联
 - [ ] JavaScript 异步加载
@@ -77,18 +81,21 @@ onCLS(console.log);
 - [ ] 资源压缩（Gzip/Brotli）
 
 ### ✅ 渲染性能
+
 - [ ] 避免强制同步布局
 - [ ] 使用 transform/opacity 做动画
 - [ ] 减少重排重绘
 - [ ] 使用 will-change 提示浏览器
 
 ### ✅ 交互性能
+
 - [ ] 首次输入延迟 < 100ms
 - [ ] 长任务拆分（> 50ms）
 - [ ] 使用 requestIdleCallback
 - [ ] 虚拟列表优化大数据渲染
 
 ### ✅ 网络性能
+
 - [ ] 合理的缓存策略
 - [ ] HTTP/2 或 HTTP/3
 - [ ] CDN 加速
@@ -96,13 +103,13 @@ onCLS(console.log);
 
 ## 性能优化工具
 
-| 工具 | 用途 | 特点 |
-|------|------|------|
-| **Lighthouse** | 综合评估 | Chrome 内置，一键生成报告 |
-| **Chrome DevTools** | 性能分析 | 火焰图、网络面板、内存分析 |
-| **WebPageTest** | 真实环境测试 | 多地点、多设备 |
-| **Bundle Analyzer** | 打包分析 | 可视化依赖关系 |
-| **Performance API** | 代码埋点 | 精确测量特定操作 |
+| 工具                | 用途         | 特点                       |
+| ------------------- | ------------ | -------------------------- |
+| **Lighthouse**      | 综合评估     | Chrome 内置，一键生成报告  |
+| **Chrome DevTools** | 性能分析     | 火焰图、网络面板、内存分析 |
+| **WebPageTest**     | 真实环境测试 | 多地点、多设备             |
+| **Bundle Analyzer** | 打包分析     | 可视化依赖关系             |
+| **Performance API** | 代码埋点     | 精确测量特定操作           |
 
 ## 本专题内容
 

@@ -1,0 +1,8 @@
+{
+  "label": "HTML 基础",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "HTML 语义化、表单、HTML5 API、Meta 标签与性能优化"
+  }
+}

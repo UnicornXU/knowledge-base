@@ -1,13 +1,17 @@
 ---
 sidebar_position: 1
-title: "Hooks 深入"
-difficulty: "medium"
-tags: ["react", "hooks"]
+title: 'Hooks 深入'
+difficulty: 'medium'
+tags: ['react', 'hooks']
 ---
 
 # Hooks 深入
 
 ## useState 的工作原理
+
+:::warning 概念演示
+以下是**极度简化**的演示代码，仅用于理解 useState 的基本思想。真实 React 实现与此完全不同。
+:::
 
 ```javascript
 // 简化版实现
@@ -27,6 +31,25 @@ function useState(initialValue) {
 }
 ```
 
+:::info 真实实现
+React 内部使用 **Fiber 架构**中的 Hook 链表来管理状态：
+
+- 每个组件的 Fiber 节点有一个 `memoizedState` 属性，指向 Hook 链表的头节点
+- 每次调用 `useState` 会创建/读取链表中的一个节点
+- 这就是为什么 Hook 不能在条件语句中调用——必须保证链表顺序一致
+- 多个 `useState` 通过链表的 `next` 指针依次关联
+
+```javascript
+// React 源码中的简化结构
+type Hook = {
+  memoizedState: any,    // 当前状态值
+  queue: UpdateQueue,     // 更新队列
+  next: Hook | null,      // 指向下一个 Hook
+};
+```
+
+:::
+
 ## useEffect vs useLayoutEffect
 
 ```javascript
@@ -45,11 +68,11 @@ useLayoutEffect(() => {
 }, []);
 ```
 
-| 特性 | useEffect | useLayoutEffect |
-|------|-----------|-----------------|
-| 执行时机 | 浏览器绘制后 | DOM 变更后、绘制前 |
-| 是否阻塞渲染 | 否 | 是 |
-| 适用场景 | 数据获取、订阅 | DOM 测量、同步更新 |
+| 特性         | useEffect      | useLayoutEffect    |
+| ------------ | -------------- | ------------------ |
+| 执行时机     | 浏览器绘制后   | DOM 变更后、绘制前 |
+| 是否阻塞渲染 | 否             | 是                 |
+| 适用场景     | 数据获取、订阅 | DOM 测量、同步更新 |
 
 ## 自定义 Hook
 

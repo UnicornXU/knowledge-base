@@ -1,23 +1,23 @@
 ---
 sidebar_position: 5
-title: "包管理工具"
-difficulty: "easy"
-tags: ["engineering", "npm", "yarn", "pnpm", "package-manager"]
+title: '包管理工具'
+difficulty: 'easy'
+tags: ['engineering', 'npm', 'yarn', 'pnpm', 'package-manager']
 ---
 
 # 包管理工具
 
 ## npm vs yarn vs pnpm
 
-| 特性 | npm | yarn (Berry) | pnpm |
-|------|-----|-------------|------|
-| 安装速度 | 中 | 快 | 最快 |
-| 磁盘占用 | 高 | 中 | 低 |
-| node_modules 结构 | 扁平 | 扁平/Plug'n'Play | 严格（硬链接） |
-| Workspace | v7+ 支持 | 原生支持 | 原生支持 |
-| 幽灵依赖 | 存在 | 存在 | 不存在 |
-| Lock 文件 | package-lock.json | yarn.lock | pnpm-lock.yaml |
-| 市场份额 | 最高 | 下降中 | 快速增长 |
+| 特性              | npm                | yarn (Berry)           | pnpm                             |
+| ----------------- | ------------------ | ---------------------- | -------------------------------- |
+| 安装速度          | 中                 | 快                     | 最快                             |
+| 磁盘占用          | 高                 | 中                     | 低                               |
+| node_modules 结构 | 扁平               | 扁平/Plug'n'Play       | 严格（硬链接）                   |
+| Workspace         | v7+ 支持           | 原生支持               | 原生支持                         |
+| 幽灵依赖          | 存在               | 存在                   | 不存在                           |
+| Lock 文件         | package-lock.json  | yarn.lock              | pnpm-lock.yaml                   |
+| 市场份额（2025）  | 最高（但份额收窄） | 稳定（Berry 生态有限） | 主流选择（已成为许多新项目首选） |
 
 ## 依赖版本管理
 
@@ -120,6 +120,7 @@ pnpm store prune           # 清理未引用的包
 ### Q: 为什么 pnpm 比 npm 快？
 
 **回答要点：**
+
 1. **硬链接** — 不需要复制文件，直接链接到全局存储
 2. **并行安装** — 依赖解析和下载并行执行
 3. **内容寻址** — 相同内容只下载一次
@@ -130,25 +131,26 @@ pnpm store prune           # 清理未引用的包
 ```json
 {
   "dependencies": {
-    "react": "^18.0.0"       // 运行时需要，会被打包
+    "react": "^18.0.0" // 运行时需要，会被打包
   },
   "devDependencies": {
-    "typescript": "^5.0.0",  // 只在开发时需要
-    "jest": "^29.0.0"        // 测试框架，生产环境不需要
+    "typescript": "^5.0.0", // 只在开发时需要
+    "jest": "^29.0.0" // 测试框架，生产环境不需要
   }
 }
 ```
 
-| 字段 | 安装场景 | 是否打包 |
-|------|---------|---------|
-| dependencies | `npm install` | ✅ 是 |
-| devDependencies | `npm install` | ❌ 否 |
-| peerDependencies | 不自动安装，需要宿主提供 | - |
-| optionalDependencies | 安装失败不报错 | 视情况 |
+| 字段                 | 安装场景                 | 是否打包 |
+| -------------------- | ------------------------ | -------- |
+| dependencies         | `npm install`            | ✅ 是    |
+| devDependencies      | `npm install`            | ❌ 否    |
+| peerDependencies     | 不自动安装，需要宿主提供 | -        |
+| optionalDependencies | 安装失败不报错           | 视情况   |
 
 ### Q: 如何处理依赖冲突？
 
 **回答要点：**
+
 1. **npm dedupe** — 扁平化依赖，减少重复
 2. **resolutions (yarn)** — 强制指定某个依赖的版本
 3. **pnpm.overrides (pnpm)** — 类似 resolutions
