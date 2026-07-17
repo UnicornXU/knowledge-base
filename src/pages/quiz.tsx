@@ -38,7 +38,7 @@ const STORAGE_KEYS = {
   WRONG_BOOK: 'quiz_wrong_book',
 } as const;
 
-function loadFromStorage<T>(key: string, fallback: T): T {
+function loadFromStorage<T> (key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
   try {
     const raw = localStorage.getItem(key);
@@ -49,7 +49,7 @@ function loadFromStorage<T>(key: string, fallback: T): T {
   }
 }
 
-function saveToStorage<T>(key: string, data: T): boolean {
+function saveToStorage<T> (key: string, data: T): boolean {
   if (typeof window === 'undefined') return false;
   try {
     localStorage.setItem(key, JSON.stringify(data));
@@ -60,13 +60,13 @@ function saveToStorage<T>(key: string, data: T): boolean {
   }
 }
 
-function formatDuration(seconds: number): string {
+function formatDuration (seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return m > 0 ? `${m}分${s}秒` : `${s}秒`;
 }
 
-function formatDate(dateStr: string): string {
+function formatDate (dateStr: string): string {
   const d = new Date(dateStr);
   const month = d.getMonth() + 1;
   const day = d.getDate();
@@ -84,7 +84,7 @@ const COUNT_OPTIONS = [
 ];
 
 // ===== 计时器 Hook =====
-function useTimer(isRunning: boolean) {
+function useTimer (isRunning: boolean) {
   const [seconds, setSeconds] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -112,7 +112,7 @@ function useTimer(isRunning: boolean) {
 }
 
 // ===== 主组件 =====
-export default function Quiz(): React.ReactElement {
+export default function Quiz (): React.ReactElement {
   const [state, setState] = useState<QuizState>('select');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [questionCount, setQuestionCount] = useState<number>(10);
@@ -466,15 +466,14 @@ export default function Quiz(): React.ReactElement {
                     </div>
                     <div className={styles.historyItemRight}>
                       <div
-                        className={`${styles.historyScore} ${
-                          session.score >= 90
+                        className={`${styles.historyScore} ${session.score >= 90
                             ? styles.scoreExcellent
                             : session.score >= 70
                               ? styles.scoreGood
                               : session.score >= 60
                                 ? styles.scoreFair
                                 : styles.scorePoor
-                        }`}
+                          }`}
                       >
                         {session.score}分
                       </div>
@@ -536,8 +535,8 @@ export default function Quiz(): React.ReactElement {
                     if (!question) return null;
                     const correctLabel = Array.isArray(question.answer)
                       ? question.answer
-                          .map((v) => question.options.find((o) => o.value === v)?.label)
-                          .join(', ')
+                        .map((v) => question.options.find((o) => o.value === v)?.label)
+                        .join(', ')
                       : question.options.find((o) => o.value === question.answer)?.label;
                     return (
                       <div key={entry.questionId} className={styles.wrongBookItem}>
@@ -606,7 +605,7 @@ export default function Quiz(): React.ReactElement {
 }
 
 // ===== 内联 QuizCard 组件 =====
-function QuizCardInline({
+function QuizCardInline ({
   question,
   questionNumber,
   totalQuestions,
@@ -759,7 +758,7 @@ function QuizCardInline({
 }
 
 // ===== 内联 QuizSummary 组件 =====
-function QuizSummaryInline({
+function QuizSummaryInline ({
   questions,
   answers,
   duration,
@@ -812,25 +811,25 @@ function QuizSummaryInline({
 
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>
-            <div className={styles.statValue} style={{color: '#10b981'}}>
+            <div className={`${styles.statValue} ${styles.statCorrect}`}>
               {correctCount}
             </div>
             <div className={styles.statLabel}>答对</div>
           </div>
           <div className={styles.statItem}>
-            <div className={styles.statValue} style={{color: '#ef4444'}}>
+            <div className={`${styles.statValue} ${styles.statWrong}`}>
               {totalCount - correctCount}
             </div>
             <div className={styles.statLabel}>答错</div>
           </div>
           <div className={styles.statItem}>
-            <div className={styles.statValue} style={{color: 'var(--ifm-color-primary)'}}>
+            <div className={`${styles.statValue} ${styles.statTotal}`}>
               {totalCount}
             </div>
             <div className={styles.statLabel}>总题数</div>
           </div>
           <div className={styles.statItem}>
-            <div className={styles.statValue} style={{color: '#f59e0b'}}>
+            <div className={`${styles.statValue} ${styles.statTime}`}>
               ⏱️ {formatDuration(duration)}
             </div>
             <div className={styles.statLabel}>用时</div>

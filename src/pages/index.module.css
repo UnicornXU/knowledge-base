@@ -1,84 +1,158 @@
-/* ========== Hero 区域 ========== */
+/* ========== Aurora Hero 区域 ========== */
 .hero {
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 50%, #f5f0ff 100%);
-  padding: 3rem 0 2rem;
   position: relative;
   overflow: hidden;
+  padding: 5rem 0 4rem;
+  background: var(--surface-bg);
 }
 
+/* Aurora / Mesh Gradient 动画背景 */
 .hero::before {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(99, 102, 241, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 350px at 75% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 350px 250px at 85% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  animation: auroraShift 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 450px 300px at 60% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 350px 250px at 30% 70%, rgba(167, 139, 250, 0.08) 0%, transparent 70%);
+  animation: auroraShift2 15s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes auroraShift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 15px) scale(0.98);
+  }
+  100% {
+    transform: translate(10px, -10px) scale(1.02);
+  }
+}
+
+@keyframes auroraShift2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-25px, 20px) scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(15px, -15px) scale(0.95);
+    opacity: 0.8;
+  }
 }
 
 .heroContent {
-  max-width: 1200px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 3rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .heroText {
-  flex: 1;
+  width: 100%;
 }
 
 .heroTitle {
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: #1e293b;
-  margin: 0 0 0.75rem;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .heroSubtitle {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.02em;
   color: #64748b;
-  margin: 0 0 1.5rem;
-  line-height: 1.6;
+  margin: 0 0 2rem;
+  line-height: 1.7;
 }
 
+/* ========== 搜索框 - Glassmorphism ========== */
 .searchBox {
   display: flex;
   gap: 0;
-  max-width: 480px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   cursor: pointer;
-  transition: box-shadow 0.2s ease;
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+  overflow: hidden;
 }
 
 .searchBox:hover {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--card-hover-border);
+  box-shadow:
+    var(--glass-shadow),
+    0 0 20px rgba(99, 102, 241, 0.08);
+}
+
+.searchBox:focus-within {
+  border-color: var(--ifm-color-primary);
+  box-shadow:
+    0 0 0 3px var(--glow-primary),
+    var(--glass-shadow);
 }
 
 .searchIcon {
-  padding-left: 1rem;
+  padding-left: 1.125rem;
   font-size: 1rem;
   flex-shrink: 0;
+  opacity: 0.6;
 }
 
 .searchInput {
   flex: 1;
   border: none;
-  padding: 0.875rem 0.75rem;
+  padding: 0.9375rem 0.75rem;
   font-size: 0.95rem;
   outline: none;
   background: transparent;
-  color: #334155;
+  color: var(--ifm-font-color-base);
   cursor: pointer;
   pointer-events: none;
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
 }
 
 .searchShortcut {
@@ -87,47 +161,35 @@
   font-size: 0.7rem;
   font-weight: 600;
   color: #94a3b8;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid var(--glass-border);
   flex-shrink: 0;
   font-family: monospace;
-}
-
-.searchInput::placeholder {
-  color: #94a3b8;
+  align-self: center;
+  margin-right: 0.5rem;
 }
 
 .searchBtn {
-  padding: 0.875rem 1.75rem;
+  padding: 0.9375rem 1.75rem;
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   color: white;
   border: none;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .searchBtn:hover {
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  box-shadow: 0 4px 20px var(--glow-primary);
 }
 
-.heroIllustration {
-  flex: 0 0 350px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.heroIllustration svg {
-  width: 100%;
-  max-width: 350px;
-}
-
-/* ========== 统计卡片 ========== */
+/* ========== 统计卡片 - Glassmorphism ========== */
 .statsSection {
   max-width: 1200px;
-  margin: -1.5rem auto 0;
+  margin: -2rem auto 0;
   padding: 0 2rem;
   position: relative;
   z-index: 10;
@@ -135,31 +197,55 @@
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
 }
 
 .statCard {
-  background: white;
-  border-radius: 12px;
-  padding: 1.25rem 1.5rem;
+  position: relative;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-radius: 14px;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
+  border: 1px solid var(--card-border);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* 顶部渐变色光条 */
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--stat-color, #6366f1), var(--ifm-color-primary-light));
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
 }
 
 .statCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  border-color: var(--card-hover-border);
+  box-shadow:
+    var(--card-hover-shadow),
+    0 0 30px rgba(99, 102, 241, 0.08);
+}
+
+.statCard:hover::before {
+  opacity: 1;
+  height: 3px;
 }
 
 .statIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
   background: color-mix(in srgb, var(--stat-color) 10%, transparent);
   display: flex;
   align-items: center;
@@ -174,31 +260,35 @@
 }
 
 .statValue {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 800;
-  color: #1e293b;
   line-height: 1.2;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .statValue small {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #64748b;
+  -webkit-text-fill-color: #64748b;
 }
 
 .statLabel {
   font-size: 0.85rem;
   color: #94a3b8;
   font-weight: 500;
+  margin-top: 0.125rem;
 }
 
 /* ========== 主内容布局 ========== */
 .mainLayout {
   max-width: 1200px;
-  margin: 2rem auto 0;
+  margin: 3rem auto 0;
   padding: 0 2rem;
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .mainContent {
@@ -206,7 +296,7 @@
   min-width: 0;
 }
 
-/* ========== 热门知识点（覆盖 HomepageFeatures） ========== */
+/* ========== Section 通用 ========== */
 .features {
   padding: 0;
   width: 100%;
@@ -217,16 +307,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
 
 .sectionTitle {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 700;
-  color: #1e293b;
   margin: 0;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .tabBar {
@@ -242,46 +335,54 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
+  border: 1px solid transparent;
 }
 
 .tab:hover {
-  background: #f1f5f9;
-  color: #334155;
+  background: var(--gradient-glow);
+  color: var(--ifm-color-primary);
+  border-color: var(--glass-border);
 }
 
 .tabActive {
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   color: white;
+  border-color: transparent;
+}
+
+.tabActive:hover {
+  color: white;
 }
 
 .viewAll {
   font-size: 0.85rem;
-  color: #6366f1;
+  color: var(--ifm-color-primary);
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
 .viewAll:hover {
-  color: #4f46e5;
+  color: var(--ifm-color-primary-dark);
   text-decoration: none;
 }
 
 .viewAllSmall {
   font-size: 0.8rem;
-  color: #6366f1;
+  color: var(--ifm-color-primary);
   font-weight: 500;
   text-decoration: none;
 }
 
 .viewAllSmall:hover {
-  color: #4f46e5;
+  color: var(--ifm-color-primary-dark);
   text-decoration: none;
 }
 
 /* ========== 最新面试题 ========== */
 .questionsSection {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .questionList {
@@ -293,9 +394,10 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid #f1f5f9;
-  transition: background 0.15s ease;
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .questionItem:last-child {
@@ -303,7 +405,7 @@
 }
 
 .questionItem:hover {
-  background: rgba(99, 102, 241, 0.02);
+  background: var(--gradient-glow);
 }
 
 .questionIcon {
@@ -318,10 +420,10 @@
 
 .questionTitle {
   font-size: 0.95rem;
-  color: #1e293b;
   font-weight: 500;
   display: block;
   margin-bottom: 0.25rem;
+  color: var(--ifm-font-color-base);
 }
 
 .questionMeta {
@@ -335,9 +437,10 @@
   padding: 2px 8px;
   border-radius: 6px;
   font-size: 0.75rem;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--gradient-glow);
+  color: var(--ifm-color-primary);
   font-weight: 500;
+  border: 1px solid var(--glass-border);
 }
 
 .questionDifficulty {
@@ -357,21 +460,28 @@
   flex-shrink: 0;
 }
 
-/* ========== 右侧信息面板 ========== */
+/* ========== 右侧信息面板 - Glassmorphism ========== */
 .rightSidebar {
   width: 300px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .sidebarCard {
-  background: white;
-  border-radius: 12px;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-radius: 14px;
   padding: 1.25rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+
+.sidebarCard:hover {
+  border-color: var(--card-hover-border);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.06);
 }
 
 .sidebarHeader {
@@ -384,57 +494,18 @@
 .sidebarTitle {
   font-size: 1rem;
   font-weight: 700;
-  color: #1e293b;
   margin: 0 0 1rem;
+  color: var(--ifm-font-color-base);
 }
 
 .sidebarHeader .sidebarTitle {
   margin: 0;
 }
 
-/* 学习进度 */
-.progressInfo {
-  margin-bottom: 1rem;
-}
-
-.progressHeader {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  color: #64748b;
-  margin-bottom: 0.5rem;
-}
-
-.progressGoal {
-  color: #1e293b;
-  font-weight: 600;
-}
-
-.progressBar {
-  height: 8px;
-  background: #f1f5f9;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progressFill {
-  height: 100%;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
-  border-radius: 4px;
-  transition: width 1s ease;
-}
-
-.progressPercent {
-  font-size: 0.8rem;
-  color: #6366f1;
-  font-weight: 600;
-  display: block;
-  margin-top: 0.25rem;
-}
-
+/* 内容概览 */
 .streakInfo {
   padding-top: 1rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -448,7 +519,10 @@
 .streakValue {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #6366f1;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .streakNote {
@@ -467,6 +541,15 @@
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.pathItem:hover {
+  background: var(--gradient-glow);
+  text-decoration: none;
 }
 
 .pathIcon {
@@ -483,9 +566,9 @@
 .pathTitle {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #1e293b;
   display: block;
   margin-bottom: 0.125rem;
+  color: var(--ifm-font-color-base);
 }
 
 .pathDesc {
@@ -504,7 +587,7 @@
 .pathProgressBar {
   flex: 1;
   height: 6px;
-  background: #f1f5f9;
+  background: rgba(99, 102, 241, 0.08);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -532,7 +615,9 @@
 
 .articleItem {
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--card-border);
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .articleItem:last-child {
@@ -540,12 +625,16 @@
   border-bottom: none;
 }
 
+.articleItem:hover {
+  text-decoration: none;
+}
+
 .articleTitle {
   font-size: 0.9rem;
-  color: #1e293b;
   font-weight: 500;
   display: block;
   margin-bottom: 0.25rem;
+  color: var(--ifm-font-color-base);
 }
 
 .articleMeta {
@@ -556,6 +645,31 @@
   color: #94a3b8;
 }
 
+/* ========== CTA 渐变按钮 (通用) ========== */
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+}
+
+.ctaBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
 /* ========== 响应式 ========== */
 @media screen and (max-width: 1100px) {
   .rightSidebar {
@@ -563,23 +677,23 @@
   }
 }
 
+@media screen and (max-width: 996px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media screen and (max-width: 768px) {
   .hero {
-    padding: 2rem 0 1.5rem;
-  }
-
-  .heroContent {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
+    padding: 3rem 0 2.5rem;
   }
 
   .heroTitle {
-    font-size: 1.75rem;
+    font-size: 2.25rem;
   }
 
   .heroSubtitle {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .searchBox {
@@ -590,25 +704,21 @@
     display: none;
   }
 
-  .heroIllustration {
-    flex: none;
-    width: 250px;
-  }
-
   .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .statCard {
-    padding: 1rem;
+    padding: 1.25rem;
   }
 
   .statValue {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   .mainLayout {
     padding: 0 1rem;
+    margin-top: 2rem;
   }
 
   .tabBar {
@@ -622,119 +732,48 @@
 }
 
 @media screen and (max-width: 480px) {
+  .hero {
+    padding: 2rem 0 1.5rem;
+  }
+
+  .heroContent {
+    padding: 0 1rem;
+  }
+
   .heroTitle {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
-  .statsGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .statIcon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.25rem;
+  .heroSubtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
   }
 
   .statValue {
+    font-size: 1.5rem;
+  }
+
+  .statIcon {
+    width: 44px;
+    height: 44px;
     font-size: 1.25rem;
   }
 
   .questionItem {
-    padding: 0.75rem 0;
+    padding: 0.75rem 0.5rem;
   }
 
   .questionDate {
     display: none;
   }
+
+  .searchBtn {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+  }
 }
 
-/* ========== 暗色主题 ========== */
-[data-theme='dark'] .hero {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-}
-
-[data-theme='dark'] .heroTitle {
-  color: #f1f5f9;
-}
-
-[data-theme='dark'] .heroSubtitle {
-  color: #94a3b8;
-}
-
-[data-theme='dark'] .searchBox {
-  background: #1e293b;
-  border-color: #334155;
-}
-
-[data-theme='dark'] .searchInput {
-  color: #e2e8f0;
-}
-
-[data-theme='dark'] .searchInput::placeholder {
-  color: #64748b;
-}
-
-[data-theme='dark'] .searchShortcut {
-  background: #334155;
-  border-color: #475569;
-  color: #94a3b8;
-}
-
-[data-theme='dark'] .statCard,
-[data-theme='dark'] .sidebarCard {
-  background: #1e293b;
-  border-color: #334155;
-}
-
-[data-theme='dark'] .statValue,
-[data-theme='dark'] .sectionTitle,
-[data-theme='dark'] .sidebarTitle {
-  color: #f1f5f9;
-}
-
-[data-theme='dark'] .statLabel,
-[data-theme='dark'] .questionDate {
-  color: #64748b;
-}
-
-[data-theme='dark'] .questionTitle,
-[data-theme='dark'] .pathTitle,
-[data-theme='dark'] .articleTitle {
-  color: #e2e8f0;
-}
-
-[data-theme='dark'] .tab {
-  color: #94a3b8;
-}
-
-[data-theme='dark'] .tab:hover {
-  background: #334155;
-}
-
-[data-theme='dark'] .questionItem {
-  border-bottom-color: #334155;
-}
-
-[data-theme='dark'] .progressBar,
-[data-theme='dark'] .pathProgressBar {
-  background: #334155;
-}
-
-[data-theme='dark'] .streakInfo {
-  border-top-color: #334155;
-}
-
-[data-theme='dark'] .articleItem {
-  border-bottom-color: #334155;
-}
-
-[data-theme='dark'] .questionTag {
-  background: #334155;
-  color: #94a3b8;
-}
-
+/* ========== 链接通用 ========== */
 .questionItem,
 .pathItem,
 .articleItem {
@@ -745,6 +784,8 @@
 .articleItem:hover {
   text-decoration: none;
 }
+
+/* ========== 无障碍 ========== */
 .searchBtn:focus-visible,
 .questionItem:focus-visible,
 .pathItem:focus-visible,

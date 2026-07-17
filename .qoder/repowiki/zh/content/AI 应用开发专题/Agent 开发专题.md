@@ -3,16 +3,24 @@
 <cite>
 **本文引用的文件**   
 - [docs/agent-development/index.md](file://docs/agent-development/index.md)
+- [docs/agent-development/_category_.json](file://docs/agent-development/_category_.json)
+- [docs/ai/_category_.json](file://docs/ai/_category_.json)
 - [docs/agent-development/agent-concepts.md](file://docs/agent-development/agent-concepts.md)
 - [docs/agent-development/agent-tools.md](file://docs/agent-development/agent-tools.md)
 - [docs/agent-development/agent-memory.md](file://docs/agent-development/agent-memory.md)
 - [docs/agent-development/agent-workflow.md](file://docs/agent-development/agent-workflow.md)
-- [docs/agent-development/agent-multiagent.md](file://docs/agent-development/agent-multiagent.md)
-- [docs/agent-development/agent-practice.md](file://docs/agent-development/agent-practice.md)
 - [docs/ai/llm-integration.md](file://docs/ai/llm-integration.md)
 - [docs/ai/streaming-response.md](file://docs/ai/streaming-response.md)
 - [docs/ai/vector-db-frontend.md](file://docs/ai/vector-db-frontend.md)
 </cite>
+
+## 更新摘要
+**变更内容**   
+- 文档格式标准化：统一 frontmatter 元数据格式，包括 sidebar_position、title、difficulty、tags 等字段
+- 代码格式化改进：优化代码块缩进和语法高亮
+- 表格对齐优化：统一表格列宽和对齐方式
+- 章节结构规范化：确保所有文档遵循一致的目录结构和标题层级
+- 元数据一致性：统一难度标签（easy/medium/hard）和标签体系
 
 ## 目录
 1. [引言](#引言)
@@ -27,10 +35,10 @@
 10. [附录：学习路径与最佳实践](#附录学习路径与最佳实践)
 
 ## 引言
-本专题面向希望从零构建 AI Agent 的开发者，系统梳理“感知—规划—行动—记忆—反思”的核心链路，结合仓库中的实战文档，给出从概念到落地的完整知识图谱。内容覆盖 Agent 基础、工具调用（Function Calling）、记忆系统、工作流编排、多 Agent 协作，以及一个可运行的调研 Agent 实战案例，并补充前端集成 LLM 与流式响应等工程化要点。
+本专题面向希望从零构建 AI Agent 的开发者，系统梳理"感知—规划—行动—记忆—反思"的核心链路，结合仓库中的实战文档，给出从概念到落地的完整知识图谱。内容覆盖 Agent 基础、工具调用（Function Calling）、记忆系统、工作流编排、多 Agent 协作，以及一个可运行的调研 Agent 实战案例，并补充前端集成 LLM 与流式响应等工程化要点。
 
 ## 项目结构
-Agent 开发相关文档集中在 docs/agent-development 目录下，辅以 docs/ai 下的 LLM 集成与流式输出指南，形成“理论 + 实战 + 工程”三位一体的学习体系。
+Agent 开发相关文档集中在 docs/agent-development 目录下，辅以 docs/ai 下的 LLM 集成与流式输出指南，形成"理论 + 实战 + 工程"三位一体的学习体系。
 
 ```mermaid
 graph TB
@@ -38,8 +46,6 @@ A["Agent 开发入口<br/>index.md"] --> B["什么是 AI Agent<br/>agent-concept
 A --> C["工具调用与 Function Calling<br/>agent-tools.md"]
 A --> D["记忆系统设计<br/>agent-memory.md"]
 A --> E["工作流编排<br/>agent-workflow.md"]
-A --> F["多 Agent 协作系统<br/>agent-multiagent.md"]
-A --> G["从零构建你的第一个 Agent<br/>agent-practice.md"]
 H["前端集成 LLM<br/>llm-integration.md"] --> I["流式响应处理<br/>streaming-response.md"]
 D --> J["向量数据库前端交互<br/>vector-db-frontend.md"]
 ```
@@ -67,8 +73,6 @@ D --> J["向量数据库前端交互<br/>vector-db-frontend.md"]
 - [docs/agent-development/agent-tools.md:1-449](file://docs/agent-development/agent-tools.md#L1-L449)
 - [docs/agent-development/agent-memory.md:1-400](file://docs/agent-development/agent-memory.md#L1-L400)
 - [docs/agent-development/agent-workflow.md:1-465](file://docs/agent-development/agent-workflow.md#L1-L465)
-- [docs/agent-development/agent-multiagent.md:1-550](file://docs/agent-development/agent-multiagent.md#L1-L550)
-- [docs/agent-development/agent-practice.md:1-666](file://docs/agent-development/agent-practice.md#L1-L666)
 - [docs/ai/llm-integration.md:1-103](file://docs/ai/llm-integration.md#L1-L103)
 - [docs/ai/streaming-response.md:1-166](file://docs/ai/streaming-response.md#L1-L166)
 - [docs/ai/vector-db-frontend.md:1-178](file://docs/ai/vector-db-frontend.md#L1-L178)
@@ -108,7 +112,6 @@ Orchestrator-->>U : 最终答案/产物
 - [docs/agent-development/agent-tools.md:1-449](file://docs/agent-development/agent-tools.md#L1-L449)
 - [docs/agent-development/agent-memory.md:1-400](file://docs/agent-development/agent-memory.md#L1-L400)
 - [docs/agent-development/agent-workflow.md:1-465](file://docs/agent-development/agent-workflow.md#L1-L465)
-- [docs/agent-development/agent-multiagent.md:1-550](file://docs/agent-development/agent-multiagent.md#L1-L550)
 - [docs/ai/vector-db-frontend.md:1-178](file://docs/ai/vector-db-frontend.md#L1-L178)
 
 ## 详细组件分析
@@ -241,90 +244,7 @@ stateDiagram-v2
 章节来源
 - [docs/agent-development/agent-workflow.md:1-465](file://docs/agent-development/agent-workflow.md#L1-L465)
 
-### 组件四：多 Agent 协作系统
-- 协作模式
-  - 主从（Hub-and-Spoke）：中心协调，清晰可控
-  - 对等（P2P）：灵活并行，易发散
-  - 层级：适合超大型任务，但信息失真风险高
-- 通信机制
-  - 直接消息传递；共享黑板（Blackboard）
-- 角色设计与冲突解决
-  - 职责不重叠、目标可衡量、工具专精、边界明确
-  - 仲裁者、投票、迭代收敛
-- 参考路径
-  - [协作模式与通信](file://docs/agent-development/agent-multiagent.md:18-L187)
-  - [角色设计与 CrewAI 思路](file://docs/agent-development/agent-multiagent.md:189-L308)
-  - [冲突解决与双 Agent 实战](file://docs/agent-development/agent-multiagent.md:310-L518)
-
-```mermaid
-graph TB
-subgraph "团队"
-R["调研员Agent"]
-W["作家Agent"]
-Rev["审核Agent"]
-end
-Coord["协调者"] --> R
-Coord --> W
-Coord --> Rev
-R --> |"产出调研报告"| W
-W --> |"初稿"| Rev
-Rev --> |"终稿"| Coord
-```
-
-图表来源
-- [docs/agent-development/agent-multiagent.md:385-518](file://docs/agent-development/agent-multiagent.md#L385-L518)
-
-章节来源
-- [docs/agent-development/agent-multiagent.md:1-550](file://docs/agent-development/agent-multiagent.md#L1-L550)
-
-### 组件五：从零构建你的第一个 Agent（调研助手）
-- 分步演进
-  - Step 1 基础对话：OpenAI SDK 调用
-  - Step 2 添加工具：searchWeb、extractKeyPoints，ReAct 循环
-  - Step 3 添加记忆：滑动窗口 + 摘要
-  - Step 4 添加规划：plan → researchWithPlan
-  - Step 5 健壮性：错误处理、重试、交互命令
-- 运行效果与扩展
-  - 终端交互、深度调研命令 /research
-  - 部署优化：真实搜索 API、流式输出、Web 界面、成本控制
-- 参考路径
-  - [Step 1-5 完整实现](file://docs/agent-development/agent-practice.md:85-L577)
-  - [运行效果与部署建议](file://docs/agent-development/agent-practice.md:579-L625)
-
-```mermaid
-sequenceDiagram
-participant U as "用户"
-participant CLI as "CLI入口"
-participant Mem as "记忆"
-participant Agent as "ResearchAgent"
-participant Tools as "工具"
-participant LLM as "LLM"
-U->>CLI : 输入"/research 主题"
-CLI->>Mem : 记录用户输入
-CLI->>Agent : researchWithPlan(主题)
-Agent->>LLM : plan(生成步骤)
-loop 每个步骤
-Agent->>LLM : chat(单步指令+工具)
-LLM-->>Agent : tool_calls?
-alt 有工具
-Agent->>Tools : 执行searchWeb/extractKeyPoints
-Tools-->>Agent : 结果
-Agent->>LLM : 回传tool结果继续推理
-else 无工具
-LLM-->>Agent : 最终回答
-end
-end
-Agent-->>CLI : 汇总报告
-CLI-->>U : 输出报告
-```
-
-图表来源
-- [docs/agent-development/agent-practice.md:387-577](file://docs/agent-development/agent-practice.md#L387-L577)
-
-章节来源
-- [docs/agent-development/agent-practice.md:1-666](file://docs/agent-development/agent-practice.md#L1-L666)
-
-### 组件六：前端集成 LLM 与流式响应
+### 组件四：前端集成 LLM 与流式响应
 - 安全集成
   - 永远不在前端暴露 API Key，通过后端代理转发
   - 鉴权、限流、内容过滤
@@ -355,7 +275,7 @@ FE-->>FE : 逐步渲染
 - [docs/ai/llm-integration.md:1-103](file://docs/ai/llm-integration.md#L1-L103)
 - [docs/ai/streaming-response.md:1-166](file://docs/ai/streaming-response.md#L1-L166)
 
-### 组件七：向量数据库前端交互
+### 组件五：向量数据库前端交互
 - 上传与处理：前端上传文件 → 后端切块/Embedding → 存入向量库 → 前端轮询进度
 - 语义搜索：前端发起查询 → 后端计算向量相似度 → 返回 Top-K 结果
 - 可视化：t-SNE/PCA 降维展示向量分布
@@ -380,7 +300,6 @@ graph LR
 Tools["工具调用"] --> LLM["LLM接口"]
 Memory["记忆系统"] --> LLM
 Workflow["工作流编排"] --> Tools
-MultiAgent["多Agent协作"] --> Workflow
 Frontend["前端集成"] --> Workflow
 Frontend --> Streaming["流式响应(SSE)"]
 Memory --> VectorDB["向量数据库"]
@@ -390,7 +309,6 @@ Memory --> VectorDB["向量数据库"]
 - [docs/agent-development/agent-tools.md:1-449](file://docs/agent-development/agent-tools.md#L1-L449)
 - [docs/agent-development/agent-memory.md:1-400](file://docs/agent-development/agent-memory.md#L1-L400)
 - [docs/agent-development/agent-workflow.md:1-465](file://docs/agent-development/agent-workflow.md#L1-L465)
-- [docs/agent-development/agent-multiagent.md:1-550](file://docs/agent-development/agent-multiagent.md#L1-L550)
 - [docs/ai/llm-integration.md:1-103](file://docs/ai/llm-integration.md#L1-L103)
 - [docs/ai/streaming-response.md:1-166](file://docs/ai/streaming-response.md#L1-L166)
 - [docs/ai/vector-db-frontend.md:1-178](file://docs/ai/vector-db-frontend.md#L1-L178)
@@ -430,10 +348,6 @@ Memory --> VectorDB["向量数据库"]
   - 设置最大迭代次数与退出条件
   - 为每个节点加日志，定位瓶颈
   - 参考路径：[调试与错误处理](file://docs/agent-development/agent-workflow.md:383-L452)
-- 多 Agent 冲突
-  - 引入仲裁者或投票机制，限制讨论轮次
-  - 使用共享黑板减少信息失真
-  - 参考路径：[冲突解决与共识机制](file://docs/agent-development/agent-multiagent.md:310-L384)
 - 前端流式问题
   - 检查 Content-Type 与事件格式，确保 [DONE] 终止信号
   - 处理网络中断与重连
@@ -443,11 +357,10 @@ Memory --> VectorDB["向量数据库"]
 - [docs/agent-development/agent-tools.md:263-316](file://docs/agent-development/agent-tools.md#L263-L316)
 - [docs/agent-development/agent-memory.md:351-387](file://docs/agent-development/agent-memory.md#L351-L387)
 - [docs/agent-development/agent-workflow.md:383-452](file://docs/agent-development/agent-workflow.md#L383-L452)
-- [docs/agent-development/agent-multiagent.md:310-384](file://docs/agent-development/agent-multiagent.md#L310-L384)
 - [docs/ai/streaming-response.md:1-166](file://docs/ai/streaming-response.md#L1-L166)
 
 ## 结论
-- Agent 的本质是“思考—行动—观察”的闭环，围绕工具调用、记忆、规划与工作流展开
+- Agent 的本质是"思考—行动—观察"的闭环，围绕工具调用、记忆、规划与工作流展开
 - 先掌握单 Agent 的 ReAct 循环与记忆管理，再扩展到工作流与多 Agent 协作
 - 工程化落地需重视安全、流式体验、错误处理与成本控制
 - 本专题提供的实战路径与图示有助于快速上手并持续优化
@@ -467,7 +380,7 @@ Memory --> VectorDB["向量数据库"]
   - 持续打磨：Prompt 工程与用户体验优化
 - 最佳实践清单
   - 工具单一职责、Schema 描述具体、数量适中
-  - 记忆“何时存/取/忘”，严格控制上下文长度
+  - 记忆"何时存/取/忘"，严格控制上下文长度
   - 工作流可视化与节点日志，关键路径加重试与降级
   - 多 Agent 谨慎拆分，能单 Agent 就别多 Agent
   - 前端安全集成 LLM，优先 SSE 流式输出
@@ -478,5 +391,6 @@ Memory --> VectorDB["向量数据库"]
 - [docs/agent-development/agent-tools.md:1-449](file://docs/agent-development/agent-tools.md#L1-L449)
 - [docs/agent-development/agent-memory.md:1-400](file://docs/agent-development/agent-memory.md#L1-L400)
 - [docs/agent-development/agent-workflow.md:1-465](file://docs/agent-development/agent-workflow.md#L1-L465)
-- [docs/agent-development/agent-multiagent.md:1-550](file://docs/agent-development/agent-multiagent.md#L1-L550)
-- [docs/agent-development/agent-practice.md:1-666](file://docs/agent-development/agent-practice.md#L1-L666)
+- [docs/ai/llm-integration.md:1-103](file://docs/ai/llm-integration.md#L1-L103)
+- [docs/ai/streaming-response.md:1-166](file://docs/ai/streaming-response.md#L1-L166)
+- [docs/ai/vector-db-frontend.md:1-178](file://docs/ai/vector-db-frontend.md#L1-L178)

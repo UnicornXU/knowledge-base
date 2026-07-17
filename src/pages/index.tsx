@@ -55,7 +55,7 @@ const hotArticles = [
 ];
 
 /* ========== Hero 区域 ========== */
-function HeroSection() {
+function HeroSection () {
   const handleSearch = () => {
     document.dispatchEvent(
       new KeyboardEvent('keydown', {
@@ -89,60 +89,13 @@ function HeroSection() {
             </button>
           </div>
         </div>
-        <div className={styles.heroIllustration}>
-          <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* 背景圆形 */}
-            <circle cx="200" cy="150" r="120" fill="url(#heroGrad)" opacity="0.1" />
-            {/* 代码窗口 */}
-            <rect
-              x="80"
-              y="60"
-              width="240"
-              height="160"
-              rx="12"
-              fill="white"
-              stroke="#e2e8f0"
-              strokeWidth="2"
-            />
-            <rect x="80" y="60" width="240" height="32" rx="12" fill="#f1f5f9" />
-            <rect x="80" y="80" width="240" height="12" fill="#f1f5f9" />
-            <circle cx="96" cy="76" r="5" fill="#ef4444" />
-            <circle cx="112" cy="76" r="5" fill="#f59e0b" />
-            <circle cx="128" cy="76" r="5" fill="#10b981" />
-            {/* 代码行 */}
-            <rect x="100" y="108" width="80" height="8" rx="2" fill="#6366f1" opacity="0.7" />
-            <rect x="100" y="124" width="120" height="8" rx="2" fill="#10b981" opacity="0.7" />
-            <rect x="100" y="140" width="60" height="8" rx="2" fill="#f59e0b" opacity="0.7" />
-            <rect x="100" y="156" width="100" height="8" rx="2" fill="#8b5cf6" opacity="0.7" />
-            <rect x="100" y="172" width="140" height="8" rx="2" fill="#6366f1" opacity="0.5" />
-            {/* 装饰元素 */}
-            <circle cx="320" cy="80" r="20" fill="#6366f1" opacity="0.15" />
-            <circle cx="80" cy="220" r="15" fill="#10b981" opacity="0.15" />
-            <rect
-              x="300"
-              y="180"
-              width="40"
-              height="40"
-              rx="8"
-              fill="#f59e0b"
-              opacity="0.15"
-              transform="rotate(15 320 200)"
-            />
-            <defs>
-              <linearGradient id="heroGrad" x1="80" y1="30" x2="320" y2="270">
-                <stop offset="0%" stopColor="#6366f1" />
-                <stop offset="100%" stopColor="#8b5cf6" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
       </div>
     </section>
   );
 }
 
 /* ========== 统计卡片 ========== */
-function StatsSection() {
+function StatsSection () {
   return (
     <section className={styles.statsSection}>
       <div className={styles.statsGrid}>
@@ -168,7 +121,7 @@ function StatsSection() {
 }
 
 /* ========== 最新面试题 ========== */
-function LatestQuestions() {
+function LatestQuestions () {
   const difficultyColor: Record<string, string> = {
     简单: '#10b981',
     中等: '#f59e0b',
@@ -213,7 +166,7 @@ function LatestQuestions() {
 }
 
 /* ========== 右侧信息面板 ========== */
-function RightSidebar() {
+function RightSidebar () {
   return (
     <aside className={styles.rightSidebar}>
       <div className={styles.sidebarCard}>
@@ -266,7 +219,7 @@ function RightSidebar() {
 }
 
 /* ========== 主页 ========== */
-export default function Home(): ReactNode {
+export default function Home (): ReactNode {
   return (
     <Layout
       title="首页"
