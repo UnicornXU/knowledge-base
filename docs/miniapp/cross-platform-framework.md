@@ -1,8 +1,8 @@
 ---
 sidebar_position: 7
-title: "跨平台框架对比"
-difficulty: "medium"
-tags: ["小程序", "Taro", "uni-app", "跨平台"]
+title: '跨平台框架对比'
+difficulty: 'medium'
+tags: ['小程序', 'Taro', 'uni-app', '跨平台']
 ---
 
 # 跨平台框架对比
@@ -11,12 +11,12 @@ tags: ["小程序", "Taro", "uni-app", "跨平台"]
 
 ### 多端开发痛点
 
-| 痛点 | 描述 | 影响 |
-|------|------|------|
-| 重复开发 | 微信/支付宝/百度/抖音各写一套 | 人力成本×N |
-| 一致性差 | 不同端功能/体验不统一 | 用户投诉 |
-| 维护困难 | Bug需多端修复、功能同步 | 迭代效率低 |
-| 技术栈分散 | 各平台语法差异大 | 团队培训成本 |
+| 痛点       | 描述                          | 影响         |
+| ---------- | ----------------------------- | ------------ |
+| 重复开发   | 微信/支付宝/百度/抖音各写一套 | 人力成本×N   |
+| 一致性差   | 不同端功能/体验不统一         | 用户投诉     |
+| 维护困难   | Bug需多端修复、功能同步       | 迭代效率低   |
+| 技术栈分散 | 各平台语法差异大              | 团队培训成本 |
 
 ### 统一开发的收益
 
@@ -26,24 +26,25 @@ tags: ["小程序", "Taro", "uni-app", "跨平台"]
 - **快速覆盖新平台**：框架适配后业务代码免改
 
 :::tip 何时选择跨平台
+
 - 需要发布 2 个以上小程序平台
 - 团队规模有限（< 5人前端）
 - 各端功能差异不大（80% 相同）
 - 项目生命周期 > 6 个月
-:::
+  :::
 
 ## 技术方案分类
 
 ### 编译时方案 vs 运行时方案
 
-| 维度 | 编译时 | 运行时 |
-|------|--------|--------|
-| 代表 | Taro 1/2、uni-app(部分) | Taro 3、Remax |
-| 原理 | 源码 AST 转换为目标平台代码 | 运行时模拟 React/Vue 渲染到小程序 |
-| 性能 | 接近原生 | 略有运行时开销 |
-| 语法限制 | 有较多限制（如不能动态生成JSX） | 几乎无限制 |
-| 兼容性 | 需逐一适配语法 | 天然支持框架全部特性 |
-| 包体积 | 较小 | 有运行时框架体积 |
+| 维度     | 编译时                          | 运行时                            |
+| -------- | ------------------------------- | --------------------------------- |
+| 代表     | Taro 1/2、uni-app(部分)         | Taro 3、Remax                     |
+| 原理     | 源码 AST 转换为目标平台代码     | 运行时模拟 React/Vue 渲染到小程序 |
+| 性能     | 接近原生                        | 略有运行时开销                    |
+| 语法限制 | 有较多限制（如不能动态生成JSX） | 几乎无限制                        |
+| 兼容性   | 需逐一适配语法                  | 天然支持框架全部特性              |
+| 包体积   | 较小                            | 有运行时框架体积                  |
 
 ```
 编译时方案流程：
@@ -57,39 +58,39 @@ React/Vue 源码 → 框架运行时接管渲染 → 通过 setData 同步到小
 
 ### 基础对比表
 
-| 维度 | Taro 3.x | uni-app | Remax |
-|------|----------|---------|-------|
-| 开发团队 | 京东凹凸实验室 | DCloud | 蚂蚁金服 |
-| 技术栈 | React/Vue/Nerv | Vue（为主）/React | React |
-| 方案类型 | 运行时 | 编译时+运行时混合 | 运行时 |
-| 首次发布 | 2018 | 2018 | 2019 |
-| GitHub Stars | 34k+ | 39k+ | 4.5k+ |
-| 维护状态 | 活跃 | 活跃 | 维护模式 |
+| 维度         | Taro 3.x       | uni-app           | Remax    |
+| ------------ | -------------- | ----------------- | -------- |
+| 开发团队     | 京东凹凸实验室 | DCloud            | 蚂蚁金服 |
+| 技术栈       | React/Vue/Nerv | Vue（为主）/React | React    |
+| 方案类型     | 运行时         | 编译时+运行时混合 | 运行时   |
+| 首次发布     | 2018           | 2018              | 2019     |
+| GitHub Stars | 34k+           | 39k+              | 4.5k+    |
+| 维护状态     | 活跃           | 活跃              | 维护模式 |
 
 ### 支持平台对比
 
-| 平台 | Taro | uni-app | Remax |
-|------|------|---------|-------|
-| 微信小程序 | ✅ | ✅ | ✅ |
-| 支付宝小程序 | ✅ | ✅ | ✅ |
-| 百度小程序 | ✅ | ✅ | ❌ |
-| 抖音小程序 | ✅ | ✅ | ✅ |
-| QQ 小程序 | ✅ | ✅ | ❌ |
-| 京东小程序 | ✅ | ❌ | ❌ |
-| H5 | ✅ | ✅ | ❌ |
-| React Native | ✅ | ❌ | ❌ |
-| App (原生渲染) | ❌ | ✅(nvue) | ❌ |
-| 快应用 | ✅ | ✅ | ❌ |
+| 平台           | Taro | uni-app  | Remax |
+| -------------- | ---- | -------- | ----- |
+| 微信小程序     | ✅   | ✅       | ✅    |
+| 支付宝小程序   | ✅   | ✅       | ✅    |
+| 百度小程序     | ✅   | ✅       | ❌    |
+| 抖音小程序     | ✅   | ✅       | ✅    |
+| QQ 小程序      | ✅   | ✅       | ❌    |
+| 京东小程序     | ✅   | ❌       | ❌    |
+| H5             | ✅   | ✅       | ❌    |
+| React Native   | ✅   | ❌       | ❌    |
+| App (原生渲染) | ❌   | ✅(nvue) | ❌    |
+| 快应用         | ✅   | ✅       | ❌    |
 
 ### 性能对比
 
-| 指标 | Taro 3 | uni-app | 原生 |
-|------|--------|---------|------|
-| 启动时间 | +10-15% | +5-10% | 基准 |
-| 列表渲染（1000项） | +20% | +10% | 基准 |
-| setData 频次 | 合并优化 | 定制优化 | 手动控制 |
-| 包体积增量 | 80-150KB | 50-100KB | 0 |
-| 长列表滚动 | 流畅 | 流畅 | 流畅 |
+| 指标               | Taro 3   | uni-app  | 原生     |
+| ------------------ | -------- | -------- | -------- |
+| 启动时间           | +10-15%  | +5-10%   | 基准     |
+| 列表渲染（1000项） | +20%     | +10%     | 基准     |
+| setData 频次       | 合并优化 | 定制优化 | 手动控制 |
+| 包体积增量         | 80-150KB | 50-100KB | 0        |
+| 长列表滚动         | 流畅     | 流畅     | 流畅     |
 
 :::warning 性能说明
 以上数据为典型场景下的相对比较，实际表现与具体业务代码质量关系更大。框架层面的性能差异在大多数应用中不构成瓶颈。
@@ -97,15 +98,15 @@ React/Vue 源码 → 框架运行时接管渲染 → 通过 setData 同步到小
 
 ### 生态与工具链
 
-| 维度 | Taro | uni-app |
-|------|------|---------|
-| UI 组件库 | Taro UI、NutUI | uView、uni-ui |
-| 状态管理 | Redux/MobX/Zustand | Vuex/Pinia |
-| 插件系统 | 插件化架构 | 条件编译+插件 |
-| IDE 支持 | VS Code + 插件 | HBuilderX（专属） |
-| 调试体验 | 各平台开发者工具 | HBuilderX 内置 |
-| 文档质量 | 优秀 | 优秀 |
-| 社区插件 | npm 生态 | DCloud 插件市场 |
+| 维度      | Taro               | uni-app           |
+| --------- | ------------------ | ----------------- |
+| UI 组件库 | Taro UI、NutUI     | uView、uni-ui     |
+| 状态管理  | Redux/MobX/Zustand | Vuex/Pinia        |
+| 插件系统  | 插件化架构         | 条件编译+插件     |
+| IDE 支持  | VS Code + 插件     | HBuilderX（专属） |
+| 调试体验  | 各平台开发者工具   | HBuilderX 内置    |
+| 文档质量  | 优秀               | 优秀              |
+| 社区插件  | npm 生态           | DCloud 插件市场   |
 
 ## Taro 3.x 深入
 
@@ -133,9 +134,9 @@ React/Vue 源码 → 框架运行时接管渲染 → 通过 setData 同步到小
 ### React 开发体验
 
 ```jsx
-import { View, Text, Button } from '@tarojs/components';
-import { useLoad, useShareAppMessage } from '@tarojs/taro';
-import { useState, useEffect } from 'react';
+import {View, Text, Button} from '@tarojs/components';
+import {useLoad, useShareAppMessage} from '@tarojs/taro';
+import {useState, useEffect} from 'react';
 import './index.scss';
 
 export default function Index() {
@@ -149,20 +150,22 @@ export default function Index() {
 
   useShareAppMessage(() => ({
     title: '分享标题',
-    path: '/pages/index/index'
+    path: '/pages/index/index',
   }));
 
   async function fetchList() {
-    const res = await Taro.request({ url: '/api/list' });
+    const res = await Taro.request({url: '/api/list'});
     setList(res.data);
   }
 
   return (
     <View className="index">
       <Text>计数: {count}</Text>
-      <Button onClick={() => setCount(c => c + 1)}>+1</Button>
-      {list.map(item => (
-        <View key={item.id} className="item">{item.title}</View>
+      <Button onClick={() => setCount((c) => c + 1)}>+1</Button>
+      {list.map((item) => (
+        <View key={item.id} className="item">
+          {item.title}
+        </View>
       ))}
     </View>
   );
@@ -177,13 +180,13 @@ module.exports = (ctx) => {
   ctx.onBuildStart(() => {
     console.log('构建开始');
   });
-  
-  ctx.modifyWebpackChain(({ chain }) => {
+
+  ctx.modifyWebpackChain(({chain}) => {
     // 修改 webpack 配置
     chain.plugin('analyzer').use(BundleAnalyzerPlugin);
   });
-  
-  ctx.onBuildFinish(({ stats }) => {
+
+  ctx.onBuildFinish(({stats}) => {
     console.log('构建完成');
   });
 };
@@ -199,11 +202,11 @@ module.exports = (ctx) => {
     <!-- #ifdef MP-WEIXIN -->
     <button open-type="share">微信分享</button>
     <!-- #endif -->
-    
+
     <!-- #ifdef MP-ALIPAY -->
     <button onTap="handleShare">支付宝分享</button>
     <!-- #endif -->
-    
+
     <!-- #ifndef H5 -->
     <view>非H5环境显示</view>
     <!-- #endif -->
@@ -215,19 +218,21 @@ export default {
   methods: {
     getData() {
       // #ifdef MP-WEIXIN
-      wx.request({ url: '/api/data' });
+      wx.request({url: '/api/data'});
       // #endif
       // #ifdef MP-ALIPAY
-      my.request({ url: '/api/data' });
+      my.request({url: '/api/data'});
       // #endif
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
 /* #ifdef MP-WEIXIN */
-.container { padding: 20rpx; }
+.container {
+  padding: 20rpx;
+}
 /* #endif */
 </style>
 ```
@@ -241,7 +246,7 @@ export default {
     <cell v-for="item in items" :key="item.id">
       <view class="card">
         <image :src="item.cover" class="cover" />
-        <text class="title">{{item.title}}</text>
+        <text class="title">{{ item.title }}</text>
       </view>
     </cell>
   </list>
@@ -252,58 +257,68 @@ export default {
 // 限制：仅支持 flex 布局，不支持部分 CSS 属性
 export default {
   data() {
-    return { items: [] };
-  }
-}
+    return {items: []};
+  },
+};
 </script>
 
 <style>
 /* nvue 仅支持 class 选择器和有限 CSS */
-.card { flex-direction: row; padding: 20rpx; }
-.cover { width: 200rpx; height: 150rpx; }
-.title { font-size: 28rpx; lines: 2; }
+.card {
+  flex-direction: row;
+  padding: 20rpx;
+}
+.cover {
+  width: 200rpx;
+  height: 150rpx;
+}
+.title {
+  font-size: 28rpx;
+  lines: 2;
+}
 </style>
 ```
 
 ### DCloud 生态
 
-| 工具/服务 | 说明 |
-|----------|------|
+| 工具/服务 | 说明                         |
+| --------- | ---------------------------- |
 | HBuilderX | 专属 IDE，内置调试/预览/发布 |
-| uni-ui | 官方跨平台 UI 组件库 |
-| uniCloud | 类似云开发的 Serverless 服务 |
-| uni 统计 | 多端数据统计 |
-| uni-push | 统一推送服务 |
-| 插件市场 | 4000+ 插件、模板 |
+| uni-ui    | 官方跨平台 UI 组件库         |
+| uniCloud  | 类似云开发的 Serverless 服务 |
+| uni 统计  | 多端数据统计                 |
+| uni-push  | 统一推送服务                 |
+| 插件市场  | 4000+ 插件、模板             |
 
 ## 选型建议
 
 ### 按团队技术栈选择
 
-| 团队特征 | 推荐方案 | 原因 |
-|---------|---------|------|
-| React 技术栈 | Taro 3 | 无缝使用 React 生态 |
-| Vue 技术栈 | uni-app | 生态完善、工具链成熟 |
-| React + 仅小程序 | Taro 3 | 最佳 React 小程序体验 |
-| 需要 App + 小程序 | uni-app | nvue 原生渲染 + 小程序 |
-| 追求极致性能 | 原生开发 | 无框架开销 |
+| 团队特征          | 推荐方案 | 原因                   |
+| ----------------- | -------- | ---------------------- |
+| React 技术栈      | Taro 3   | 无缝使用 React 生态    |
+| Vue 技术栈        | uni-app  | 生态完善、工具链成熟   |
+| React + 仅小程序  | Taro 3   | 最佳 React 小程序体验  |
+| 需要 App + 小程序 | uni-app  | nvue 原生渲染 + 小程序 |
+| 追求极致性能      | 原生开发 | 无框架开销             |
 
 ### 按项目规模选择
 
-| 规模 | 推荐 | 说明 |
-|------|------|------|
-| 小型（< 20页） | uni-app | 快速开发，工具链简单 |
-| 中型（20-50页） | Taro / uni-app | 看团队技术栈 |
-| 大型（50+页） | Taro 3 + 微前端 | 插件化架构更灵活 |
-| 超大型 | 原生 + 共享层 | 各端深度优化 |
+| 规模            | 推荐            | 说明                 |
+| --------------- | --------------- | -------------------- |
+| 小型（< 20页）  | uni-app         | 快速开发，工具链简单 |
+| 中型（20-50页） | Taro / uni-app  | 看团队技术栈         |
+| 大型（50+页）   | Taro 3 + 微前端 | 插件化架构更灵活     |
+| 超大型          | 原生 + 共享层   | 各端深度优化         |
 
 :::info 核心决策因素
+
 1. 团队熟悉的技术栈（最重要）
 2. 目标平台覆盖范围
 3. 性能要求级别
 4. 是否需要 App 端
 5. 长期维护和迁移成本
-:::
+   :::
 
 ## 迁移策略
 
@@ -331,13 +346,13 @@ export default {
 
 ### 迁移注意事项
 
-| 风险点 | 应对策略 |
-|--------|---------|
-| 原生 API 不兼容 | 封装统一 API 层，条件编译兜底 |
-| 自定义组件迁移 | 拆分为纯逻辑 + UI 两层 |
-| 性能回退 | 关键页面保持原生，非核心页迁移 |
-| 三方 SDK 不支持 | 原生插件机制引入 |
-| 团队学习成本 | 渐进式推进，先小功能试点 |
+| 风险点          | 应对策略                       |
+| --------------- | ------------------------------ |
+| 原生 API 不兼容 | 封装统一 API 层，条件编译兜底  |
+| 自定义组件迁移  | 拆分为纯逻辑 + UI 两层         |
+| 性能回退        | 关键页面保持原生，非核心页迁移 |
+| 三方 SDK 不支持 | 原生插件机制引入               |
+| 团队学习成本    | 渐进式推进，先小功能试点       |
 
 ```javascript
 // 统一 API 封装示例
@@ -349,17 +364,17 @@ export function request(options) {
     Taro.request({
       ...options,
       success: resolve,
-      fail: reject
+      fail: reject,
     });
   });
 }
 
 export function navigateTo(url) {
-  Taro.navigateTo({ url });
+  Taro.navigateTo({url});
 }
 
 export function showToast(title, icon = 'none') {
-  Taro.showToast({ title, icon });
+  Taro.showToast({title, icon});
 }
 ```
 

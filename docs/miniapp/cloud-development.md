@@ -1,8 +1,8 @@
 ---
 sidebar_position: 6
-title: "小程序云开发实战"
-difficulty: "medium"
-tags: ["小程序", "云开发", "Serverless", "云函数"]
+title: '小程序云开发实战'
+difficulty: 'medium'
+tags: ['小程序', '云开发', 'Serverless', '云函数']
 ---
 
 # 小程序云开发实战
@@ -11,17 +11,17 @@ tags: ["小程序", "云开发", "Serverless", "云函数"]
 
 ### 云开发 vs 传统后端开发
 
-| 对比维度 | 云开发 | 传统后端 |
-|---------|--------|---------|
-| 服务器管理 | 无需管理 | 需购买/运维 |
-| 数据库 | 文档型（NoSQL） | 自选（MySQL/MongoDB等） |
-| 部署方式 | 自动部署 | 手动或CI/CD |
-| 扩缩容 | 自动弹性 | 手动配置 |
-| 域名/备案 | 无需 | 必须 |
-| 鉴权 | 内置用户身份 | 自建鉴权体系 |
-| 成本 | 按量付费（有免费额度） | 固定+按量 |
-| 适合团队 | 前端团队/小团队 | 全栈团队 |
-| 局限性 | 平台绑定、定制性有限 | 高度灵活 |
+| 对比维度   | 云开发                 | 传统后端                |
+| ---------- | ---------------------- | ----------------------- |
+| 服务器管理 | 无需管理               | 需购买/运维             |
+| 数据库     | 文档型（NoSQL）        | 自选（MySQL/MongoDB等） |
+| 部署方式   | 自动部署               | 手动或CI/CD             |
+| 扩缩容     | 自动弹性               | 手动配置                |
+| 域名/备案  | 无需                   | 必须                    |
+| 鉴权       | 内置用户身份           | 自建鉴权体系            |
+| 成本       | 按量付费（有免费额度） | 固定+按量               |
+| 适合团队   | 前端团队/小团队        | 全栈团队                |
+| 局限性     | 平台绑定、定制性有限   | 高度灵活                |
 
 ### 适用场景
 
@@ -31,11 +31,12 @@ tags: ["小程序", "云开发", "Serverless", "云函数"]
 - 内容型应用（博客、社区、小工具）
 
 :::warning 不适合场景
+
 - 高并发实时系统（游戏、直播）
 - 需要复杂关系型查询的业务
 - 已有成熟后端架构的项目
 - 对数据隐私要求极高的金融系统
-:::
+  :::
 
 ## 云函数
 
@@ -44,18 +45,18 @@ tags: ["小程序", "云开发", "Serverless", "云函数"]
 ```javascript
 // cloudfunctions/getUser/index.js
 const cloud = require('wx-server-sdk');
-cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
+cloud.init({env: cloud.DYNAMIC_CURRENT_ENV});
 
 exports.main = async (event, context) => {
-  const { OPENID, APPID } = cloud.getWXContext();
-  
+  const {OPENID, APPID} = cloud.getWXContext();
+
   const db = cloud.database();
-  const user = await db.collection('users').where({ openid: OPENID }).get();
-  
+  const user = await db.collection('users').where({openid: OPENID}).get();
+
   return {
     code: 0,
     data: user.data[0] || null,
-    openid: OPENID
+    openid: OPENID,
   };
 };
 ```
@@ -64,12 +65,12 @@ exports.main = async (event, context) => {
 
 ```javascript
 // 初始化云开发
-wx.cloud.init({ env: 'my-env-id', traceUser: true });
+wx.cloud.init({env: 'my-env-id', traceUser: true});
 
 // 调用云函数
 async function getUser() {
   try {
-    const res = await wx.cloud.callFunction({ name: 'getUser' });
+    const res = await wx.cloud.callFunction({name: 'getUser'});
     console.log('用户数据:', res.result.data);
     return res.result;
   } catch (err) {
@@ -99,14 +100,15 @@ async function getUser() {
 exports.main = async (event, context) => {
   const db = cloud.database();
   const _ = db.command;
-  
+
   // 清理30天前的临时数据
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const result = await db.collection('temp_data')
-    .where({ createdAt: _.lt(thirtyDaysAgo) })
+  const result = await db
+    .collection('temp_data')
+    .where({createdAt: _.lt(thirtyDaysAgo)})
     .remove();
-  
-  return { removed: result.stats.removed };
+
+  return {removed: result.stats.removed};
 };
 ```
 
@@ -116,23 +118,22 @@ exports.main = async (event, context) => {
 exports.main = async (event, context) => {
   try {
     // 参数校验
-    const { orderId, amount } = event;
+    const {orderId, amount} = event;
     if (!orderId || !amount) {
-      return { code: 400, message: '参数缺失' };
+      return {code: 400, message: '参数缺失'};
     }
-    
+
     // 业务逻辑
     const result = await processOrder(orderId, amount);
-    return { code: 0, data: result };
-    
+    return {code: 0, data: result};
   } catch (err) {
     console.error('云函数异常:', err);
-    
+
     // 区分错误类型
     if (err.errCode === -502001) {
-      return { code: 500, message: '数据库操作失败' };
+      return {code: 500, message: '数据库操作失败'};
     }
-    return { code: 500, message: '服务器内部错误' };
+    return {code: 500, message: '服务器内部错误'};
   }
 };
 ```
@@ -141,16 +142,16 @@ exports.main = async (event, context) => {
 
 ### 数据类型
 
-| 类型 | 说明 | 示例 |
-|------|------|------|
-| String | 字符串 | "hello" |
-| Number | 数字 | 42, 3.14 |
-| Boolean | 布尔值 | true |
-| Object | 对象 | { name: "Tom" } |
-| Array | 数组 | [1, 2, 3] |
-| Date | 日期 | new Date() |
+| 类型     | 说明     | 示例                  |
+| -------- | -------- | --------------------- |
+| String   | 字符串   | "hello"               |
+| Number   | 数字     | 42, 3.14              |
+| Boolean  | 布尔值   | true                  |
+| Object   | 对象     | { name: "Tom" }       |
+| Array    | 数组     | [1, 2, 3]             |
+| Date     | 日期     | new Date()            |
 | GeoPoint | 地理位置 | db.Geo.Point(113, 23) |
-| Null | 空值 | null |
+| Null     | 空值     | null                  |
 
 ### CRUD 操作
 
@@ -165,20 +166,22 @@ const addResult = await todos.add({
     done: false,
     tags: ['学习', '技术'],
     createdAt: db.serverDate(),
-    _openid: OPENID // 自动鉴权
-  }
+    _openid: OPENID, // 自动鉴权
+  },
 });
 
 // Read - 查询
-const queryResult = await todos.where({ done: false })
+const queryResult = await todos
+  .where({done: false})
   .orderBy('createdAt', 'desc')
-  .skip(0).limit(20)
-  .field({ title: true, done: true, createdAt: true })
+  .skip(0)
+  .limit(20)
+  .field({title: true, done: true, createdAt: true})
   .get();
 
 // Update - 更新
 await todos.doc('doc-id').update({
-  data: { done: true, updatedAt: db.serverDate() }
+  data: {done: true, updatedAt: db.serverDate()},
 });
 
 // Delete - 删除
@@ -191,19 +194,23 @@ await todos.doc('doc-id').remove();
 const _ = db.command;
 
 // 比较操作
-const result = await db.collection('products')
+const result = await db
+  .collection('products')
   .where({
     price: _.gt(100).and(_.lt(500)), // 100 < price < 500
     category: _.in(['电子', '图书']),
     stock: _.neq(0),
-    tags: _.all(['热销', '新品'])     // 数组同时包含
-  }).get();
+    tags: _.all(['热销', '新品']), // 数组同时包含
+  })
+  .get();
 
 // 正则匹配
-const searchResult = await db.collection('articles')
+const searchResult = await db
+  .collection('articles')
   .where({
-    title: db.RegExp({ regexp: keyword, options: 'i' })
-  }).get();
+    title: db.RegExp({regexp: keyword, options: 'i'}),
+  })
+  .get();
 ```
 
 ### 聚合查询 Pipeline
@@ -211,16 +218,17 @@ const searchResult = await db.collection('articles')
 ```javascript
 const $ = db.command.aggregate;
 
-const result = await db.collection('orders')
+const result = await db
+  .collection('orders')
   .aggregate()
-  .match({ status: 'paid' })
+  .match({status: 'paid'})
   .group({
     _id: '$category',
     totalAmount: $.sum('$amount'),
     count: $.sum(1),
-    avgAmount: $.avg('$amount')
+    avgAmount: $.avg('$amount'),
   })
-  .sort({ totalAmount: -1 })
+  .sort({totalAmount: -1})
   .limit(10)
   .end();
 
@@ -229,12 +237,12 @@ const result = await db.collection('orders')
 
 ### 权限规则
 
-| 权限 | 说明 | 适用场景 |
-|------|------|---------|
-| 仅创建者可写，所有人可读 | 默认规则 | 公开内容 |
-| 仅创建者可读写 | 私密数据 | 用户日记 |
+| 权限                     | 说明     | 适用场景  |
+| ------------------------ | -------- | --------- |
+| 仅创建者可写，所有人可读 | 默认规则 | 公开内容  |
+| 仅创建者可读写           | 私密数据 | 用户日记  |
 | 仅管理端可写，所有人可读 | 系统配置 | 公告/配置 |
-| 仅管理端可读写 | 敏感数据 | 管理后台 |
+| 仅管理端可读写           | 敏感数据 | 管理后台  |
 
 ```json
 // 自定义安全规则（database/collection.rule）
@@ -252,23 +260,23 @@ const result = await db.collection('orders')
 // 上传文件
 async function uploadImage(filePath) {
   const cloudPath = `images/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
-  
+
   const res = await wx.cloud.uploadFile({
     cloudPath,
-    filePath
+    filePath,
   });
   return res.fileID; // cloud://env-id.xxxx/images/xxx.jpg
 }
 
 // 获取临时链接（有效期2小时）
-const { fileList } = await wx.cloud.getTempFileURL({
-  fileList: ['cloud://env-id.xxxx/images/1.jpg']
+const {fileList} = await wx.cloud.getTempFileURL({
+  fileList: ['cloud://env-id.xxxx/images/1.jpg'],
 });
 const tempUrl = fileList[0].tempFileURL;
 
 // 删除文件
 await wx.cloud.deleteFile({
-  fileList: ['cloud://env-id.xxxx/images/old.jpg']
+  fileList: ['cloud://env-id.xxxx/images/old.jpg'],
 });
 ```
 
@@ -278,26 +286,26 @@ await wx.cloud.deleteFile({
 // 头像上传完整流程
 Page({
   async chooseAndUpload() {
-    const { tempFilePaths } = await wx.chooseImage({ count: 1, sizeType: ['compressed'] });
-    
-    wx.showLoading({ title: '上传中...' });
+    const {tempFilePaths} = await wx.chooseImage({count: 1, sizeType: ['compressed']});
+
+    wx.showLoading({title: '上传中...'});
     try {
       const fileID = await uploadImage(tempFilePaths[0]);
-      
+
       // 更新用户头像记录
       await wx.cloud.callFunction({
         name: 'updateUser',
-        data: { avatar: fileID }
+        data: {avatar: fileID},
       });
-      
-      this.setData({ avatar: fileID });
-      wx.showToast({ title: '上传成功' });
+
+      this.setData({avatar: fileID});
+      wx.showToast({title: '上传成功'});
     } catch (err) {
-      wx.showToast({ title: '上传失败', icon: 'error' });
+      wx.showToast({title: '上传失败', icon: 'error'});
     } finally {
       wx.hideLoading();
     }
-  }
+  },
 });
 ```
 
@@ -311,19 +319,19 @@ const cloud = require('wx-server-sdk');
 cloud.init();
 
 exports.main = async (event) => {
-  const { toUser, templateId, data, page } = event;
-  
+  const {toUser, templateId, data, page} = event;
+
   const result = await cloud.openapi.subscribeMessage.send({
     touser: toUser,
     templateId,
     page,
     data: {
-      thing1: { value: data.title },
-      time2: { value: data.time },
-      thing3: { value: data.remark }
-    }
+      thing1: {value: data.title},
+      time2: {value: data.time},
+      thing3: {value: data.remark},
+    },
   });
-  
+
   return result;
 };
 ```
@@ -334,20 +342,20 @@ exports.main = async (event) => {
 // cloudfunctions/genQRCode/index.js
 exports.main = async (event) => {
   const result = await cloud.openapi.wxacode.getUnlimited({
-    scene: event.scene,     // 最多32字符
+    scene: event.scene, // 最多32字符
     page: event.page,
     width: 280,
     autoColor: false,
-    lineColor: { r: 0, g: 0, b: 0 }
+    lineColor: {r: 0, g: 0, b: 0},
   });
-  
+
   // 将 buffer 上传到云存储
   const upload = await cloud.uploadFile({
     cloudPath: `qrcode/${event.scene}.png`,
-    fileContent: result.buffer
+    fileContent: result.buffer,
   });
-  
-  return { fileID: upload.fileID };
+
+  return {fileID: upload.fileID};
 };
 ```
 
@@ -361,9 +369,9 @@ const db = cloud.database();
 const users = db.collection('users');
 
 exports.main = async (event) => {
-  const { action, data } = event;
-  const { OPENID } = cloud.getWXContext();
-  
+  const {action, data} = event;
+  const {OPENID} = cloud.getWXContext();
+
   switch (action) {
     case 'register':
       return register(OPENID, data);
@@ -372,14 +380,14 @@ exports.main = async (event) => {
     case 'update':
       return updateProfile(OPENID, data);
     default:
-      return { code: 400, message: '未知操作' };
+      return {code: 400, message: '未知操作'};
   }
 };
 
 async function register(openid, data) {
-  const existing = await users.where({ openid }).count();
-  if (existing.total > 0) return { code: 409, message: '用户已存在' };
-  
+  const existing = await users.where({openid}).count();
+  if (existing.total > 0) return {code: 409, message: '用户已存在'};
+
   await users.add({
     data: {
       openid,
@@ -387,21 +395,21 @@ async function register(openid, data) {
       avatar: data.avatar,
       role: 'user',
       createdAt: db.serverDate(),
-      lastLoginAt: db.serverDate()
-    }
+      lastLoginAt: db.serverDate(),
+    },
   });
-  return { code: 0, message: '注册成功' };
+  return {code: 0, message: '注册成功'};
 }
 
 async function login(openid) {
-  const user = await users.where({ openid }).get();
-  if (user.data.length === 0) return { code: 404, message: '用户不存在' };
-  
+  const user = await users.where({openid}).get();
+  if (user.data.length === 0) return {code: 404, message: '用户不存在'};
+
   // 更新登录时间
-  await users.where({ openid }).update({
-    data: { lastLoginAt: db.serverDate(), loginCount: db.command.inc(1) }
+  await users.where({openid}).update({
+    data: {lastLoginAt: db.serverDate(), loginCount: db.command.inc(1)},
   });
-  return { code: 0, data: user.data[0] };
+  return {code: 0, data: user.data[0]};
 }
 
 async function updateProfile(openid, data) {
@@ -412,9 +420,9 @@ async function updateProfile(openid, data) {
     if (data[key] !== undefined) updateData[key] = data[key];
   }
   updateData.updatedAt = db.serverDate();
-  
-  await users.where({ openid }).update({ data: updateData });
-  return { code: 0, message: '更新成功' };
+
+  await users.where({openid}).update({data: updateData});
+  return {code: 0, message: '更新成功'};
 }
 ```
 
@@ -422,12 +430,12 @@ async function updateProfile(openid, data) {
 
 ### 云函数冷启动优化
 
-| 优化方式 | 效果 | 说明 |
-|---------|------|------|
-| 减少依赖包 | 降低初始化时间 | 只安装必要的 npm 包 |
-| 使用预置并发 | 消除冷启动 | 付费特性，保持实例活跃 |
-| 代码精简 | 减少注入时间 | 避免在全局作用域做重计算 |
-| 复用数据库连接 | 减少握手 | 在函数外部初始化 db |
+| 优化方式       | 效果           | 说明                     |
+| -------------- | -------------- | ------------------------ |
+| 减少依赖包     | 降低初始化时间 | 只安装必要的 npm 包      |
+| 使用预置并发   | 消除冷启动     | 付费特性，保持实例活跃   |
+| 代码精简       | 减少注入时间   | 避免在全局作用域做重计算 |
+| 复用数据库连接 | 减少握手       | 在函数外部初始化 db      |
 
 ```javascript
 // ✅ 全局初始化（复用连接）
@@ -451,8 +459,9 @@ exports.main = async (event) => {
 // articles: category + publishedAt（组合）
 
 // 查询时利用索引
-const result = await db.collection('orders')
-  .where({ userId: openid, status: 'pending' }) // 命中组合索引
+const result = await db
+  .collection('orders')
+  .where({userId: openid, status: 'pending'}) // 命中组合索引
   .orderBy('createdAt', 'desc')
   .limit(20)
   .get();
@@ -463,16 +472,16 @@ const result = await db.collection('orders')
 ```javascript
 // ❌ 循环单条操作（N次网络请求）
 for (const item of items) {
-  await db.collection('data').add({ data: item });
+  await db.collection('data').add({data: item});
 }
 
 // ✅ 批量写入（1次请求，限制20条/次）
-const batch = items.map(item => ({ data: item }));
+const batch = items.map((item) => ({data: item}));
 // 云函数中可批量操作
 const MAX_BATCH = 20;
 for (let i = 0; i < batch.length; i += MAX_BATCH) {
   const chunk = batch.slice(i, i + MAX_BATCH);
-  await Promise.all(chunk.map(item => db.collection('data').add(item)));
+  await Promise.all(chunk.map((item) => db.collection('data').add(item)));
 }
 ```
 

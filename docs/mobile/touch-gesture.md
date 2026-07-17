@@ -1,8 +1,8 @@
 ---
 sidebar_position: 6
-title: "触摸与手势交互"
-difficulty: "hard"
-tags: ["移动端", "touch", "手势", "交互"]
+title: '触摸与手势交互'
+difficulty: 'hard'
+tags: ['移动端', 'touch', '手势', '交互']
 ---
 
 # 触摸与手势交互
@@ -13,12 +13,12 @@ tags: ["移动端", "touch", "手势", "交互"]
 
 ### 触摸事件类型
 
-| 事件 | 触发时机 | 类比鼠标事件 |
-|------|---------|-------------|
-| touchstart | 手指触碰屏幕 | mousedown |
-| touchmove | 手指在屏幕上滑动 | mousemove |
-| touchend | 手指离开屏幕 | mouseup |
-| touchcancel | 系统取消触摸（来电/弹窗） | - |
+| 事件        | 触发时机                  | 类比鼠标事件 |
+| ----------- | ------------------------- | ------------ |
+| touchstart  | 手指触碰屏幕              | mousedown    |
+| touchmove   | 手指在屏幕上滑动          | mousemove    |
+| touchend    | 手指离开屏幕              | mouseup      |
+| touchcancel | 系统取消触摸（来电/弹窗） | -            |
 
 ### 事件对象属性
 
@@ -30,17 +30,17 @@ element.addEventListener('touchstart', (e) => {
 
   const touch = e.touches[0];
   console.log({
-    identifier: touch.identifier,   // 触摸点唯一标识
-    clientX: touch.clientX,         // 相对视口的X坐标
-    clientY: touch.clientY,         // 相对视口的Y坐标
-    pageX: touch.pageX,             // 相对页面的X坐标
-    pageY: touch.pageY,             // 相对页面的Y坐标
-    screenX: touch.screenX,         // 相对屏幕的X坐标
-    screenY: touch.screenY,         // 相对屏幕的Y坐标
-    target: touch.target,           // 触摸点所在的DOM元素
-    radiusX: touch.radiusX,         // 触摸椭圆X半径
-    radiusY: touch.radiusY,         // 触摸椭圆Y半径
-    force: touch.force              // 压力值 0-1
+    identifier: touch.identifier, // 触摸点唯一标识
+    clientX: touch.clientX, // 相对视口的X坐标
+    clientY: touch.clientY, // 相对视口的Y坐标
+    pageX: touch.pageX, // 相对页面的X坐标
+    pageY: touch.pageY, // 相对页面的Y坐标
+    screenX: touch.screenX, // 相对屏幕的X坐标
+    screenY: touch.screenY, // 相对屏幕的Y坐标
+    target: touch.target, // 触摸点所在的DOM元素
+    radiusX: touch.radiusX, // 触摸椭圆X半径
+    radiusY: touch.radiusY, // 触摸椭圆Y半径
+    force: touch.force, // 压力值 0-1
   });
 });
 ```
@@ -51,22 +51,22 @@ element.addEventListener('touchstart', (e) => {
 
 ## Touch vs Mouse vs Pointer 事件对比
 
-| 特性 | Touch Events | Mouse Events | Pointer Events |
-|------|-------------|--------------|----------------|
-| 多点触控 | ✓ | ✗ | ✓ |
-| 触控笔支持 | ✗ | ✗ | ✓ |
-| 统一API | ✗ | ✗ | ✓ |
-| 兼容性 | 移动端极好 | 全平台 | 现代浏览器 |
-| 事件前缀 | touch- | mouse- | pointer- |
-| 取消操作 | touchcancel | - | pointercancel |
-| 捕获 | - | setCapture | setPointerCapture |
+| 特性       | Touch Events | Mouse Events | Pointer Events    |
+| ---------- | ------------ | ------------ | ----------------- |
+| 多点触控   | ✓            | ✗            | ✓                 |
+| 触控笔支持 | ✗            | ✗            | ✓                 |
+| 统一API    | ✗            | ✗            | ✓                 |
+| 兼容性     | 移动端极好   | 全平台       | 现代浏览器        |
+| 事件前缀   | touch-       | mouse-       | pointer-          |
+| 取消操作   | touchcancel  | -            | pointercancel     |
+| 捕获       | -            | setCapture   | setPointerCapture |
 
 ```javascript
 // Pointer Events - 统一处理触摸/鼠标/触控笔
 element.addEventListener('pointerdown', (e) => {
   console.log(e.pointerType); // 'mouse' | 'touch' | 'pen'
-  console.log(e.pressure);    // 压力值
-  console.log(e.pointerId);   // 指针ID（多点触控）
+  console.log(e.pressure); // 压力值
+  console.log(e.pointerId); // 指针ID（多点触控）
 });
 ```
 
@@ -91,7 +91,7 @@ touchstart → touchend → [等待300ms] → click
 
 ```html
 <!-- 禁止缩放，浏览器无需等待双击判断 -->
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width" />
 ```
 
 现代浏览器（Chrome 32+、iOS 9.3+）在检测到 `width=device-width` 后自动移除 300ms 延迟。
@@ -118,11 +118,11 @@ html {
 // 2. 立即派发一个合成的 click 事件
 // 3. 阻止 300ms 后的原生 click
 
-element.addEventListener('touchend', function(e) {
+element.addEventListener('touchend', function (e) {
   e.preventDefault();
   const clickEvent = new MouseEvent('click', {
     bubbles: true,
-    cancelable: true
+    cancelable: true,
   });
   e.target.dispatchEvent(clickEvent);
 });
@@ -169,15 +169,14 @@ class GestureDetector {
 
       // 长按检测（超过750ms）
       this.longTapTimeout = setTimeout(() => {
-        this._emit('longTap', { x: this.startX, y: this.startY });
+        this._emit('longTap', {x: this.startX, y: this.startY});
       }, 750);
     });
 
     this.el.addEventListener('touchmove', (e) => {
       // 移动超过10px取消长按
       const touch = e.touches[0];
-      if (Math.abs(touch.clientX - this.startX) > 10 ||
-          Math.abs(touch.clientY - this.startY) > 10) {
+      if (Math.abs(touch.clientX - this.startX) > 10 || Math.abs(touch.clientY - this.startY) > 10) {
         clearTimeout(this.longTapTimeout);
       }
     });
@@ -212,8 +211,8 @@ gesture
 ```javascript
 function detectSwipe(element, callback) {
   let startX, startY, startTime;
-  const threshold = 50;   // 最小滑动距离
-  const maxTime = 300;    // 最大滑动时间
+  const threshold = 50; // 最小滑动距离
+  const maxTime = 300; // 最大滑动时间
 
   element.addEventListener('touchstart', (e) => {
     const touch = e.touches[0];
@@ -246,13 +245,13 @@ function detectSwipe(element, callback) {
       direction,
       deltaX,
       deltaY,
-      velocity: Math.max(absX, absY) / deltaTime
+      velocity: Math.max(absX, absY) / deltaTime,
     });
   });
 }
 
 // 使用
-detectSwipe(document.body, ({ direction, velocity }) => {
+detectSwipe(document.body, ({direction, velocity}) => {
   console.log(`滑动方向: ${direction}, 速度: ${velocity}`);
 });
 ```
@@ -287,8 +286,8 @@ function detectPinch(element, callback) {
         scale: currentScale,
         center: {
           x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
-          y: (e.touches[0].clientY + e.touches[1].clientY) / 2
-        }
+          y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
+        },
       });
       e.preventDefault();
     }
@@ -296,7 +295,7 @@ function detectPinch(element, callback) {
 }
 
 // 使用
-detectPinch(imageEl, ({ scale, center }) => {
+detectPinch(imageEl, ({scale, center}) => {
   imageEl.style.transform = `scale(${scale})`;
 });
 ```
@@ -368,15 +367,15 @@ class MomentumScroll {
 
 ## 手势库对比
 
-| 特性 | Hammer.js | AlloyFinger | use-gesture (React) |
-|------|-----------|-------------|-------------------|
-| 体积 | 7.3KB gzip | 3.3KB gzip | 8.5KB gzip |
-| 框架依赖 | 无 | 无 | React |
-| 手势类型 | 全面 | 全面 | 全面 |
-| 多指支持 | ✓ | ✓ | ✓ |
-| TypeScript | 有类型 | 无 | 原生 TS |
-| 维护状态 | 停止维护 | 低频 | 活跃 |
-| 适用场景 | 传统项目 | 轻量需求 | React 项目 |
+| 特性       | Hammer.js  | AlloyFinger | use-gesture (React) |
+| ---------- | ---------- | ----------- | ------------------- |
+| 体积       | 7.3KB gzip | 3.3KB gzip  | 8.5KB gzip          |
+| 框架依赖   | 无         | 无          | React               |
+| 手势类型   | 全面       | 全面        | 全面                |
+| 多指支持   | ✓          | ✓           | ✓                   |
+| TypeScript | 有类型     | 无          | 原生 TS             |
+| 维护状态   | 停止维护   | 低频        | 活跃                |
+| 适用场景   | 传统项目   | 轻量需求    | React 项目          |
 
 ## 点击穿透问题
 

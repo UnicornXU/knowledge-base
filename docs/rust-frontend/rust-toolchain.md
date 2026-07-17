@@ -1,8 +1,8 @@
 ---
 sidebar_position: 2
-title: "Rust 构建工具实战"
-difficulty: "hard"
-tags: ["swc", "Turbopack", "oxlint", "Biome", "构建工具"]
+title: 'Rust 构建工具实战'
+difficulty: 'hard'
+tags: ['swc', 'Turbopack', 'oxlint', 'Biome', '构建工具']
 ---
 
 # Rust 构建工具实战
@@ -50,23 +50,24 @@ swc（Speedy Web Compiler）是用 Rust 编写的超高性能 JavaScript/TypeScr
 ```
 
 :::info 配置说明
+
 - `jsc.parser`：定义解析器行为，支持 TypeScript、JSX、装饰器等语法
 - `jsc.transform.react`：React JSX 转换配置，`automatic` 对应 React 17+ 新 JSX 转换
 - `jsc.target`：输出代码的目标 ES 版本
 - `module.type`：输出模块格式（es6/commonjs/amd/umd）
-:::
+  :::
 
 ### 与 Babel 配置对照表
 
-| Babel 配置 | swc 等价配置 | 说明 |
-|------------|-------------|------|
-| `@babel/preset-env` | `jsc.target` | 指定目标环境 |
-| `@babel/preset-react` | `jsc.transform.react` | JSX 转换 |
-| `@babel/preset-typescript` | `jsc.parser.syntax: "typescript"` | TS 支持 |
-| `@babel/plugin-proposal-decorators` | `jsc.parser.decorators: true` | 装饰器 |
-| `@babel/plugin-transform-runtime` | `jsc.externalHelpers: true` | 辅助函数外置 |
-| `babel-plugin-module-resolver` | 不直接支持，需 bundler 配合 | 路径别名 |
-| `babel-plugin-styled-components` | SWC 插件（Rust 编写） | CSS-in-JS |
+| Babel 配置                          | swc 等价配置                      | 说明         |
+| ----------------------------------- | --------------------------------- | ------------ |
+| `@babel/preset-env`                 | `jsc.target`                      | 指定目标环境 |
+| `@babel/preset-react`               | `jsc.transform.react`             | JSX 转换     |
+| `@babel/preset-typescript`          | `jsc.parser.syntax: "typescript"` | TS 支持      |
+| `@babel/plugin-proposal-decorators` | `jsc.parser.decorators: true`     | 装饰器       |
+| `@babel/plugin-transform-runtime`   | `jsc.externalHelpers: true`       | 辅助函数外置 |
+| `babel-plugin-module-resolver`      | 不直接支持，需 bundler 配合       | 路径别名     |
+| `babel-plugin-styled-components`    | SWC 插件（Rust 编写）             | CSS-in-JS    |
 
 ### webpack loader 集成
 
@@ -103,19 +104,20 @@ module.exports = {
 
 ### 性能对比数据
 
-| 项目规模 | Babel 耗时 | swc 耗时 | 提升倍数 |
-|---------|-----------|----------|---------|
-| 100 文件 | 4.2s | 0.18s | **23x** |
-| 1,000 文件 | 38s | 0.9s | **42x** |
-| 5,000 文件 | 210s | 3.2s | **65x** |
-| 10,000 文件 | 450s+ | 6.8s | **66x** |
+| 项目规模    | Babel 耗时 | swc 耗时 | 提升倍数 |
+| ----------- | ---------- | -------- | -------- |
+| 100 文件    | 4.2s       | 0.18s    | **23x**  |
+| 1,000 文件  | 38s        | 0.9s     | **42x**  |
+| 5,000 文件  | 210s       | 3.2s     | **65x**  |
+| 10,000 文件 | 450s+      | 6.8s     | **66x**  |
 
 :::warning 已知限制
+
 - **Babel 插件不兼容**：Babel 的 JS 插件无法在 swc 中使用，需要用 Rust 重写为 swc 插件
 - **装饰器差异**：legacy decorator 行为可能与 Babel 有细微差别
 - **宏支持**：`babel-plugin-macros` 无法直接迁移
 - **source map 精度**：极少数情况下 source map 映射位置与 Babel 不完全一致
-:::
+  :::
 
 ---
 
@@ -142,6 +144,7 @@ Turbopack 架构：
 ```
 
 **核心设计理念：**
+
 - **增量计算**：每个编译函数的输入/输出被追踪，仅在输入变化时重新执行
 - **函数级缓存**：不是文件级缓存，而是更细粒度的函数结果缓存
 - **按需编译**：开发模式下只编译浏览器实际请求的模块
@@ -182,18 +185,19 @@ next dev --turbo
 
 ### 与 Webpack/Vite 性能对比
 
-| 指标 | Webpack 5 | Vite (esbuild) | Turbopack | 说明 |
-|------|-----------|----------------|-----------|------|
-| 冷启动 | 12.5s | 3.2s | 1.8s | 10,000模块项目 |
-| HMR 更新 | 1.2s | 120ms | 8ms | 单文件修改 |
-| 内存占用 | 2.1GB | 680MB | 520MB | 峰值内存 |
-| 增量构建 | 8.5s | 1.5s | 0.4s | 修改10个文件 |
+| 指标     | Webpack 5 | Vite (esbuild) | Turbopack | 说明           |
+| -------- | --------- | -------------- | --------- | -------------- |
+| 冷启动   | 12.5s     | 3.2s           | 1.8s      | 10,000模块项目 |
+| HMR 更新 | 1.2s      | 120ms          | 8ms       | 单文件修改     |
+| 内存占用 | 2.1GB     | 680MB          | 520MB     | 峰值内存       |
+| 增量构建 | 8.5s      | 1.5s           | 0.4s      | 修改10个文件   |
 
 :::tip 何时选择 Turbopack
+
 - 你在使用 Next.js 13.4+（原生支持）
 - 项目规模大（1000+ 模块），HMR 慢
 - 团队不想维护复杂的 webpack 配置
-:::
+  :::
 
 ### 当前限制与路线图
 
@@ -244,13 +248,13 @@ npx oxlint --deny-warnings ./src
 
 ### 规则集覆盖率对比
 
-| 规则来源 | ESLint 规则数 | oxlint 已实现 | 覆盖率 |
-|---------|-------------|-------------|--------|
-| eslint 核心规则 | ~280 | ~220 | 78% |
-| typescript-eslint | ~130 | ~80 | 61% |
-| eslint-plugin-react | ~85 | ~50 | 59% |
-| eslint-plugin-import | ~45 | ~25 | 55% |
-| eslint-plugin-unicorn | ~120 | ~60 | 50% |
+| 规则来源              | ESLint 规则数 | oxlint 已实现 | 覆盖率 |
+| --------------------- | ------------- | ------------- | ------ |
+| eslint 核心规则       | ~280          | ~220          | 78%    |
+| typescript-eslint     | ~130          | ~80           | 61%    |
+| eslint-plugin-react   | ~85           | ~50           | 59%    |
+| eslint-plugin-import  | ~45           | ~25           | 55%    |
+| eslint-plugin-unicorn | ~120          | ~60           | 50%    |
 
 ### 与 ESLint 共存策略
 
@@ -271,11 +275,11 @@ npx oxlint --deny-warnings ./src
 
 ### 性能对比
 
-| 项目规模 | ESLint | oxlint | 提升倍数 |
-|---------|--------|--------|---------|
-| 100 文件 | 3.8s | 52ms | **73x** |
-| 1,000 文件 | 32s | 0.4s | **80x** |
-| 5,000 文件 | 165s | 1.7s | **97x** |
+| 项目规模   | ESLint | oxlint | 提升倍数 |
+| ---------- | ------ | ------ | -------- |
+| 100 文件   | 3.8s   | 52ms   | **73x**  |
+| 1,000 文件 | 32s    | 0.4s   | **80x**  |
+| 5,000 文件 | 165s   | 1.7s   | **97x**  |
 
 ---
 
@@ -389,10 +393,11 @@ npx @biomejs/biome check --write .  # 自动修复
 ```
 
 :::warning 迁移注意事项
+
 - Biome 的格式化输出与 Prettier 有约 3% 的差异（主要在长行折行策略上）
 - 部分 ESLint 插件规则尚未覆盖（如 eslint-plugin-testing-library）
 - 建议在 CI 中先并行运行两套工具，确认无重大差异后再完全切换
-:::
+  :::
 
 **迁移后的 package.json 对比：**
 
@@ -451,12 +456,14 @@ npx @biomejs/biome check --write .  # 自动修复
 **参考答案：**
 
 **优势：**
+
 - 性能：25-35x 提升（单次 AST 解析）
 - 配置简化：一个工具、一个配置文件
 - 无冲突：不存在 Prettier/ESLint 规则冲突问题
 - 依赖精简：从 7-10 个包减少到 1 个
 
 **劣势：**
+
 - 规则覆盖率：部分 ESLint 社区插件规则未实现
 - 格式化差异：与 Prettier 有 ~3% 输出差异
 - 生态集成：部分 IDE 插件/CI 工具尚未适配
@@ -467,11 +474,13 @@ npx @biomejs/biome check --write .  # 自动修复
 **参考答案：**
 
 **Webpack 文件级缓存：**
+
 - 以文件为最小缓存单元
 - 文件任何变化都会使整个文件的编译缓存失效
 - 依赖关系追踪粒度粗
 
 **Turbopack 函数级缓存：**
+
 - 编译过程被拆分为大量细粒度函数（resolve、parse、transform、codegen 等）
 - 每个函数的输入输出独立追踪
 - 只有当函数的精确输入变化时才重新执行
