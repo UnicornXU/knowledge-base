@@ -15,27 +15,40 @@
 - [package.json](file://package.json)
 </cite>
 
+## 更新摘要
+**变更内容**
+- 新增现代玻璃态设计系统章节，涵盖 backdrop-filter 模糊效果和半透明材质
+- 添加极光网格背景动画系统的详细说明
+- 扩展渐变文本裁剪和发光边框技术实现
+- 完善高级 CSS 自定义属性系统，包括间距和圆角值的一致性管理
+- 更新组件化样式架构，体现现代 UI 设计趋势
+
 ## 目录
 1. [引言](#引言)
 2. [项目结构](#项目结构)
 3. [核心组件](#核心组件)
-4. [架构概览](#架构概览)
-5. [详细组件分析](#详细组件分析)
-6. [依赖分析](#依赖分析)
-7. [性能考虑](#性能考虑)
-8. [故障排除指南](#故障排除指南)
-9. [结论](#结论)
+4. [现代玻璃态设计系统](#现代玻璃态设计系统)
+5. [极光网格背景动画](#极光网格背景动画)
+6. [渐变文本与发光效果](#渐变文本与发光效果)
+7. [高级 CSS 自定义属性系统](#高级-css-自定义属性系统)
+8. [架构概览](#架构概览)
+9. [详细组件分析](#详细组件分析)
+10. [依赖分析](#依赖分析)
+11. [性能考虑](#性能考虑)
+12. [故障排除指南](#故障排除指南)
+13. [结论](#结论)
 
 ## 引言
 
-这是一个基于 Docusaurus 3.10.1 构建的知识库项目，专注于前端 CSS 基础知识的教学和展示。该项目采用现代化的 CSS 设计理念，结合 Docusaurus 的文档功能，为学习者提供了一个美观、响应式的 CSS 学习环境。
+这是一个基于 Docusaurus 3.10.1 构建的知识库项目，专注于前端 CSS 基础知识的教学和展示。该项目采用了现代化的 CSS 设计理念，结合最新的玻璃态设计（Glassmorphism）技术和极光网格背景动画，为学习者提供了一个美观、响应式的 CSS 学习环境。
 
 项目的核心特色包括：
-- 现代化的 CSS 变量系统和主题支持
-- 响应式设计和移动端优化
-- 组件化的样式管理（CSS Modules）
-- 丰富的 CSS 新特性演示
-- 交互式的学习体验
+- **现代玻璃态设计系统**：基于 backdrop-filter 的模糊效果和半透明材质
+- **极光网格背景动画**：动态渐变色块营造沉浸式视觉体验
+- **渐变文本裁剪技术**：使用 background-clip 实现彩色文字效果
+- **高级 CSS 自定义属性**：统一的间距、圆角和色彩管理系统
+- **组件化的样式管理**：CSS Modules 确保样式的局部作用域
+- **丰富的 CSS 新特性演示**：展示现代 CSS 的最佳实践
 
 ## 项目结构
 
@@ -68,49 +81,52 @@ end
 CUSTOM --> DOCS
 HOMESTYLES --> DOCS
 QUIZSTYLES --> DOCS
+INDEX --> DOCS
 ```
 
 **图表来源**
-- [custom.css:1-800](file://src/css/custom.css#L1-L800)
-- [index.module.css:1-683](file://src/pages/index.module.css#L1-L683)
-- [styles.module.css:1-119](file://src/components/HomepageFeatures/styles.module.css#L1-L119)
+- [custom.css:1-629](file://src/css/custom.css#L1-L629)
+- [index.module.css:1-796](file://src/pages/index.module.css#L1-L796)
+- [styles.module.css:1-260](file://src/components/HomepageFeatures/styles.module.css#L1-L260)
 
 **章节来源**
-- [custom.css:1-800](file://src/css/custom.css#L1-L800)
-- [package.json:1-51](file://package.json#L1-L51)
+- [custom.css:1-629](file://src/css/custom.css#L1-L629)
+- [package.json:1-67](file://package.json#L1-L67)
 
 ## 核心组件
 
 ### 全局样式系统
 
-项目采用了基于 CSS 变量的现代化样式系统，提供了完整的明暗主题支持：
+项目采用了基于 CSS 变量的现代化样式系统，提供了完整的明暗主题支持和玻璃态设计令牌：
 
 ```mermaid
 classDiagram
-class CSSVariables {
+class DesignTokens {
 +--ifm-color-primary : #6366f1
-+--ifm-color-primary-dark : #4f46e5
-+--ifm-color-primary-light : #818cf8
-+--ifm-font-family-base : -apple-system, BlinkMacSystemFont
-+--ifm-line-height-base : 1.7
-+docusaurus-highlighted-code-line-bg : rgba(0, 0, 1)
++--glow-primary : rgba(99, 102, 241, 0.4)
++--glass-bg : rgba(255, 255, 255, 0.7)
++--glass-border : rgba(99, 102, 241, 0.1)
++--gradient-text : linear-gradient(...)
++--ifm-border-radius : 12px
 }
-class DarkTheme {
-+--ifm-color-primary : #818cf8
-+--ifm-color-primary-dark : #6366f1
-+docusaurus-highlighted-code-line-bg : rgba(0, 0, 0.3)
+class GlassEffects {
++--backdrop-filter : blur(20px) saturate(180%)
++--glass-shadow : 0 8px 32px rgba(0, 0, 0, 0.06)
++--card-bg : rgba(255, 255, 255, 0.8)
++--card-border : rgba(99, 102, 241, 0.08)
 }
-class LightTheme {
-+--ifm-color-primary : #6366f1
-+--ifm-color-primary-dark : #4f46e5
-+docusaurus-highlighted-code-line-bg : rgba(0, 0, 0.1)
+class AuroraBackground {
++--grid-color : rgba(99, 102, 241, 0.03)
++--surface-bg : #fafbfc
++--radial-gradients : multiple layers
++--animation : auroraShift
 }
-CSSVariables <|-- DarkTheme
-CSSVariables <|-- LightTheme
+DesignTokens <|-- GlassEffects
+DesignTokens <|-- AuroraBackground
 ```
 
 **图表来源**
-- [custom.css:7-33](file://src/css/custom.css#L7-L33)
+- [custom.css:7-69](file://src/css/custom.css#L7-L69)
 
 ### 组件化样式架构
 
@@ -120,10 +136,11 @@ CSSVariables <|-- LightTheme
 classDiagram
 class HomepageFeaturesStyles {
 +features : Flex container
-+featureCard : Card component
-+featureEmoji : Emoji styling
-+fadeInUp : Animation
++featureCard : Glass card component
++featureIcon : Animated emoji styling
++fadeInUp : Staggered animation
 +responsive : Mobile adaptation
++glowBorder : Hover glow effect
 }
 class QuizStyles {
 +quizContainer : Main layout
@@ -137,27 +154,410 @@ class QuizStyles {
 +summaryCard : Results display
 }
 class PageStyles {
-+heroBanner : Hero section
-+buttons : Call-to-action
-+stats : Statistics display
++heroBanner : Aurora background hero
++searchBox : Glassmorphism search
++statsSection : Glass stat cards
 +features : Feature showcase
 +techStack : Technology stack
 +cta : Call-to-action section
 +animations : Page transitions
 }
-HomepageFeaturesStyles --> PageStyles : "shared components"
+HomepageFeaturesStyles --> PageStyles : "shared glass effects"
 QuizStyles --> PageStyles : "shared components"
 ```
 
 **图表来源**
-- [styles.module.css:1-119](file://src/components/HomepageFeatures/styles.module.css#L1-L119)
-- [styles.module.css:1-896](file://src/components/Quiz/styles.module.css#L1-L896)
-- [index.module.css:1-683](file://src/pages/index.module.css#L1-L683)
+- [styles.module.css:1-260](file://src/components/HomepageFeatures/styles.module.css#L1-L260)
+- [styles.module.css:1-800](file://src/components/Quiz/styles.module.css#L1-L800)
+- [index.module.css:1-796](file://src/pages/index.module.css#L1-L796)
 
 **章节来源**
-- [styles.module.css:1-119](file://src/components/HomepageFeatures/styles.module.css#L1-L119)
-- [styles.module.css:1-896](file://src/components/Quiz/styles.module.css#L1-L896)
-- [index.module.css:1-683](file://src/pages/index.module.css#L1-L683)
+- [styles.module.css:1-260](file://src/components/HomepageFeatures/styles.module.css#L1-L260)
+- [styles.module.css:1-800](file://src/components/Quiz/styles.module.css#L1-L800)
+- [index.module.css:1-796](file://src/pages/index.module.css#L1-L796)
+
+## 现代玻璃态设计系统
+
+### 玻璃态效果原理
+
+玻璃态设计（Glassmorphism）是现代 UI 设计的核心趋势，通过 backdrop-filter 模糊效果和半透明材质创造深度感：
+
+```mermaid
+flowchart TD
+A[背景层] --> B[模糊滤镜 backdrop-filter]
+B --> C[半透明背景 rgba()]
+C --> D[边框高亮 border]
+D --> E[阴影层次 box-shadow]
+E --> F[最终玻璃效果]
+G[光照效果] --> H[渐变边框 gradient]
+H --> I[悬停状态 hover]
+I --> J[发光效果 glow]
+J --> F
+```
+
+**图表来源**
+- [custom.css:83-116](file://src/css/custom.css#L83-L116)
+- [index.module.css:102-133](file://src/pages/index.module.css#L102-L133)
+
+### 核心玻璃态组件
+
+#### 导航栏玻璃效果
+```css
+.navbar {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: var(--glass-bg) !important;
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: none;
+  transition: all 0.3s ease;
+  will-change: backdrop-filter;
+}
+```
+
+#### 搜索框玻璃容器
+```css
+.searchBox {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+```
+
+#### 卡片玻璃效果
+```css
+.featureCard {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              background 0.3s ease;
+}
+```
+
+**章节来源**
+- [custom.css:83-116](file://src/css/custom.css#L83-L116)
+- [index.module.css:102-133](file://src/pages/index.module.css#L102-L133)
+- [styles.module.css:48-102](file://src/components/HomepageFeatures/styles.module.css#L48-L102)
+
+## 极光网格背景动画
+
+### 极光背景实现原理
+
+极光背景通过多层径向渐变和关键帧动画创建动态的视觉效果：
+
+```mermaid
+sequenceDiagram
+participant Layer1 as "第一层渐变"
+participant Layer2 as "第二层渐变"
+participant Animation as "动画控制"
+participant Browser as "浏览器渲染"
+Layer1->>Animation : radial-gradient(ellipse 600px 400px at 20% 30%, ...)
+Layer2->>Animation : radial-gradient(ellipse 500px 350px at 75% 20%, ...)
+Animation->>Browser : auroraShift 12s ease-in-out infinite alternate
+Browser->>Browser : 变换位置 translate()
+Browser->>Browser : 缩放变化 scale()
+Browser->>Browser : 透明度变化 opacity()
+```
+
+**图表来源**
+- [index.module.css:10-62](file://src/pages/index.module.css#L10-L62)
+
+### 多层渐变系统
+
+#### 主极光层
+```css
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(99, 102, 241, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 350px at 75% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 350px 250px at 85% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  animation: auroraShift 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+```
+
+#### 辅助极光层
+```css
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 450px 300px at 60% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 350px 250px at 30% 70%, rgba(167, 139, 250, 0.08) 0%, transparent 70%);
+  animation: auroraShift2 15s ease-in-out infinite alternate;
+  z-index: 0;
+}
+```
+
+### 动画关键帧
+
+#### 主极光动画
+```css
+@keyframes auroraShift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 15px) scale(0.98);
+  }
+  100% {
+    transform: translate(10px, -10px) scale(1.02);
+  }
+}
+```
+
+#### 辅助极光动画
+```css
+@keyframes auroraShift2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-25px, 20px) scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(15px, -15px) scale(0.95);
+    opacity: 0.8;
+  }
+}
+```
+
+**章节来源**
+- [index.module.css:10-62](file://src/pages/index.module.css#L10-L62)
+
+## 渐变文本与发光效果
+
+### 渐变文本裁剪技术
+
+渐变文本通过 background-clip 和 text-fill-color 实现彩色文字效果：
+
+```mermaid
+flowchart LR
+A[渐变背景] --> B[background-clip: text]
+B --> C[-webkit-background-clip: text]
+C --> D[text-fill-color: transparent]
+D --> E[渐变文字效果]
+F[发光边框] --> G[::before 伪元素]
+G --> H[linear-gradient 边框]
+H --> I[mask 遮罩]
+I --> J[发光边框效果]
+```
+
+**图表来源**
+- [index.module.css:80-90](file://src/pages/index.module.css#L80-L90)
+- [styles.module.css:70-102](file://src/components/HomepageFeatures/styles.module.css#L70-L102)
+
+### 渐变文本实现
+
+#### 标题渐变效果
+```css
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+```
+
+#### 统计数值渐变
+```css
+.statValue {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+```
+
+### 发光边框效果
+
+#### 卡片发光边框
+```css
+.featureCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--glow-primary), var(--glow-secondary), transparent);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+```
+
+#### 悬停发光效果
+```css
+.featureCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--card-hover-border);
+  box-shadow: var(--card-hover-shadow);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.featureCard:hover::before {
+  opacity: 1;
+}
+```
+
+**章节来源**
+- [index.module.css:80-90](file://src/pages/index.module.css#L80-L90)
+- [styles.module.css:70-102](file://src/components/HomepageFeatures/styles.module.css#L70-L102)
+
+## 高级 CSS 自定义属性系统
+
+### 设计令牌架构
+
+项目建立了完整的设计令牌系统，统一管理颜色、间距、圆角等设计变量：
+
+```mermaid
+classDiagram
+class DesignSystem {
++--ColorTokens : 颜色系统
++--SpacingTokens : 间距系统
++--RadiusTokens : 圆角系统
++--ShadowTokens : 阴影系统
++--TypographyTokens : 字体系统
+}
+class ColorTokens {
++--primary : #6366f1
++--primary-dark : #4f46e5
++--primary-light : #818cf8
++--glow-primary : rgba(99, 102, 241, 0.4)
++--glow-secondary : rgba(139, 92, 246, 0.3)
+}
+class SpacingTokens {
++--ifm-font-size-base : 15px
++--ifm-line-height-base : 1.75
++--ifm-border-radius : 12px
+}
+class ShadowTokens {
++--glass-shadow : 0 8px 32px rgba(0, 0, 0, 0.06)
++--card-hover-shadow : 0 8px 40px rgba(99, 102, 241, 0.12)
+}
+DesignSystem --> ColorTokens
+DesignSystem --> SpacingTokens
+DesignSystem --> ShadowTokens
+```
+
+**图表来源**
+- [custom.css:7-69](file://src/css/custom.css#L7-L69)
+
+### 明暗主题系统
+
+#### 浅色主题令牌
+```css
+:root {
+  --ifm-color-primary: #6366f1;
+  --ifm-color-primary-dark: #4f46e5;
+  --ifm-color-primary-darker: #4338ca;
+  --ifm-color-primary-darkest: #3730a3;
+  --ifm-color-primary-light: #818cf8;
+  --ifm-color-primary-lighter: #a5b4fc;
+  --ifm-color-primary-lightest: #c7d2fe;
+  
+  --glow-primary: rgba(99, 102, 241, 0.4);
+  --glow-secondary: rgba(139, 92, 246, 0.3);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(99, 102, 241, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --grid-color: rgba(99, 102, 241, 0.03);
+  --surface-bg: #fafbfc;
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --card-border: rgba(99, 102, 241, 0.08);
+  --card-hover-border: rgba(99, 102, 241, 0.3);
+  --card-hover-shadow: 0 8px 40px rgba(99, 102, 241, 0.12);
+  --code-bg: #1e1e2e;
+  --gradient-text: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+}
+```
+
+#### 深色主题令牌
+```css
+[data-theme='dark'] {
+  --ifm-color-primary: #818cf8;
+  --ifm-color-primary-dark: #6366f1;
+  --ifm-color-primary-light: #a5b4fc;
+  --ifm-color-primary-lighter: #c7d2fe;
+  --ifm-color-primary-lightest: #e0e7ff;
+  --ifm-color-primary-darker: #4f46e5;
+  --ifm-color-primary-darkest: #4338ca;
+  
+  --glow-primary: rgba(129, 140, 248, 0.3);
+  --glow-secondary: rgba(167, 139, 250, 0.25);
+  --glass-bg: rgba(17, 17, 27, 0.8);
+  --glass-border: rgba(129, 140, 248, 0.12);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --grid-color: rgba(129, 140, 248, 0.04);
+  --surface-bg: #0a0a0f;
+  --card-bg: rgba(17, 17, 27, 0.6);
+  --card-border: rgba(129, 140, 248, 0.1);
+  --card-hover-border: rgba(129, 140, 248, 0.4);
+  --card-hover-shadow: 0 8px 40px rgba(129, 140, 248, 0.1);
+  --code-bg: #0d0d14;
+  --gradient-text: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 50%, #d8b4fe 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(129, 140, 248, 0.1) 0%, rgba(167, 139, 250, 0.08) 100%);
+}
+```
+
+### 背景网格系统
+
+#### 基础网格背景
+```css
+.main-wrapper {
+  background-image: radial-gradient(circle, var(--grid-color) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+```
+
+#### 表格玻璃效果
+```css
+table {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--glass-shadow);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+}
+```
+
+**章节来源**
+- [custom.css:7-69](file://src/css/custom.css#L7-L69)
+- [custom.css:71-80](file://src/css/custom.css#L71-L80)
+- [custom.css:193-228](file://src/css/custom.css#L193-L228)
 
 ## 架构概览
 
@@ -203,9 +603,9 @@ C --> T
 ```
 
 **图表来源**
-- [custom.css:1-800](file://src/css/custom.css#L1-L800)
-- [styles.module.css:1-119](file://src/components/HomepageFeatures/styles.module.css#L1-L119)
-- [styles.module.css:1-896](file://src/components/Quiz/styles.module.css#L1-L896)
+- [custom.css:1-629](file://src/css/custom.css#L1-L629)
+- [styles.module.css:1-260](file://src/components/HomepageFeatures/styles.module.css#L1-L260)
+- [styles.module.css:1-800](file://src/components/Quiz/styles.module.css#L1-L800)
 
 ### 文档内容架构
 
@@ -219,20 +619,29 @@ B --> C[Flexbox 与 Grid]
 C --> D[响应式设计]
 D --> E[过渡与动画]
 E --> F[现代 CSS 特性]
-A --> G[基础概念]
-B --> H[布局原理]
-C --> I[布局技巧]
-D --> J[适配策略]
-E --> K[性能优化]
-F --> L[前沿技术]
+F --> G[玻璃态设计]
+F --> H[极光背景]
+F --> I[渐变文本]
+A --> J[基础概念]
+B --> K[布局原理]
+C --> L[布局技巧]
+D --> M[适配策略]
+E --> N[性能优化]
+F --> O[前沿技术]
+G --> P[UI 设计趋势]
+H --> Q[视觉特效]
+I --> R[文本装饰]
 end
 subgraph "实践应用"
-M[组件样式]
-N[页面布局]
-O[交互效果]
-A --> M
-C --> N
-E --> O
+S[组件样式]
+T[页面布局]
+U[交互效果]
+A --> S
+C --> T
+E --> U
+G --> S
+H --> T
+I --> U
 end
 ```
 
@@ -525,7 +934,7 @@ E --> S
 ```
 
 **图表来源**
-- [package.json:17-26](file://package.json#L17-L26)
+- [package.json:26-35](file://package.json#L26-L35)
 
 ### 浏览器兼容性
 
@@ -551,10 +960,10 @@ G --> I
 ```
 
 **图表来源**
-- [package.json:35-49](file://package.json#L35-L49)
+- [package.json:51-62](file://package.json#L51-L62)
 
 **章节来源**
-- [package.json:1-51](file://package.json#L1-L51)
+- [package.json:1-67](file://package.json#L1-L67)
 
 ## 性能考虑
 
@@ -566,6 +975,8 @@ G --> I
 2. **硬件加速**：合理使用 transform 和 opacity
 3. **媒体查询优化**：使用移动优先策略
 4. **组件化样式**：避免全局样式污染
+5. **will-change 优化**：提前通知浏览器优化动画元素
+6. **backdrop-filter 优化**：使用 -webkit-backdrop-filter 前缀
 
 ### 构建性能优化
 
@@ -594,6 +1005,16 @@ G --> I
    - 优先使用 transform 和 opacity
    - 避免触发布局的属性动画
 
+5. **玻璃态效果问题**
+   - 检查 backdrop-filter 浏览器兼容性
+   - 确保有合适的背景内容才能看到模糊效果
+   - 使用 -webkit-backdrop-filter 前缀提升兼容性
+
+6. **极光背景性能**
+   - 限制渐变层数，避免过多复杂渐变
+   - 使用 will-change 提示浏览器优化
+   - 在低性能设备上考虑禁用复杂动画
+
 ### 调试技巧
 
 1. **开发者工具**
@@ -608,15 +1029,20 @@ G --> I
    - 使用 Performance 面板分析渲染性能
    - 监控合成层的使用情况
 
+4. **兼容性测试**
+   - 使用 Can I Use 检查特性支持
+   - 在不同浏览器中测试效果
+
 ## 结论
 
-这个 CSS 基础知识项目展示了现代前端开发的最佳实践，通过 Docusaurus 平台提供了丰富的学习资源。项目不仅涵盖了 CSS 的基础知识，还深入介绍了现代 CSS 的新特性和最佳实践。
+这个 CSS 基础知识项目展示了现代前端开发的最佳实践，通过 Docusaurus 平台提供了丰富的学习资源。项目不仅涵盖了 CSS 的基础知识，还深入介绍了现代 CSS 的新特性和最佳实践，特别是玻璃态设计、极光背景动画和渐变文本等前沿技术。
 
 项目的主要优势包括：
-- 完整的 CSS 知识体系
-- 现代化的开发工具链
-- 优秀的用户体验设计
-- 良好的性能表现
-- 详细的文档说明
+- **完整的 CSS 知识体系**：从基础概念到现代特性的全面覆盖
+- **现代设计系统**：玻璃态设计、极光背景、渐变文本等前沿技术
+- **先进的开发工具链**：基于 Docusaurus 3.10.1 的现代化构建流程
+- **优秀的用户体验设计**：响应式布局、流畅动画、无障碍访问
+- **良好的性能表现**：优化的样式结构和动画性能
+- **详细的文档说明**：图文并茂的技术文档和学习资源
 
-对于学习 CSS 的开发者来说，这是一个非常有价值的学习资源，既适合初学者入门，也能为有经验的开发者提供深入的技术洞察。
+对于学习 CSS 的开发者来说，这是一个非常有价值的学习资源，既适合初学者入门，也能为有经验的开发者提供深入的技术洞察。项目中的玻璃态设计系统和极光背景动画更是紧跟当前 UI 设计趋势，具有很高的实用价值。
